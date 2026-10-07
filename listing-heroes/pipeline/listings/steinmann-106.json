@@ -1,0 +1,58 @@
+{
+  "id": "steinmann-106",
+  "address": "106 Steinmann Avenue, Middlebury, CT 06762",
+  "photos_dir": "../../heroes/media",
+  "out_dir": "../../heroes/media/ai",
+  "servers": {
+    "gpu0": "http://127.0.0.1:8188",
+    "gpu1": "http://127.0.0.1:8189"
+  },
+  "depth": ["front", "front2", "livingwide", "living", "fireplace", "kitchen", "kitchen2", "decktub",
+            "deckgazebo", "back", "rear2", "primary", "primary2", "bed2", "bath1"],
+  "dusk": [
+    {"photo": "front2"},
+    {"photo": "front"}
+  ],
+  "living": [
+    {"photo": "back",
+     "prompt": "Locked-off tripod shot, the camera does not move. A gentle summer breeze: white clouds drift slowly from right to left, the tree leaves and rose of Sharon sway softly, the navy gazebo curtains ripple and lift. The house, deck, hot tub and lawn stay perfectly still. No people, no animals."}
+  ],
+  "transitions": [
+    {"from": "front", "to": "livingwide",
+     "prompt": "Smooth steady drone shot: the camera glides up the front walk, over the entry steps and through the open front door into a bright living room with oak floors and a brick fireplace."},
+    {"from": "livingwide", "to": "living",
+     "prompt": "Smooth steady gimbal shot: the camera turns from the fireplace and glides past the staircase toward the dining table and the kitchen beyond."},
+    {"from": "living", "to": "kitchen",
+     "prompt": "Smooth steady gimbal shot: the camera glides past the round oak dining table into a white kitchen and drifts toward the half-glass back door."},
+    {"from": "kitchen", "to": "decktub",
+     "prompt": "Smooth steady gimbal shot: the camera passes through the back door out onto a sunny wood deck overlooking a green lawn."},
+    {"from": "decktub", "to": "back",
+     "prompt": "Smooth steady drone shot: the camera rises off the deck and pulls back across the lawn to reveal the whole rear of the house, the deck and the gazebo."},
+    {"from": "back", "to": "primary",
+     "prompt": "Smooth steady drone shot: the camera flies up to the second-floor balcony and through the sliding door into a bright bedroom with a vaulted ceiling."},
+    {"from": "primary", "to": "rear2",
+     "prompt": "Smooth steady drone shot: the camera backs out of the bedroom through the slider and pulls away and up over the backyard to frame the rear of the house."}
+  ],
+  "interpolate_transitions": true,
+  "rooms": [
+    {"photo": "front", "room": "Front entry"},
+    {"photo": "fireplace", "room": "Living room"},
+    {"photo": "living", "room": "Dining area"},
+    {"photo": "kitchen", "room": "Kitchen"},
+    {"photo": "sitting", "room": "Sitting room"},
+    {"photo": "bed1", "room": "First-floor bedroom"},
+    {"photo": "bath1", "room": "Full bath (main level)"},
+    {"photo": "primary2", "room": "Primary bedroom"},
+    {"photo": "bed2", "room": "Upstairs bedroom"},
+    {"photo": "bath2", "room": "Full bath (upstairs)"},
+    {"photo": "decktub", "room": "Deck"},
+    {"photo": "back", "room": "Backyard"}
+  ],
+  "facts": {
+    "price": "$439,900", "status": "Active, price reduced from $455,900 on Oct 2, 2026",
+    "beds": 4, "baths": "2 full", "sqft": 1630, "lot_acres": 0.39, "year_built": 1953, "style": "Cape Cod",
+    "taxes": "$7,968/yr", "hoa": "none", "parking": "parking for six, one-car garage",
+    "remarks": "Nicely updated, move-in ready New England Cape. Living room with fireplace, dining area, large kitchen with tile floors and lots of cabinets. Two bedrooms and a recently renovated full bath on the main level, all hardwood. Upstairs: remodeled full bath, a bedroom, and a large primary bedroom with vaulted ceiling, large closet and slider to a balcony over the landscaped backyard. Full walk-out basement into a one-car garage, large shed, large deck off the kitchen. Close to Route 84 and the Middlebury walking trail, Region 15 schools.",
+    "agent": "Christina Cavallo, Independent Realty Group, 203.733.3969"
+  }
+}

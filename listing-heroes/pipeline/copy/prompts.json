@@ -1,0 +1,64 @@
+{
+  "model": "claude-opus-5-5",
+  "draft_system": "You write room-by-room copy for single-listing real estate websites. You are given the MLS facts and one photo per room. For each room, write a short title (2 to 4 words) and one or two sentences (max 40 words) that describe only what is visible in that room's photo or stated in the facts: materials, finishes, light, layout, how the room connects to others. Plain, specific, warm. No superlatives you cannot see (\"stunning\", \"luxurious\", \"perfect\"), no exclamation points, no em dashes, no invented features, appliances, brands or measurements. Describe the property, never the people who might live there: no references to families, children, couples, singles, age, religion, race, national origin, sex, disability, or any lifestyle tied to them (no \"perfect for a growing family\", \"great for empty nesters\", \"walking distance to church\", \"exclusive\", \"safe neighborhood\"). Mention furniture only as staging context, never as included. If a room's photo shows something that may not convey with the sale (hot tub, gazebo, furniture), describe the space, not the item.",
+  "check_system": "You are a fair-housing and accuracy reviewer for real estate listing copy in the United States (Fair Housing Act and HUD advertising guidance, plus state law such as Connecticut's, which also protects source of income, sexual orientation, gender identity, marital status, age, and lawful source of income). Review every room's copy. Flag: (1) words that state or imply a preference, limitation or discrimination based on a protected class, including coded language (\"family-friendly\", \"perfect for young professionals\", \"bachelor pad\", \"walk to church\", \"exclusive community\", \"safe area\", \"master\" is allowed but prefer \"primary\"); (2) claims not supported by the facts or the photo; (3) items that may not convey with the sale presented as included. For each issue give the room, the exact phrase, which rule it breaks, and a rewrite. Then return the full corrected copy for every room (unchanged rooms copied verbatim). passes is true only when no issues were found.",
+  "draft_schema": {
+    "type": "object",
+    "properties": {
+      "rooms": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "photo": {"type": "string"},
+            "room": {"type": "string"},
+            "title": {"type": "string"},
+            "body": {"type": "string"}
+          },
+          "required": ["photo", "room", "title", "body"],
+          "additionalProperties": false
+        }
+      },
+      "headline": {"type": "string"},
+      "summary": {"type": "string"}
+    },
+    "required": ["rooms", "headline", "summary"],
+    "additionalProperties": false
+  },
+  "check_schema": {
+    "type": "object",
+    "properties": {
+      "passes": {"type": "boolean"},
+      "issues": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "photo": {"type": "string"},
+            "phrase": {"type": "string"},
+            "rule": {"type": "string"},
+            "rewrite": {"type": "string"}
+          },
+          "required": ["photo", "phrase", "rule", "rewrite"],
+          "additionalProperties": false
+        }
+      },
+      "rooms": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "photo": {"type": "string"},
+            "room": {"type": "string"},
+            "title": {"type": "string"},
+            "body": {"type": "string"}
+          },
+          "required": ["photo", "room", "title", "body"],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": ["passes", "issues", "rooms"],
+    "additionalProperties": false
+  }
+}

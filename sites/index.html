@@ -1,0 +1,123 @@
+<!doctype html>
+<title>Five Houses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Fragment+Mono&display=swap">
+<style>
+/* Layout: a studio index. One row per house, screenshot and idea side by side, alternating; nothing else competes. */
+:root {
+  --bg: #eceef1;
+  --ink: #14171c;
+  --soft: #555c68;
+  --rule: #cfd3da;
+  --accent: #2d47c9;
+  --card: #f7f8fa;
+  --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --mono: "Fragment Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #0f1216; --ink: #e8ebef; --soft: #9aa2ae; --rule: #262c35; --accent: #93a6ff; --card: #161a20; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #0f1216; --ink: #e8ebef; --soft: #9aa2ae; --rule: #262c35; --accent: #93a6ff; --card: #161a20; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--display); margin: 0; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 48px); }
+header { padding-block: clamp(48px, 9vh, 104px) clamp(32px, 6vh, 64px); display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 24px 48px; align-items: end; border-bottom: 1px solid var(--rule); }
+h1 { font-weight: 800; font-size: clamp(48px, 9vw, 132px); line-height: .88; letter-spacing: -.035em; margin: 0; text-wrap: balance; }
+header p { margin: 0; font-size: 18px; line-height: 1.55; color: var(--soft); max-width: 32em; }
+.lab { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--soft); }
+.row { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(20px, 4vw, 56px); padding-block: clamp(36px, 6vh, 72px); border-bottom: 1px solid var(--rule); align-items: center; }
+.row:nth-child(even) .shot { order: 2; }
+.shot { display: block; aspect-ratio: 16 / 10; overflow: hidden; background: var(--card); max-width: 100%; }
+.shot img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .8s cubic-bezier(.2, .7, .2, 1); }
+.shot:hover img, .shot:focus-visible img { transform: scale(1.025); }
+.txt { min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.txt h2 { font-weight: 800; font-size: clamp(30px, 3.6vw, 48px); line-height: .95; letter-spacing: -.02em; margin: 0; text-wrap: balance; }
+.txt .idea { font-weight: 600; font-size: 20px; line-height: 1.3; margin: 0; color: var(--accent); }
+.txt p { margin: 0; font-size: 17px; line-height: 1.55; color: var(--soft); max-width: 34em; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; margin: 2px 0 0; }
+.tags li { font-family: var(--mono); font-size: 11.5px; padding: 6px 9px; border: 1px solid var(--rule); color: var(--ink); }
+.go { align-self: flex-start; margin-top: 6px; font-weight: 600; font-size: 16px; color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--accent); padding-bottom: 3px; }
+.go:hover { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+footer { padding-block: 32px 48px; font-family: var(--mono); font-size: 12px; line-height: 1.7; color: var(--soft); }
+@media (max-width: 820px) {
+  header, .row { grid-template-columns: minmax(0, 1fr); }
+  .row:nth-child(even) .shot { order: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .shot img { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <div class="lab">Listing pages from 360 tours</div>
+      <h1>Five houses, five ways in.</h1>
+    </div>
+    <p>Same raw material for every house: the panoramas from its 360 tour, color corrected, and the tour's own door links. Each page turns that into a different idea, drawn from the house itself.</p>
+  </header>
+
+  <main>
+    <article class="row">
+      <a class="shot" href="mission-house/" target="_blank" rel="noopener"><img src="img/mission.jpg" alt="The Mission House page: the rooftop terrace as a little planet with the address orbiting it"></a>
+      <div class="txt">
+        <div class="lab">1146 Florida Street · San Francisco</div>
+        <h2>The Mission House</h2>
+        <p class="idea">The house starts as a planet and unrolls into a walk.</p>
+        <p>Scroll and the rooftop planet flattens into the terrace view, then walks down through all three levels on the tour's real doors. A live floor plan shows where you stand and which way you face.</p>
+        <ul class="tags"><li>Little-planet projection</li><li>Scroll-driven walk</li><li>Floor plan tracking</li></ul>
+        <a class="go" href="mission-house/" target="_blank" rel="noopener">Open the page</a>
+      </div>
+    </article>
+
+    <article class="row">
+      <a class="shot" href="noe-valley-victorian/" target="_blank" rel="noopener"><img src="img/victorian.jpg" alt="The Noe Valley Victorian page: the facade as a sepia print on an 1890s cabinet card"></a>
+      <div class="txt">
+        <div class="lab">4250 23rd Street · Noe Valley</div>
+        <h2>The Noe Valley Victorian</h2>
+        <p class="idea">An 1893 house shown as an 1890s photo album.</p>
+        <p>Every room is a cabinet card whose print develops from sepia into color as you reach it. A brass slider runs from 1893 to today. Open a card and you are standing in the room.</p>
+        <ul class="tags"><li>Period object as interface</li><li>Print development</li><li>Re-inked floor plan</li></ul>
+        <a class="go" href="noe-valley-victorian/" target="_blank" rel="noopener">Open the page</a>
+      </div>
+    </article>
+
+    <article class="row">
+      <a class="shot" href="sun-drenched-production-space/" target="_blank" rel="noopener"><img src="img/loft.jpg" alt="The West Town loft page: the entrance seen through a cinema camera viewfinder with a slate"></a>
+      <div class="txt">
+        <div class="lab">West Town · Chicago</div>
+        <h2>The Production Loft</h2>
+        <p class="idea">A rental for film crews, seen through the camera.</p>
+        <p>The page is a cinema monitor with timecode, lens and slate. Scroll dives from a drone shot over the skyline down into the set, then a spec sheet lists every space with its real dimensions.</p>
+        <ul class="tags"><li>Interface as the camera</li><li>Drone dive</li><li>Set sheet with dimensions</li></ul>
+        <a class="go" href="sun-drenched-production-space/" target="_blank" rel="noopener">Open the page</a>
+      </div>
+    </article>
+
+    <article class="row">
+      <a class="shot" href="47-ross-avenue/" target="_blank" rel="noopener"><img src="img/ross.jpg" alt="The 47 Ross Avenue page: rooms as glass marbles connected by their doorways"></a>
+      <div class="txt">
+        <div class="lab">47 Ross Avenue · San Anselmo</div>
+        <h2>47 Ross Avenue</h2>
+        <p class="idea">The house as a constellation of its rooms.</p>
+        <p>Each room is a glass marble, joined to the others by its real doorways. Pick one and you fall into it. A guided walk lights its path across the map as it goes.</p>
+        <ul class="tags"><li>Door graph as navigation</li><li>Marble to room transition</li><li>Guided walk</li></ul>
+        <a class="go" href="47-ross-avenue/" target="_blank" rel="noopener">Open the page</a>
+      </div>
+    </article>
+
+    <article class="row">
+      <a class="shot" href="vine-leaf-residence/" target="_blank" rel="noopener"><img src="img/vine.jpg" alt="The Vine Leaf page: the living room as an ink drawing with a circle of daylight showing the photo"></a>
+      <div class="txt">
+        <div class="lab">8902 Vine Leaf · Schertz, Texas</div>
+        <h2>Vine Leaf Residence</h2>
+        <p class="idea">An empty new build that starts as a drawing.</p>
+        <p>The rooms appear as an architect's ink drawing, and your cursor carries the daylight that turns them into photos. Rooms are numbered like a drawing set, and a slider shows the photo correction before and after.</p>
+        <ul class="tags"><li>Reveal by light</li><li>Drawing set navigation</li><li>Before and after grade</li></ul>
+        <a class="go" href="vine-leaf-residence/" target="_blank" rel="noopener">Open the page</a>
+      </div>
+    </article>
+  </main>
+
+  <footer>Concept demos built from each property's public 360 tour. Photography belongs to the credited photographers, named on each page.</footer>
+</div>

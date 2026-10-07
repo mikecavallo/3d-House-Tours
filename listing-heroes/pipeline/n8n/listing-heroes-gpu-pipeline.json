@@ -1,0 +1,375 @@
+{
+  "name": "listing-heroes \u00b7 GPU pipeline",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ],
+      "id": "e6a0107a-5e4c-5a63-8d49-6c5e9a8c7f42"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "listing-heroes-gpu",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        400
+      ],
+      "id": "35743b82-30da-54b4-b58d-af8a3eca835f",
+      "webhookId": "f156f71a-e63d-5223-a6d8-24a09d632873"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Edit these two lines, or POST {\"listing\": \"steinmann-106\"} to the webhook.\nconst repo = '/mnt/llm/listing-heroes';\nconst listing = ($json.body && $json.body.listing) || $json.listing || 'steinmann-106';\nreturn [{ json: { repo, listing } }];"
+      },
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        300
+      ],
+      "id": "0d12e68f-ceca-562a-9bce-e7b26ee2571c"
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $json.repo }}/pipeline/listings/{{ $json.listing }}.json",
+        "options": {}
+      },
+      "name": "Read listing",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        440,
+        300
+      ],
+      "id": "2d5ced8b-8eb2-56c6-bfd2-1d71bd01c3c2"
+    },
+    {
+      "parameters": {
+        "operation": "fromJson",
+        "options": {}
+      },
+      "name": "Parse listing",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        660,
+        300
+      ],
+      "id": "02279f04-5532-559d-8407-fa87e425f1e1"
+    },
+    {
+      "parameters": {
+        "command": "=cd {{ $('Config').first().json.repo }} && python3 pipeline/run_listing.py pipeline/listings/{{ $('Config').first().json.listing }}.json --mkdir-only"
+      },
+      "name": "Make output folders",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        770,
+        520
+      ],
+      "id": "eee91bfe-a7b3-5a19-927f-7d2f1cbb3e2d",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Plan GPU jobs from the listing file (mirrors run_listing.py plan()).\n// The parsed listings/<id>.json comes from Parse listing (Extract From File puts it in json.data); repo from Config.\nconst L = $('Parse listing').first().json.data;\nconst repo = $('Config').first().json.repo;\nconst join = (...p) => p.join('/').replace(/\\/+/g, '/');\nconst base = join(repo, 'pipeline/listings');\nconst resolve = (rel) => {\n  if (rel.startsWith('/')) return rel;\n  const parts = join(base, rel).split('/');\n  const out = [];\n  for (const p of parts) { if (p === '..') out.pop(); else if (p !== '.') out.push(p); }\n  return '/' + out.filter(Boolean).join('/');\n};\nconst photos = resolve(L.photos_dir);\nconst outDir = resolve(L.out_dir);\nconst servers = Object.assign({ gpu0: 'http://127.0.0.1:8188' }, L.servers || {});\nservers.gpu1 = servers.gpu1 || servers.gpu0;\nconst photo = (n) => `${photos}/${n}.jpg`;\nconst jobs = [];\nfor (const n of L.depth || []) jobs.push({ kind: 'depth', server: servers.gpu0, name: n, workflow: 'depth', params: { image: photo(n) }, dir: `${outDir}/raw` });\nfor (const d of L.dusk || []) jobs.push({ kind: 'dusk', server: servers.gpu0, name: `${d.photo}-dusk`, workflow: 'dusk', params: Object.assign({ image: photo(d.photo) }, d.prompt ? { prompt: d.prompt } : {}), dir: outDir });\nfor (const v of L.living || []) jobs.push({ kind: 'living', server: servers.gpu0, name: `${v.photo}-living`, workflow: 'living', params: Object.assign({ image: photo(v.photo) }, v.prompt ? { prompt: v.prompt } : {}), dir: outDir });\n(L.transitions || []).forEach((t, i) => {\n  const params = { first: photo(t.from), last: photo(t.to), prompt: t.prompt };\n  for (const k of ['seconds', 'strength', 'seed']) if (k in t) params[k] = t[k];\n  jobs.push({ kind: 'transition', server: i % 2 === 0 ? servers.gpu1 : servers.gpu0, name: `${t.from}-to-${t.to}`, workflow: 'transition', params, dir: outDir });\n});\n// custom jobs: {\"workflow\": \"selftest\", \"name\": \"front-test\", \"images\": {\"image\": \"front\"}, \"params\": {...}, \"gpu\": \"gpu1\"}\nfor (const c of L.jobs || []) {\n  const params = Object.assign({}, c.params || {});\n  for (const [k, n] of Object.entries(c.images || {})) params[k] = photo(n);\n  jobs.push({ kind: 'custom', server: servers[c.gpu || 'gpu0'], name: c.name, workflow: c.workflow, params, dir: outDir });\n}\nreturn jobs.map((j) => ({ json: Object.assign(j, { mode: 'submit', repo, listing_id: L.id, interpolate: !!L.interpolate_transitions }) }));\n"
+      },
+      "name": "Plan jobs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        300
+      ],
+      "id": "2e2094fe-3275-5521-809d-0d9a888bd47a"
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "lhComfyJob000001",
+          "mode": "id"
+        },
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "name": "Submit all jobs",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.1,
+      "position": [
+        1100,
+        300
+      ],
+      "id": "5e9ea3a8-933b-5925-9991-842eab58a4ec"
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "lhComfyJob000001",
+          "mode": "id"
+        },
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "name": "Wait for all jobs",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.1,
+      "position": [
+        1320,
+        300
+      ],
+      "id": "eb7b5fd1-8c90-50c0-b242-6e5d650bee9d"
+    },
+    {
+      "parameters": {
+        "command": "=cd {{ $('Config').first().json.repo }} && python3 pipeline/run_listing.py pipeline/listings/{{ $('Config').first().json.listing }}.json --post-only"
+      },
+      "name": "Depth to disparity",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        1540,
+        300
+      ],
+      "id": "fc7948b9-807b-5846-97d8-3b3f83fa151d",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Follow-up jobs: double each transition's frame rate with FILM (writes <name>-50fps.mp4 next to it).\nconst jobs = $('Plan jobs').all().map((x) => x.json).filter((j) => j.kind === 'transition' && j.interpolate);\nreturn jobs.map((j) => ({ json: { kind: 'interpolate', mode: 'submit', server: j.server, repo: j.repo, listing_id: j.listing_id,\n  name: `${j.name}-50fps`, workflow: 'interpolate', params: { video: `${j.dir}/${j.name}.mp4` }, dir: j.dir } }));\n"
+      },
+      "name": "Plan interpolation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        300
+      ],
+      "id": "0e04bce5-070b-549f-9449-18383fad6b84"
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "lhComfyJob000001",
+          "mode": "id"
+        },
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "name": "Submit interpolation",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.1,
+      "position": [
+        1980,
+        300
+      ],
+      "id": "828ce6fa-5c3f-52c9-ae96-f4df3a8660cd"
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "lhComfyJob000001",
+          "mode": "id"
+        },
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "name": "Wait for interpolation",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.1,
+      "position": [
+        2200,
+        300
+      ],
+      "id": "90d50087-044b-5064-83f3-fe55dd908fc1"
+    },
+    {
+      "parameters": {
+        "content": "## listing-heroes: GPU pipeline\n1. Set **repo** in Config (or POST {\"listing\": \"<id>\"} to the webhook).\n2. Run. Every job in pipeline/listings/<id>.json is queued on both ComfyUI servers at once, then collected.\n3. Depth maps are converted to disparity PNGs (Execute Command: start n8n with NODES_EXCLUDE=\"[]\").\n4. Transitions get a 50 fps copy.\n\nn8n needs N8N_RESTRICT_FILE_ACCESS_TO=<repo path> to read photos and write outputs.",
+        "height": 420,
+        "width": 520
+      },
+      "name": "README",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        -260
+      ],
+      "id": "224c2ec5-e1e9-59ae-8072-e0c0f8e3802b"
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Read listing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read listing": {
+      "main": [
+        [
+          {
+            "node": "Parse listing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse listing": {
+      "main": [
+        [
+          {
+            "node": "Make output folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Make output folders": {
+      "main": [
+        [
+          {
+            "node": "Plan jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Plan jobs": {
+      "main": [
+        [
+          {
+            "node": "Submit all jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit all jobs": {
+      "main": [
+        [
+          {
+            "node": "Wait for all jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for all jobs": {
+      "main": [
+        [
+          {
+            "node": "Depth to disparity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Depth to disparity": {
+      "main": [
+        [
+          {
+            "node": "Plan interpolation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Plan interpolation": {
+      "main": [
+        [
+          {
+            "node": "Submit interpolation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit interpolation": {
+      "main": [
+        [
+          {
+            "node": "Wait for interpolation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "id": "lhGpuPipeline001",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "tags": []
+}

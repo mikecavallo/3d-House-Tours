@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Material lab</title>
+<style>
+  html,body{margin:0;height:100%;background:#999;font:13px/1.3 Arial,sans-serif}
+  canvas{display:block;width:100%;height:100%}
+  #labels{position:absolute;left:0;right:0;bottom:8px;display:flex;justify-content:space-around;pointer-events:none}
+  #labels span{background:rgba(0,0,0,.6);color:#fff;padding:3px 6px;border-radius:3px}
+  #err{position:absolute;top:8px;left:8px;color:#fff;background:#b00;padding:6px;white-space:pre-wrap;display:none}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="labels"></div>
+<pre id="err"></pre>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/objects/Sky.js"></script>
+<script src="../src/_core.js"></script>
+<script src="../src/rig.js"></script>
+<script>
+/* Lab page for the photoreal modules.
+   ?mod=<name>        loads ../src/<name>.js and shows REAL[name].create(...).variants as sample pieces
+   ?mod=veg           shows REAL.veg samples instead
+   ?view=close|wide   camera distance; ?dark=1 evening light; ?only=<variantKey> show one variant big */
+const q = new URLSearchParams(location.search);
+const mod = q.get("mod") || "wood";
+const s = document.createElement("script");
+s.src = "../src/" + mod + ".js";
+s.onload = start;
+s.onerror = () => fail("could not load ../src/" + mod + ".js");
+document.body.appendChild(s);
+function fail(msg){ const e = document.getElementById("err"); e.style.display = "block"; e.textContent = msg; window.__ready = true; window.__error = msg; }
+window.addEventListener("error", e => fail(String(e.message || e)));
+
+function start(){
+  try {
+    const canvas = document.getElementById("c");
+    const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+    renderer.setPixelRatio(1);
+    renderer.setSize(innerWidth, innerHeight, false);
+    const scene = new THREE.Scene();
+    const rig = REAL.rig.create(THREE, renderer, scene, {dark: q.get("dark") === "1"});
+    const camera = new THREE.PerspectiveCamera(35, innerWidth/innerHeight, 0.05, 2000);
+
+    /* neutral gravel-grey pad to stand samples on */
+    const pad = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.MeshStandardMaterial({color:0x8a8a84, roughness:1}));
+    pad.rotation.x = -Math.PI/2; pad.receiveShadow = true; scene.add(pad);
+
+    const labels = document.getElementById("labels");
+    const items = [];
+    if (mod === "veg"){
+      const veg = REAL.veg.create(THREE, renderer, {});
+      (veg.samples || []).forEach(sp => items.push({label: sp.label || sp.type, obj: veg.make(sp.type, sp.size, sp.seed || 1), w: sp.footprint || sp.size * 0.8}));
+    } else {
+      const out = REAL[mod].create(THREE, renderer, {});
+      const only = q.get("only");
+      Object.entries(out.variants).forEach(([key, v]) => {
+        if (only && key !== only) return;
+        const size = v.sample || [1, 1, 1];
+        const n = v.count || 3;
+        const mesh = new THREE.InstancedMesh(new THREE.BoxGeometry(1,1,1), v.material, n);
+        mesh.castShadow = true; mesh.receiveShadow = true;
+        const m = new THREE.Matrix4(), qq = new THREE.Quaternion(), e = new THREE.Euler();
+        const rot = v.rot || [0, 0, 0];
+        const spread = v.spread || [Math.min(size[0], size[2]) * 1.6 + 0.2, 0, 0];
+        for (let i = 0; i < n; i++){
+          qq.setFromEuler(e.set(rot[0], rot[1], rot[2]));
+          m.compose(new THREE.Vector3(spread[0] * (i - (n-1)/2), size[1]/2 + spread[1] * i, spread[2] * (i - (n-1)/2)), qq, new THREE.Vector3(size[0], size[1], size[2]));
+          mesh.setMatrixAt(i, m);
+        }
+        if (v.color) for (let i = 0; i < n; i++) mesh.setColorAt(i, new THREE.Color(v.color));
+        const g = new THREE.Group(); g.add(mesh);
+        items.push({label: key, obj: g, w: Math.max(size[0] + Math.abs(spread[0]) * (n-1), size[2] + Math.abs(spread[2]) * (n-1), 1.5), h: size[1] + Math.abs(spread[1]) * (n-1)});
+      });
+    }
+    /* lay samples out in a row */
+    const gap = 1.2;
+    const total = items.reduce((a, it) => a + it.w, 0) + gap * (items.length - 1);
+    let x = -total/2;
+    items.forEach(it => {
+      it.obj.position.x = x + it.w/2;
+      x += it.w + gap;
+      it.obj.traverse(o => { if (o.isMesh){ o.castShadow = true; o.receiveShadow = true; } });
+      scene.add(it.obj);
+      const sp = document.createElement("span"); sp.textContent = it.label; labels.appendChild(sp);
+    });
+    let maxH = 1;
+    scene.updateMatrixWorld(true);
+    const bb = new THREE.Box3();
+    items.forEach(it => bb.expandByObject(it.obj));
+    if (!bb.isEmpty()) maxH = bb.max.y;
+    items.forEach(it => { if (it.h) maxH = Math.max(maxH, it.h); });
+    const view = q.get("view") || "wide";
+    const span = Math.max(total, maxH * 1.6);
+    const vf = THREE.MathUtils.degToRad(camera.fov/2), hf = Math.atan(Math.tan(vf) * camera.aspect);
+    const fit = Math.max((total/2) / Math.tan(hf), (maxH/2) / Math.tan(vf)) * 1.18 + 1;
+    const dist = (view === "close" ? 0.5 : 1.0) * fit;
+    camera.position.set(dist * 0.12, maxH * 0.5 + dist * 0.16, dist);
+    camera.lookAt(0, maxH * 0.45, 0);
+    rig.sun.shadow.camera.left = -span; rig.sun.shadow.camera.right = span;
+    rig.sun.shadow.camera.top = span; rig.sun.shadow.camera.bottom = -span;
+    rig.sun.shadow.camera.updateProjectionMatrix();
+    window.__lab = {renderer, scene, camera, rig, render: () => renderer.render(scene, camera)};
+    renderer.render(scene, camera);
+    requestAnimationFrame(() => { renderer.render(scene, camera); window.__ready = true; });
+  } catch (err){ fail(err && err.stack || String(err)); }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+heroes/dist/
+node_modules/
+.DS_Store
+__pycache__/
+heroes/media/ai/
+pipeline/logs/
+pipeline/n8n/local/

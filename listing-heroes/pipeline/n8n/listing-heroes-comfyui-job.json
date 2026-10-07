@@ -1,0 +1,675 @@
+{
+  "name": "listing-heroes \u00b7 ComfyUI job",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "name": "When called",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        300
+      ],
+      "id": "d71633cc-ebb7-514a-9964-6842b018a235"
+    },
+    {
+      "parameters": {
+        "jsCode": "return { json: $json };",
+        "mode": "runOnceForEachItem"
+      },
+      "name": "Job",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        300
+      ],
+      "id": "7ed65863-7485-5aea-86f6-b11f0731475d"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "59be98fd-efd6-4a9c-8963-160ea0a83e3a",
+              "leftValue": "={{ $json.mode }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "rightValue": "collect"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Collect mode?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        300
+      ],
+      "id": "3e27cc96-1626-54cc-a8db-568afc4b8f48"
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $('Job').first().json.repo }}/pipeline/comfyui/workflows/*.json",
+        "options": {}
+      },
+      "name": "Read workflow files",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        660,
+        460
+      ],
+      "id": "b1c683b9-7abe-597e-a725-10b515685c4d",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse every JSON file read by \"Read workflow files\" into { file, data }.\nconst out = [];\nconst items = $input.all();\nfor (let i = 0; i < items.length; i++) {\n  const buf = await this.helpers.getBinaryDataBuffer(i, 'data');\n  out.push({ json: { file: items[i].binary.data.fileName, data: JSON.parse(buf.toString('utf8')) } });\n}\nreturn out;\n"
+      },
+      "name": "Parse workflow files",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        460
+      ],
+      "id": "e9ff478e-b9f7-5c98-8004-02ae099f3cda"
+    },
+    {
+      "parameters": {
+        "jsCode": "// One item per photo/video the jobs need uploaded to ComfyUI (ji = index of the job).\nconst manifest = $('Parse workflow files').all().find((x) => x.json.file === 'manifest.json').json.data;\nconst ups = [];\n$('Job').all().forEach((it, ji) => {\n  const job = it.json, spec = manifest.workflows[job.workflow];\n  for (const [key, value] of Object.entries(job.params)) {\n    if (spec.params[key] && spec.params[key][0][2] === 'image') ups.push({ json: { ji, key, path: value, server: job.server } });\n  }\n});\nreturn ups;\n"
+      },
+      "name": "List uploads",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        460
+      ],
+      "id": "91a72095-f888-5bb8-9e4f-3149a5b7e42a"
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $json.path }}",
+        "options": {}
+      },
+      "name": "Read input file",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        1320,
+        460
+      ],
+      "id": "694b2288-3df6-55fd-b83f-02278a7ac6c4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('List uploads').item.json.server }}/upload/image",
+        "options": {
+          "timeout": 120000
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "image",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "overwrite",
+              "value": "true"
+            },
+            {
+              "name": "subfolder",
+              "value": "listing-heroes"
+            }
+          ]
+        }
+      },
+      "name": "Upload to ComfyUI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1540,
+        460
+      ],
+      "id": "a67dd630-ae15-506e-8406-7c847024cfcd"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Give every job the names ComfyUI assigned its uploads (\"subfolder/name\"), keyed by param.\nconst metas = $('List uploads').all().map((x) => x.json);\nconst byJob = {};\n$input.all().forEach((it, k) => {\n  const m = metas[k];\n  (byJob[m.ji] = byJob[m.ji] || {})[m.key] = it.json.subfolder ? `${it.json.subfolder}/${it.json.name}` : it.json.name;\n});\nreturn $('Job').all().map((it, ji) => ({ json: Object.assign({}, it.json, { uploads: byJob[ji] || {} }) }));\n"
+      },
+      "name": "Collect uploads",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        460
+      ],
+      "id": "55f48ae1-c557-5ed8-8963-9c5d958c00bb"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build the ComfyUI API prompt for one job: load the workflow, apply params (image params use the uploaded\n// names collected by the previous nodes), randomise seeds the caller didn't pin.\n// Runs once per item. Input item = the job plus uploads { paramName: 'subfolder/name' };\n// $('Parse workflow files') holds manifest.json and every workflow file.\nconst job = $input.item.json;\nconst files = {};\nfor (const it of $('Parse workflow files').all()) files[it.json.file] = it.json.data;\nconst manifest = files['manifest.json'];\nconst spec = manifest.workflows[job.workflow];\nif (!spec) throw new Error(`unknown workflow ${job.workflow}`);\nconst prompt = JSON.parse(JSON.stringify(files[spec.file]));\nconst byTitle = (t) => {\n  const id = Object.keys(prompt).find((k) => (prompt[k]._meta || {}).title === t);\n  if (!id) throw new Error(`${job.workflow}: no node titled \"${t}\"`);\n  return id;\n};\nconst uploads = job.uploads || {};\nfor (const [key, raw] of Object.entries(job.params)) {\n  const targets = spec.params[key];\n  if (!targets) throw new Error(`${job.workflow}: unknown param ${key}`);\n  const kind = targets[0][2];\n  let v = raw;\n  if (kind === 'image') v = uploads[key];\n  else if (kind === 'int') v = parseInt(raw, 10);\n  else if (kind === 'float') v = parseFloat(raw);\n  else if (kind === 'bool') v = ['1', 'true', 'yes', true].includes(raw);\n  for (const [title, field] of targets) prompt[byTitle(title)].inputs[field] = v;\n}\nif (!('seed' in job.params)) {\n  for (const node of Object.values(prompt)) {\n    for (const f of ['seed', 'noise_seed']) {\n      if (f in node.inputs && !Array.isArray(node.inputs[f])) node.inputs[f] = Math.floor(Math.random() * 2 ** 48);\n    }\n  }\n}\nreturn { json: Object.assign({}, job, { prompt_body: { prompt, client_id: 'listing-heroes-n8n' }, outputs: spec.outputs, titles: Object.fromEntries(Object.entries(spec.outputs).map(([label, t]) => [label, byTitle(t)])) }) };\n",
+        "mode": "runOnceForEachItem"
+      },
+      "name": "Build prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1980,
+        460
+      ],
+      "id": "bc8b689a-f526-57e1-851e-208fe297c022"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.server }}/prompt",
+        "options": {
+          "timeout": 120000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.prompt_body) }}"
+      },
+      "name": "Queue job",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2200,
+        460
+      ],
+      "id": "1b94657a-46c9-5c8f-bc30-085b0e915512"
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = Object.assign({}, $('Build prompt').item.json);\ndelete j.prompt_body; delete j.uploads;\nreturn { json: Object.assign(j, { prompt_id: $json.prompt_id, mode: 'collect' }) };",
+        "mode": "runOnceForEachItem"
+      },
+      "name": "Submitted",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2420,
+        460
+      ],
+      "id": "1d740529-1969-5535-bfba-a0d4bf405052"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "name": "Wait for job",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        660,
+        140
+      ],
+      "id": "e14d212f-f324-5e3c-b176-fb3b13fc4300",
+      "webhookId": "1490be14-ba69-5250-aaa5-475403d56166"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.server }}/history/{{ $json.prompt_id }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "name": "Get history",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        140
+      ],
+      "id": "c38cde96-e464-5d0e-a513-a401ddb9def6"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Classify one job from GET /history/<id>: pending, error or done (+ the files to download).\nconst job = $('Wait for job').item.json;\nconst hist = $input.item.json || {};\nconst entry = hist[job.prompt_id];\nif (!entry) return { json: Object.assign({}, job, { state: 'pending' }) };\nconst st = entry.status || {};\nif (st.status_str === 'error') {\n  const errs = (st.messages || []).filter((m) => m[0] === 'execution_error').map((m) => `${m[1].node_type} (${m[1].node_id}): ${(m[1].exception_message || '').trim()}`);\n  return { json: Object.assign({}, job, { state: 'error', error: errs.join('; ') || 'unknown ComfyUI error' }) };\n}\nif (st.completed === false) return { json: Object.assign({}, job, { state: 'pending' }) };\nconst downloads = [];\nfor (const [label, nodeId] of Object.entries(job.titles)) {\n  const out = (entry.outputs || {})[nodeId] || {};\n  const f = [].concat(out.images || [], out.videos || [], out.gifs || []).find((x) => x && x.filename && x.type === 'output');\n  if (f) {\n    const ext = f.filename.slice(f.filename.lastIndexOf('.'));\n    downloads.push({ filename: f.filename, subfolder: f.subfolder || '', type: f.type, dest: `${job.dir}/${job.name}${label ? '-' + label : ''}${ext}` });\n  }\n}\nif (!downloads.length) return { json: Object.assign({}, job, { state: 'error', error: 'job finished but saved nothing' }) };\nreturn { json: Object.assign({}, job, { state: 'done', downloads }) };\n",
+        "mode": "runOnceForEachItem"
+      },
+      "name": "Check job",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        140
+      ],
+      "id": "f958392b-4ba6-596b-9726-b3e5645e6de8"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2598891e-6800-44f4-9bf1-ad23ba0e7904",
+                    "leftValue": "={{ $json.state }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "rightValue": "pending"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "pending"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e456e2f9-7628-4d5a-909e-fcd991dc2d5f",
+                    "leftValue": "={{ $json.state }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "rightValue": "error"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "error"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e6b71eb1-d405-4f93-88a7-e4fed0f1a38c",
+                    "leftValue": "={{ $json.state }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "rightValue": "done"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "done"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Route",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1320,
+        140
+      ],
+      "id": "e3150502-b605-5500-b4da-4c1c2047d3c2"
+    },
+    {
+      "parameters": {
+        "errorMessage": "={{ $json.name }}: {{ $json.error }}"
+      },
+      "name": "Job failed",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1540,
+        140
+      ],
+      "id": "1d72fe11-42c7-500d-9985-42bfc70ba1f2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// One item per file to download, across every finished job.\nreturn $input.all().flatMap((it) => it.json.downloads.map((dl) => ({ json: { server: it.json.server, name: it.json.name, dl } })));\n"
+      },
+      "name": "Expand downloads",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1540,
+        0
+      ],
+      "id": "712bb4e3-a019-5212-93ef-e1781d6465f2"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.server }}/view?filename={{ encodeURIComponent($json.dl.filename) }}&subfolder={{ encodeURIComponent($json.dl.subfolder) }}&type={{ $json.dl.type }}",
+        "options": {
+          "timeout": 600000,
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "name": "Download",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1760,
+        0
+      ],
+      "id": "9cf8d2f1-0e54-54f7-832f-a0ed7116e838"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ $('Expand downloads').item.json.dl.dest }}",
+        "dataPropertyName": "data",
+        "options": {}
+      },
+      "name": "Save file",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        1980,
+        0
+      ],
+      "id": "ccc226dd-ca1b-5776-afda-56a205ea0b02"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { saved: $('Expand downloads').all().map((x) => x.json.dl.dest) } }];"
+      },
+      "name": "Saved",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2200,
+        0
+      ],
+      "id": "992e04e5-dc70-5ea2-8a92-38055d9bcf32"
+    },
+    {
+      "parameters": {
+        "content": "## listing-heroes: ComfyUI job\nCalled by the GPU pipeline. Items are jobs: {server, workflow, params, dir, name, repo, mode}.\n\n- **mode submit**: uploads the input photos, fills the workflow from pipeline/comfyui/workflows, queues it, returns prompt_id.\n- **mode collect**: polls /history every 10 s, downloads every output to dir/name[-label].ext.\n\nPure HTTP to ComfyUI: nothing to install.",
+        "height": 420,
+        "width": 520
+      },
+      "name": "README",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        -260
+      ],
+      "id": "224c2ec5-e1e9-59ae-8072-e0c0f8e3802b"
+    }
+  ],
+  "connections": {
+    "When called": {
+      "main": [
+        [
+          {
+            "node": "Job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Job": {
+      "main": [
+        [
+          {
+            "node": "Collect mode?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect mode?": {
+      "main": [
+        [
+          {
+            "node": "Wait for job",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Read workflow files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read workflow files": {
+      "main": [
+        [
+          {
+            "node": "Parse workflow files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse workflow files": {
+      "main": [
+        [
+          {
+            "node": "List uploads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List uploads": {
+      "main": [
+        [
+          {
+            "node": "Read input file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read input file": {
+      "main": [
+        [
+          {
+            "node": "Upload to ComfyUI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to ComfyUI": {
+      "main": [
+        [
+          {
+            "node": "Collect uploads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect uploads": {
+      "main": [
+        [
+          {
+            "node": "Build prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build prompt": {
+      "main": [
+        [
+          {
+            "node": "Queue job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Queue job": {
+      "main": [
+        [
+          {
+            "node": "Submitted",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for job": {
+      "main": [
+        [
+          {
+            "node": "Get history",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get history": {
+      "main": [
+        [
+          {
+            "node": "Check job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check job": {
+      "main": [
+        [
+          {
+            "node": "Route",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route": {
+      "main": [
+        [
+          {
+            "node": "Wait for job",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Job failed",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Expand downloads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Expand downloads": {
+      "main": [
+        [
+          {
+            "node": "Download",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download": {
+      "main": [
+        [
+          {
+            "node": "Save file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save file": {
+      "main": [
+        [
+          {
+            "node": "Saved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "id": "lhComfyJob000001",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "tags": []
+}

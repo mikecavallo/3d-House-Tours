@@ -1,0 +1,737 @@
+<title>Vine Leaf Residence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Chivo+Mono:wght@400;500;600&family=Chivo:wght@300;400;500&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --paper:#efeee8; --paper-2:#e6e4da; --paper-3:#f6f5f0;
+  --ink:#1f242c; --ink-2:#565d69; --rule:rgba(31,36,44,.18); --rule-2:rgba(31,36,44,.55);
+  --blue:#2350a0; --blue-soft:rgba(35,80,160,.10); --blue-line:rgba(35,80,160,.07);
+  --sun:#d8962c; --sun-glow:rgba(255,205,120,.34);
+  --img-filter:none; --img-blend:multiply;
+  --scrim:rgba(239,238,232,.86);
+  --display:'Gloock','Libre Caslon Display',Georgia,serif;
+  --mono:'Chivo Mono','Azeret Mono',ui-monospace,Menlo,monospace;
+  --body:'Chivo','Helvetica Neue',Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --paper:#10295a; --paper-2:#0c214b; --paper-3:#143168;
+  --ink:#eaf0fa; --ink-2:#a9bcdd; --rule:rgba(234,240,250,.18); --rule-2:rgba(234,240,250,.55);
+  --blue:#a7c6ff; --blue-soft:rgba(167,198,255,.12); --blue-line:rgba(167,198,255,.07);
+  --sun:#f3c56b; --sun-glow:rgba(255,205,120,.30);
+  --img-filter:invert(1); --img-blend:screen; --scrim:rgba(16,41,90,.88);
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#10295a; --paper-2:#0c214b; --paper-3:#143168;
+  --ink:#eaf0fa; --ink-2:#a9bcdd; --rule:rgba(234,240,250,.18); --rule-2:rgba(234,240,250,.55);
+  --blue:#a7c6ff; --blue-soft:rgba(167,198,255,.12); --blue-line:rgba(167,198,255,.07);
+  --sun:#f3c56b; --sun-glow:rgba(255,205,120,.30);
+  --img-filter:invert(1); --img-blend:screen; --scrim:rgba(16,41,90,.88);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:auto}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.55 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.mono{font-family:var(--mono);letter-spacing:.04em}
+.lab{font:500 10px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- hero: the sheet ---------- */
+.hero{position:relative;height:340vh}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;overflow:clip;background:var(--paper)}
+.poster{position:absolute;inset:0;background:var(--paper)}
+.poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;mix-blend-mode:var(--img-blend);filter:var(--img-filter);opacity:.92}
+canvas#view{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .9s ease;touch-action:pan-y;cursor:crosshair;outline:none}
+canvas#view.on{opacity:1}
+canvas#view.dev{cursor:grab}
+canvas#view:focus-visible{outline:2px solid var(--blue);outline-offset:-6px}
+/* blueprint layers: invert the drawing, then lay it on blueprint blue; the daylight hole stays photographic */
+.bp{position:absolute;inset:0;pointer-events:none;display:none}
+.bp-inv{background:#fff;mix-blend-mode:difference}
+.bp-tint{background:#12306a;mix-blend-mode:screen}
+.glow{position:absolute;inset:0;pointer-events:none;mix-blend-mode:soft-light;opacity:0}
+.sun{position:absolute;left:0;top:0;pointer-events:none;border-radius:50%;border:1px dashed var(--blue);opacity:0;will-change:transform}
+.sun::before,.sun::after{content:"";position:absolute;left:50%;top:50%;background:var(--blue)}
+.sun::before{width:15px;height:1px;margin:-.5px 0 0 -7.5px}
+.sun::after{width:1px;height:15px;margin:-7.5px 0 0 -.5px}
+.sun span{position:absolute;left:50%;top:-1px;transform:translate(-50%,-50%);background:var(--paper);padding:2px 6px;font:500 9px/1 var(--mono);letter-spacing:.16em;color:var(--blue);white-space:nowrap}
+
+/* sheet frame: border with zone ticks, like a real drawing sheet */
+.frame{position:absolute;inset:14px;border:1px solid var(--rule-2);pointer-events:none}
+.frame::after{content:"";position:absolute;inset:5px;border:1px solid var(--rule)}
+.zones{position:absolute;display:flex;justify-content:space-around;font:500 9px/1 var(--mono);color:var(--ink-2);letter-spacing:.1em}
+.zones.t{left:0;right:0;top:-12px}.zones.b{left:0;right:0;bottom:-12px}
+.zones.l,.zones.r{flex-direction:column;top:0;bottom:0;align-items:center}
+.zones.l{left:-11px}.zones.r{right:-11px}
+.zones span{background:var(--paper);padding:1px 3px}
+
+.bar{position:absolute;left:20px;right:20px;top:20px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;z-index:7}
+.brand{background:var(--paper);border:1px solid var(--rule-2);padding:9px 12px 8px;display:flex;flex-direction:column;gap:3px}
+.brand b{font:600 12px/1 var(--mono);letter-spacing:.2em}
+.brand small{font:400 10px/1 var(--mono);letter-spacing:.08em;color:var(--ink-2)}
+.tools{display:flex;gap:6px;align-items:stretch}
+.tbtn{background:var(--paper);border:1px solid var(--rule-2);padding:0 12px;height:38px;display:inline-flex;align-items:center;gap:8px;font:500 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;border-radius:0}
+.tbtn:hover{background:var(--paper-3)}
+.tbtn[aria-pressed="true"],.tbtn[aria-expanded="true"]{background:var(--ink);color:var(--paper)}
+.tbtn svg{width:16px;height:16px;flex:none}
+.compass{width:38px;height:38px;background:var(--paper);border:1px solid var(--rule-2);display:grid;place-items:center}
+.compass svg{width:28px;height:28px}
+.seg{display:none}
+@media (pointer:coarse),(max-width:760px){.seg{display:inline-flex}}
+.seg.hide{display:none!important}
+.seg button{background:var(--paper);border:1px solid var(--rule-2);height:38px;padding:0 10px;font:500 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.seg button+button{border-left:0}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+/* title block */
+.tb{position:absolute;right:20px;bottom:20px;width:min(560px,calc(100% - 40px));background:var(--paper);border:1.5px solid var(--ink);z-index:4;transition:opacity .3s}
+.tb.away{opacity:0;pointer-events:none}
+.tb-head{overflow:hidden;border-bottom:1px solid var(--ink)}
+.tb-head-in{padding:14px 18px 16px;display:grid;grid-template-columns:1fr auto;gap:4px 16px;align-items:end}
+.tb-head h1{grid-column:1/-1;margin:2px 0 0;font:400 clamp(40px,5.2vw,68px)/.95 var(--display);letter-spacing:-.01em}
+.tb-head .addr{margin:6px 0 0;font:400 15px/1.3 var(--body);color:var(--ink-2)}
+.tb-head .kick{font:500 10px/1.2 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--blue);text-align:right}
+.tb-row{display:grid;grid-template-columns:1.05fr 1.6fr .7fr .9fr}
+.tb-row>div{padding:8px 12px 9px;border-right:1px solid var(--rule-2);min-width:0}
+.tb-row>div:last-child{border-right:0}
+.tb-row .v{display:block;margin-top:5px;font:500 14px/1.15 var(--mono);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-row .v.big{font:400 22px/1.2 var(--display);letter-spacing:0;margin-top:2px}
+.tb-row .v.sheetno{color:var(--blue);font-size:18px;font-weight:600}
+.tb-note{border-top:1px solid var(--rule-2);padding:9px 12px 10px;display:flex;gap:10px;align-items:center;font:400 12px/1.4 var(--mono);color:var(--ink-2);letter-spacing:.01em}
+.tb-note i{flex:none;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,var(--sun) 0 35%,transparent 36%);box-shadow:0 0 0 1px var(--sun) inset}
+.tb-credit{border-top:1px solid var(--rule);padding:6px 12px 7px;font:400 10px/1.3 var(--mono);color:var(--ink-2);letter-spacing:.06em;text-transform:uppercase}
+
+/* sheet change: a fresh sheet slides over and away */
+.flip{position:absolute;inset:0;background:var(--paper);z-index:6;opacity:0;visibility:hidden;pointer-events:none;display:grid;place-items:center}
+.flip::before{content:"";position:absolute;inset:14px;border:1px solid var(--rule-2)}
+.flip p{margin:0;text-align:center}
+.flip .n{display:block;font:600 14px/1 var(--mono);letter-spacing:.24em;color:var(--blue)}
+.flip .t{display:block;margin-top:14px;font:400 clamp(44px,7vw,96px)/1 var(--display)}
+
+/* sheet index */
+.index{position:absolute;z-index:8;right:20px;top:68px;bottom:20px;width:360px;background:var(--paper);border:1.5px solid var(--ink);display:flex;flex-direction:column;transform:translateX(calc(100% + 30px));transition:transform .45s cubic-bezier(.2,.7,.2,1);visibility:hidden}
+.index.open{transform:none;visibility:visible}
+.ix-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--ink)}
+.ix-head h2{margin:0;font:400 26px/1 var(--display)}
+.ix-close{background:none;border:1px solid var(--rule-2);width:34px;height:34px;display:grid;place-items:center}
+.ix-list{overflow:auto;flex:1;padding:0 0 10px;overscroll-behavior:contain}
+.ix-grp{position:sticky;top:0;background:var(--paper-2);padding:8px 14px;border-bottom:1px solid var(--rule);font:600 10px/1.2 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);display:flex;justify-content:space-between}
+.ix-item{display:grid;grid-template-columns:64px 1fr auto;align-items:center;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--rule);padding:10px 14px;gap:8px}
+.ix-item:hover{background:var(--blue-soft)}
+.ix-item .no{font:600 12px/1 var(--mono);color:var(--blue);letter-spacing:.06em}
+.ix-item .nm{font:400 15px/1.2 var(--body)}
+.ix-item .c{font:500 9px/1 var(--mono);letter-spacing:.14em;color:var(--ink-2)}
+.ix-item[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.ix-item[aria-current="true"] .no,.ix-item[aria-current="true"] .c{color:var(--paper)}
+.stage.modal{position:fixed;inset:0;z-index:50;height:100vh;height:100dvh}
+:root.lock,:root.lock body{overflow:hidden}
+.scrim{position:absolute;inset:0;z-index:7;background:rgba(0,0,0,.18);opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.on{opacity:1;pointer-events:auto}
+.grab{display:none}
+
+/* ---------- page below ---------- */
+main{position:relative;background:var(--paper);background-image:linear-gradient(var(--blue-line) 1px,transparent 1px),linear-gradient(90deg,var(--blue-line) 1px,transparent 1px);background-size:32px 32px}
+.sec{max-width:1280px;margin:0 auto;padding:110px 40px 40px}
+.sec-h{display:grid;grid-template-columns:200px 1fr;gap:24px;border-top:1.5px solid var(--ink);padding-top:14px;margin-bottom:44px}
+.sec-h .lab{padding-top:8px}
+.sec-h .lab b{display:block;font:600 15px/1 var(--mono);color:var(--blue);letter-spacing:.08em;margin-bottom:6px}
+.sec-h h2{margin:0;font:400 clamp(38px,5vw,72px)/1 var(--display);letter-spacing:-.01em;max-width:16ch}
+.sec-h p{margin:16px 0 0;max-width:58ch;color:var(--ink-2);font-size:17px}
+
+.notes{display:grid;grid-template-columns:200px 1fr 1fr;gap:24px}
+.notes ol{list-style:none;margin:0;padding:0;counter-reset:n;grid-column:2/4;columns:2;column-gap:48px}
+.notes li{counter-increment:n;break-inside:avoid;padding:12px 0 14px 46px;border-bottom:1px solid var(--rule);position:relative;font-size:17px;line-height:1.45}
+.notes li::before{content:counter(n,decimal-leading-zero);position:absolute;left:0;top:14px;font:600 12px/1 var(--mono);color:var(--blue);letter-spacing:.06em}
+.notes .fine{grid-column:2/4;margin:6px 0 0;font:400 12px/1.5 var(--mono);color:var(--ink-2)}
+
+.set{display:grid;grid-template-columns:200px 1fr;gap:24px;margin-bottom:56px}
+.set .grp b{display:block;font:600 13px/1 var(--mono);color:var(--blue);letter-spacing:.08em}
+.set .grp span{display:block;margin-top:8px;font:400 22px/1.1 var(--display)}
+.set .grp small{display:block;margin-top:6px;font:400 11px/1 var(--mono);color:var(--ink-2);letter-spacing:.08em}
+.sheets{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.sheet{display:block;text-align:left;padding:0;background:var(--paper-3);border:1px solid var(--rule-2);border-radius:0}
+.sheet:hover{border-color:var(--ink)}
+.sh-fig{display:block;position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--paper-3);border-bottom:1px solid var(--rule-2)}
+.sh-fig img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.sh-fig .ink{mix-blend-mode:var(--img-blend);filter:var(--img-filter)}
+:root[data-theme="dark"] .sh-fig,:root[data-theme="dark"] .poster{background:#12306a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sh-fig,:root:not([data-theme="light"]) .poster{background:#12306a}}
+.sh-fig .ph{opacity:0;transition:opacity .35s;-webkit-mask-image:radial-gradient(circle at var(--mx,50%) var(--my,50%),#000 0,#000 22%,transparent 58%);mask-image:radial-gradient(circle at var(--mx,50%) var(--my,50%),#000 0,#000 22%,transparent 58%)}
+.sheet:hover .ph{opacity:1}
+.sheet:focus-visible .ph{opacity:1;-webkit-mask-image:none;mask-image:none}
+.sh-tb{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:baseline;padding:9px 10px 10px}
+.sh-tb .no{font:600 11px/1 var(--mono);color:var(--blue);letter-spacing:.06em}
+.sh-tb .nm{font:400 15px/1.2 var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sh-tb .c{font:500 9px/1 var(--mono);letter-spacing:.14em;color:var(--ink-2)}
+
+/* before / after */
+.ba-wrap{display:grid;grid-template-columns:200px 1fr;gap:24px}
+.ba-tabs{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--rule-2)}
+.ba-tabs button{background:none;border:0;border-bottom:1px solid var(--rule-2);text-align:left;padding:11px 0;display:flex;gap:12px;align-items:baseline}
+.ba-tabs button .no{font:600 11px/1 var(--mono);color:var(--blue);width:46px}
+.ba-tabs button .nm{font:400 16px/1.2 var(--body)}
+.ba-tabs button[aria-selected="true"] .nm{font-family:var(--display);font-size:20px}
+.ba-tabs button[aria-selected="true"]{border-bottom-color:var(--ink)}
+.ba{position:relative;aspect-ratio:16/10;overflow:hidden;border:1.5px solid var(--ink);background:#777;touch-action:pan-y;cursor:ew-resize;user-select:none;-webkit-user-select:none;--x:50%}
+.ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.ba .raw{clip-path:inset(0 calc(100% - var(--x)) 0 0)}
+.ba .line{position:absolute;top:0;bottom:0;left:var(--x);width:0;border-left:1.5px solid #fff;box-shadow:0 0 0 .5px rgba(0,0,0,.35)}
+.ba .knob{position:absolute;top:50%;left:var(--x);width:46px;height:46px;transform:translate(-50%,-50%);border-radius:50%;background:#fff;color:#1f242c;display:grid;place-items:center;box-shadow:0 1px 6px rgba(0,0,0,.25)}
+.ba .knob svg{width:22px;height:22px}
+.ba .tag{position:absolute;top:14px;padding:6px 9px;background:rgba(20,24,30,.72);color:#fff;font:500 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.ba .tag.l{left:14px}.ba .tag.r{right:14px}
+.ba input{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px}
+.ba:focus-within{outline:2px solid var(--blue);outline-offset:3px}
+.ba-cap{margin:12px 0 0;display:flex;justify-content:space-between;gap:16px;font:400 12px/1.4 var(--mono);color:var(--ink-2)}
+
+/* transmittal form */
+.form{display:grid;grid-template-columns:200px 1fr;gap:24px}
+form{border:1.5px solid var(--ink);background:var(--paper-3);display:grid;grid-template-columns:1fr 1fr}
+form label{display:block;padding:12px 16px 14px;border-bottom:1px solid var(--rule-2)}
+form label+label{border-left:1px solid var(--rule-2)}
+form label.full{grid-column:1/-1;border-left:0}
+form input,form textarea{display:block;width:100%;margin-top:8px;border:0;border-bottom:1px solid var(--rule-2);background:transparent;padding:6px 0;font:400 18px/1.4 var(--body);border-radius:0}
+form textarea{resize:vertical;min-height:96px}
+form input:focus,form textarea:focus{outline:none;border-bottom-color:var(--blue);box-shadow:0 1px 0 var(--blue)}
+.fs{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px}
+.fs p{margin:0;font:400 12px/1.4 var(--mono);color:var(--ink-2)}
+.go{background:var(--ink);color:var(--paper);border:0;padding:14px 22px;font:600 12px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase}
+.go:hover{background:var(--blue)}
+.ok{grid-column:1/-1;padding:28px 16px}
+.ok h3{margin:0;font:400 34px/1.05 var(--display)}
+.ok p{margin:10px 0 0;color:var(--ink-2)}
+
+footer{border-top:1.5px solid var(--ink);margin:90px auto 0;max-width:1280px;padding:18px 40px 40px;display:flex;justify-content:space-between;gap:20px;font:400 11px/1.6 var(--mono);color:var(--ink-2);letter-spacing:.04em}
+
+/* ---------- phone ---------- */
+@media (max-width:760px){
+  .hero{height:300vh}
+  .frame{inset:8px}
+  .zones{display:none}
+  .bar{left:16px;right:16px;top:16px}
+  .brand{padding:8px 10px 7px}
+  .brand small{display:none}
+  .brand b{white-space:nowrap;font-size:11px;letter-spacing:.16em}
+  .compass{display:none}
+  .stage.modal .brand{display:none}
+  .tbtn{padding:0 10px}
+  .tbtn .tl{display:none}
+  .tb{left:16px;right:16px;bottom:16px;width:auto}
+  .tb-head-in{padding:10px 12px 12px}
+  .tb-head h1{font-size:40px}
+  .tb-head .addr{font-size:14px}
+  .tb-head .kick{display:none}
+  .tb-row{grid-template-columns:1fr 1.6fr}
+  .tb-row>div:nth-child(2){border-right:0}
+  .tb-row>div:nth-child(n+3){display:none}
+  .tb-row .v.big{font-size:19px}
+  .tb-note{font-size:11px;padding:8px 12px}
+  .tb-credit{display:none}
+  .index{left:0;right:0;bottom:0;top:auto;width:auto;height:74%;border-width:1.5px 0 0;transform:translateY(102%)}
+  .grab{display:block;width:44px;height:4px;background:var(--rule-2);margin:8px auto 0}
+  .ix-head{padding:8px 16px 12px}
+  .sec{padding:80px 16px 24px}
+  .sec-h,.notes,.set,.ba-wrap,.form{grid-template-columns:1fr;gap:12px}
+  .sec-h{margin-bottom:28px}
+  .sec-h p{font-size:16px}
+  .notes ol{grid-column:1;columns:1}
+  .notes .fine{grid-column:1}
+  .sheets{grid-template-columns:1fr 1fr;gap:10px}
+  .sh-tb{grid-template-columns:auto 1fr;padding:8px}
+  .sh-tb .c{display:none}
+  .sh-tb .nm{font-size:13px}
+  .ba-tabs{display:grid;grid-template-columns:1fr 1fr;column-gap:16px;border-top:0}
+  .ba-tabs button{padding:10px 0}
+  .ba-tabs button .no{width:auto}
+  .ba{aspect-ratio:4/3}
+  .ba-cap{flex-direction:column;gap:4px}
+  form{grid-template-columns:1fr}
+  form label+label{border-left:0}
+  .fs{flex-direction:column;align-items:stretch}
+  footer{flex-direction:column;padding:16px 16px 32px;margin-top:60px}
+}
+@media (prefers-reduced-motion:reduce){
+  .hero{height:100vh;height:100svh}
+  .index,.flip,.tb,canvas#view,.scrim{transition:none}
+}
+</style>
+
+<section class="hero" id="top" aria-label="Vine Leaf Residence, 360 drawing set">
+  <div class="stage" id="stage">
+    <div class="poster" aria-hidden="true"><img src="assets/hero-ink.jpg" alt=""></div>
+    <canvas id="view" tabindex="0" role="img" aria-label="360 view of the Living Room, drawn as an ink sketch. Move the pointer to light it, drag to look around, press Enter to develop the photograph, arrow keys to turn."></canvas>
+    <div class="bp bp-inv" id="bpInv"></div>
+    <div class="bp bp-tint" id="bpTint"></div>
+    <div class="glow" id="glow"></div>
+    <div class="sun" id="sun"><span>DAYLIGHT</span></div>
+
+    <div class="frame" aria-hidden="true">
+      <div class="zones t"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+      <div class="zones b"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+      <div class="zones l"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+      <div class="zones r"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+    </div>
+
+    <div class="flip" id="flip" aria-hidden="true"><p><span class="n" id="flipNo">A-101</span><span class="t" id="flipT">Foyer</span></p></div>
+
+    <div class="bar">
+      <div class="brand"><b>VINE LEAF</b><small>Drawing set, 24 sheets, all 360</small></div>
+      <div class="tools">
+        <div class="seg" id="seg" role="group" aria-label="Finger moves">
+          <button type="button" id="mLight" aria-pressed="true">Light</button><button type="button" id="mLook" aria-pressed="false">Look</button>
+        </div>
+        <button class="tbtn" type="button" id="redraw" hidden title="Back to the drawing"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 14l2.5-.6L13 4.9 11.1 3 2.6 11.5z"/><path d="M9.8 4.3l1.9 1.9"/></svg><span class="tl">Redraw</span></button>
+        <button class="tbtn" type="button" id="theme" aria-label="Switch to blueprint"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="2" width="12" height="12"/><path d="M2 6h12M6 2v12"/></svg><span class="tl" id="themeL">Blueprint</span></button>
+        <span class="compass" aria-hidden="true" title="View direction"><svg viewBox="0 0 28 28"><circle cx="14" cy="14" r="12" fill="none" stroke="currentColor" stroke-opacity=".45"/><g id="needle"><path d="M14 3.5l3 10.5h-6z" fill="var(--blue)"/><path d="M14 24.5l-3-10.5h6z" fill="none" stroke="currentColor" stroke-opacity=".7"/></g></svg></span>
+        <button class="tbtn" type="button" id="closeView" hidden aria-label="Close the viewer and return to the drawing list"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 3l10 10M13 3L3 13"/></svg><span class="tl">Close</span></button>
+        <button class="tbtn" type="button" id="ixBtn" aria-expanded="false" aria-controls="index"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 3.5h12M2 8h12M2 12.5h12"/></svg><span class="tl">Sheet index</span><span>24</span></button>
+      </div>
+    </div>
+
+    <div class="tb" id="tb">
+      <div class="tb-head" id="tbHead"><div class="tb-head-in">
+        <span class="lab">Project</span><span class="kick">From drawing to home</span>
+        <h1>Vine Leaf Residence</h1>
+        <p class="addr">8902 Vine Leaf, Schertz, Texas</p>
+      </div></div>
+      <div class="tb-row">
+        <div><span class="lab">Sheet</span><span class="v sheetno" id="tbNo">A-109</span></div>
+        <div><span class="lab">Title</span><span class="v big" id="tbT">Living Room</span></div>
+        <div><span class="lab">Scale</span><span class="v">1:1</span></div>
+        <div><span class="lab">Drawn by</span><span class="v">Light</span></div>
+      </div>
+      <div class="tb-note" aria-live="polite"><i aria-hidden="true"></i><span id="note">Move the light across the drawing. Scroll to bring the room to daylight.</span></div>
+      <div class="tb-credit">360 photography: Jamie Farley Photography, LLC</div>
+    </div>
+
+    <div class="scrim" id="scrim"></div>
+    <aside class="index" id="index" aria-label="Sheet index">
+      <div class="grab" aria-hidden="true"></div>
+      <div class="ix-head"><h2>Sheet index</h2><button class="ix-close" type="button" id="ixClose" aria-label="Close sheet index"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 3l10 10M13 3L3 13"/></svg></button></div>
+      <div class="ix-list" id="ixList"></div>
+    </aside>
+  </div>
+</section>
+
+<main>
+  <section class="sec" aria-labelledby="g1">
+    <div class="sec-h"><div class="lab"><b>G-001</b>General notes</div><div><h2 id="g1">An empty house, drawn and lit room by room.</h2><p>8902 Vine Leaf sits on the edge of open land in Schertz, Texas. Every room was photographed in 360. Here is what the photographs show.</p></div></div>
+    <div class="notes">
+      <ol>
+        <li>Tile floors run through the foyer, halls, kitchen, dining and living spaces.</li>
+        <li>White shaker cabinets with granite counters, a large island and pendant lights in the kitchen.</li>
+        <li>Arched openings, plantation shutters and a fireplace in the living room.</li>
+        <li>Carpeted bedrooms, a primary suite with a bay of windows, and a walk-in closet with built-in shelving.</li>
+        <li>A walk-in shower with a herringbone tile band and a double vanity.</li>
+        <li>A covered back porch that looks over open land and a vineyard row.</li>
+      </ol>
+      <p class="fine">Notes describe what is visible in the photographs only. Ask for specifications, plans and measurements at the showing.</p>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="g2" id="setSec">
+    <div class="sec-h"><div class="lab"><b>A-000</b>Drawing list</div><div><h2 id="g2">Twenty-four sheets. Every one is a room you can stand in.</h2><p>Every room starts as a drawing. Open one and it develops into the photograph from wherever you tap.</p></div></div>
+    <div id="setList"></div>
+  </section>
+
+  <section class="sec" aria-labelledby="g3">
+    <div class="sec-h"><div class="lab"><b>G-002</b>Before and after the grade</div><div><h2 id="g3">Same photo, finished properly.</h2><p>Same photo. Corrected white balance, local contrast and color. Drag the line to compare the frame as it came from the tour with the graded version used on this page.</p></div></div>
+    <div class="ba-wrap">
+      <div class="ba-tabs" role="tablist" aria-label="Compare a room" id="baTabs"></div>
+      <div>
+        <div class="ba" id="ba">
+          <img class="gr" id="baG" alt="" draggable="false">
+          <img class="raw" id="baR" alt="" draggable="false">
+          <span class="tag l">Original</span><span class="tag r">Graded</span>
+          <span class="line" aria-hidden="true"></span>
+          <span class="knob" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg></span>
+          <input type="range" min="0" max="100" value="50" id="baIn" aria-label="Comparison position, original on the left, graded on the right">
+        </div>
+        <p class="ba-cap"><span id="baCap">A-204 Bathroom 2, a 75 degree crop from the 360</span><span>No objects added or removed.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="g4">
+    <div class="sec-h"><div class="lab"><b>T-001</b>Transmittal</div><div><h2 id="g4">Book a private showing.</h2><p>See the real light in these rooms. Leave your details and a note about when suits you.</p></div></div>
+    <div class="form">
+      <div></div>
+      <form id="form" novalidate>
+        <label><span class="lab">Name</span><input name="name" autocomplete="name" required></label>
+        <label><span class="lab">Email</span><input name="email" type="email" autocomplete="email" required></label>
+        <label class="full"><span class="lab">Message</span><textarea name="msg" placeholder="Days and times that work for you"></textarea></label>
+        <div class="fs"><p id="formMsg">Re: 8902 Vine Leaf, Schertz, Texas</p><button class="go" type="submit">Request a showing</button></div>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <span>Concept demo built from the property's 360 tour. 360 photography: Jamie Farley Photography, LLC.</span>
+    <span>Vine Leaf Residence, sheet set A-101 to A-401</span>
+  </footer>
+</main>
+
+<script src="../../engine/pano.js"></script>
+<script>
+(async () => {
+  'use strict';
+  const MEDIA = window.MEDIA_BASE || '../../media/vine-leaf';
+  const { clamp, lerp, ease, easeOut, wrapPi } = PanoKit;
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = s => document.querySelector(s);
+  const TAU = Math.PI * 2;
+
+  // sheet set: [sheet no, room index, display name, view fraction across the equirect]
+  const GROUPS = [
+    ['A-100', 'Main living', [['A-101', 1, 'Foyer', .56], ['A-102', 2, 'Hallway 1', .53], ['A-103', 3, 'Office', .3], ['A-104', 4, 'Hallway 2', .7], ['A-105', 5, 'Kitchen', .31], ['A-106', 6, 'Dining Room', .27], ['A-107', 7, 'Desk', .3], ['A-108', 8, 'Walkway', .19], ['A-109', 9, 'Living Room', .97], ['A-110', 16, 'Hallway 3', .47], ['A-111', 17, 'Bonus Room', .2]]],
+    ['A-200', 'Bedrooms and baths', [['A-201', 10, 'Primary Suite 1', 0], ['A-202', 11, 'Primary Suite 2', .75], ['A-203', 12, 'Bathroom 1', .5], ['A-204', 13, 'Bathroom 2', .28], ['A-205', 18, 'Bathroom 3', .45], ['A-206', 19, 'Bedroom 2', .5], ['A-207', 20, 'Bedroom 3', .72], ['A-208', 22, 'Bedroom 4', .55], ['A-209', 23, 'Bathroom 4', .3]]],
+    ['A-300', 'Service', [['A-301', 14, 'Closet', .5], ['A-302', 15, 'Laundry', .69], ['A-303', 21, 'Garage', .1]]],
+    ['A-400', 'Exterior', [['A-401', 24, 'Porch', .22, .14]]],
+  ];
+  const SHEETS = [];
+  GROUPS.forEach(g => g[2].forEach(s => SHEETS.push({ no: s[0], i: s[1], name: s[2], yaw: (s[3] - .5) * TAU, pitch: s[4], grp: g[0] })));
+  const byRoom = new Map(SHEETS.map(s => [s.i, s]));
+  const pad = i => String(i).padStart(2, '0');
+
+  /* ---------- build index + drawing list ---------- */
+  const ixList = $('#ixList'), setList = $('#setList');
+  for (const [code, label, items] of GROUPS) {
+    const h = document.createElement('div'); h.className = 'ix-grp'; h.innerHTML = `<span>${code} ${label}</span><span>${items.length}</span>`; ixList.append(h);
+    const blk = document.createElement('div'); blk.className = 'set';
+    blk.innerHTML = `<div class="grp"><b>${code}</b><span>${label}</span><small>${items.length} ${items.length > 1 ? 'sheets' : 'sheet'}</small></div><div class="sheets"></div>`;
+    const grid = blk.querySelector('.sheets');
+    for (const [no, i, name] of items) {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'ix-item'; b.dataset.i = i;
+      b.innerHTML = `<span class="no">${no}</span><span class="nm">${name}</span><span class="c">360</span>`;
+      ixList.append(b);
+      const c = document.createElement('button'); c.type = 'button'; c.className = 'sheet'; c.dataset.i = i;
+      c.setAttribute('aria-label', `Open sheet ${no}, ${name}, in the 360 viewer`);
+      c.innerHTML = `<span class="sh-fig"><img class="ink" src="assets/s${pad(i)}-ink.jpg" alt="" loading="lazy" decoding="async"><img class="ph" src="assets/s${pad(i)}.jpg" alt="" loading="lazy" decoding="async"></span><span class="sh-tb"><span class="no">${no}</span><span class="nm">${name}</span><span class="c">360</span></span>`;
+      grid.append(c);
+    }
+    setList.append(blk);
+  }
+  setList.addEventListener('pointermove', e => {
+    const c = e.target.closest('.sheet'); if (!c) return;
+    const f = c.querySelector('.sh-fig').getBoundingClientRect();
+    c.style.setProperty('--mx', (e.clientX - f.left) + 'px'); c.style.setProperty('--my', (e.clientY - f.top) + 'px');
+  });
+
+  /* ---------- theme ---------- */
+  const root = document.documentElement;
+  const isDark = () => root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  const syncTheme = () => { const d = isDark(); $('#themeL').textContent = d ? 'Vellum' : 'Blueprint'; $('#theme').setAttribute('aria-label', d ? 'Switch to vellum, light theme' : 'Switch to blueprint, dark theme'); };
+  $('#theme').addEventListener('click', () => { root.dataset.theme = isDark() ? 'light' : 'dark'; syncTheme(); });
+  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', syncTheme);
+  syncTheme();
+
+  /* ---------- stage state ---------- */
+  const canvas = $('#view'), stage = $('#stage'), hero = $('#top');
+  const note = $('#note'), tbHead = $('#tbHead'), sun = $('#sun'), glow = $('#glow'), bpInv = $('#bpInv'), bpTint = $('#bpTint');
+  const coarse = matchMedia('(pointer: coarse)').matches;
+  const S = {
+    mode: 'hero',          // hero: scroll grows the light; sheet: a chosen room, develops on tap
+    R: 0, line: 1,         // sheet mode radius (height units) and line amount
+    lock: false,           // light centre locked while developing
+    developed: false, flipping: false,
+    finger: 'light',
+    p: 0, lastP: 0,
+    tx: 0, ty: 0, lx: 0, ly: 0, hasPtr: false, t: 0,
+    cur: byRoom.get(9),
+  };
+  const W = () => canvas.clientWidth, H = () => canvas.clientHeight;
+  const baseR = () => Math.min(W(), H()) * (W() < 700 ? .4 : .36) / H();
+  const SOFT = .56;
+  const coverR = (x, y) => { const w = W(), h = H(); const dx = Math.max(x, w - x) / h, dy = Math.max(y, h - y) / h; return Math.hypot(dx, dy) / (1 - SOFT) + .02; };
+  const restPos = () => ({ x: W() * (W() < 700 ? .5 : .43), y: H() * (W() < 700 ? .36 : .42) });
+  { const r = restPos(); S.tx = S.lx = r.x; S.ty = S.ly = r.y; }
+
+  let pano, tour;
+  try {
+    pano = new PanoKit.Pano(canvas, { fov: 72, maxDpr: 1.75, look: { vig: 0, grain: .012, lineAmt: 1, spotSoft: SOFT, spot: [.5, .5, .2], nadir: 1, warm: .15 } });
+    tour = new PanoKit.Tour(pano, (await (await fetch(MEDIA + '/layout.json')).json()), MEDIA, { auto: RM ? 0 : 0.007 });
+  } catch (err) {
+    note.textContent = 'This browser cannot show the 360 view. The drawing list below still opens every room as a still.';
+    console.warn(err); return;
+  }
+  const fitFov = () => { const a = W() / H(); pano.fov = a < .8 ? 88 : a < 1.2 ? 80 : 70; };
+  fitFov(); addEventListener('resize', fitFov);
+
+  const setTitle = s => {
+    $('#tbNo').textContent = s.no; $('#tbT').textContent = s.name;
+    canvas.setAttribute('aria-label', `360 view of sheet ${s.no}, ${s.name}. Move the pointer to light it, drag to look around, press Enter to develop the photograph, arrow keys to turn.`);
+    ixList.querySelectorAll('.ix-item').forEach(b => b.setAttribute('aria-current', String(+b.dataset.i === s.i)));
+  };
+  const say = t => { if (note.textContent !== t) note.textContent = t; };
+  const tap = coarse ? 'Tap' : 'Click';
+
+  await tour.show(9, S.cur.yaw, -0.03);
+  setTitle(S.cur);
+  requestAnimationFrame(() => requestAnimationFrame(() => canvas.classList.add('on')));
+
+  /* ---------- scroll ---------- */
+  const readScroll = () => {
+    const r = hero.getBoundingClientRect(), span = hero.offsetHeight - innerHeight;
+    S.p = span > 0 ? clamp(-r.top / span, 0, 1) : 0;
+  };
+  addEventListener('scroll', readScroll, { passive: true }); readScroll(); S.lastP = S.p;
+
+  /* ---------- pointer: light, look, tap ---------- */
+  let down = null;
+  const local = e => { const b = canvas.getBoundingClientRect(); return { x: e.clientX - b.left, y: e.clientY - b.top }; };
+  canvas.addEventListener('pointerdown', e => {
+    const q = local(e);
+    down = { id: e.pointerId, x: e.clientX, y: e.clientY, lx: e.clientX, ly: e.clientY, moved: 0, type: e.pointerType };
+    if (e.pointerType === 'mouse') { canvas.setPointerCapture(e.pointerId); tour.dragging = true; tour.vel = 0; tour.vy = 0; }
+    else if (S.finger === 'light' && !S.lock) { S.tx = q.x; S.ty = q.y; S.hasPtr = true; }
+    else { tour.dragging = true; tour.vel = 0; }
+  });
+  canvas.addEventListener('pointermove', e => {
+    const q = local(e);
+    if (e.pointerType === 'mouse' || (S.finger === 'light' && !S.developed)) { if (!S.lock) { S.tx = q.x; S.ty = q.y; S.hasPtr = true; } }
+    if (!down || e.pointerId !== down.id) return;
+    const dx = e.clientX - down.lx, dy = e.clientY - down.ly; down.lx = e.clientX; down.ly = e.clientY;
+    down.moved += Math.abs(dx) + Math.abs(dy);
+    const look = e.pointerType === 'mouse' || S.finger === 'look' || S.developed;
+    if (look && !tour.busy && !S.flipping) {
+      const s = pano.fov * PanoKit.D2R / H();
+      pano.A.yaw -= dx * s; tour.vel = -dx * s;
+      if (e.pointerType === 'mouse') { pano.A.pitch = clamp(pano.A.pitch + dy * s, -1.2, 1.2); tour.vy = dy * s; }
+    }
+  });
+  const up = e => {
+    if (!down || e.pointerId !== down.id) return;
+    const wasTap = down.moved < 8 && e.type === 'pointerup';
+    tour.dragging = false; down = null;
+    if (wasTap) { const q = local(e); develop(q.x, q.y); }
+  };
+  canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up);
+  canvas.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') S.hasPtr = false; });
+  canvas.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') { pano.A.yaw -= .12; e.preventDefault(); }
+    else if (e.key === 'ArrowRight') { pano.A.yaw += .12; e.preventDefault(); }
+    else if (e.key === 'ArrowUp') { pano.A.pitch = clamp(pano.A.pitch + .08, -1.2, 1.2); e.preventDefault(); }
+    else if (e.key === 'ArrowDown') { pano.A.pitch = clamp(pano.A.pitch - .08, -1.2, 1.2); e.preventDefault(); }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); develop(S.lx, S.ly); }
+  });
+
+  // finger mode toggle (touch)
+  const seg = $('#seg');
+  const setFinger = m => { S.finger = m; $('#mLight').setAttribute('aria-pressed', String(m === 'light')); $('#mLook').setAttribute('aria-pressed', String(m === 'look')); };
+  $('#mLight').addEventListener('click', () => setFinger('light'));
+  $('#mLook').addEventListener('click', () => setFinger('look'));
+
+  /* ---------- develop: the photograph grows out from the tap ---------- */
+  let devTimer = 0, devId = 0;
+  function tween(sec, f) { return tour.tween(sec, f); }
+  async function develop(x, y) {
+    if (S.developed || S.flipping || S.lock) return;
+    clearTimeout(devTimer);
+    const id = ++devId;
+    if (S.mode === 'hero' && heroR() >= coverR(S.lx, S.ly) - .021) {   // already in daylight
+      S.mode = 'sheet'; S.line = 0; S.R = 0; S.developed = true; afterDevelop(); return;
+    }
+    // take over from the scroll reveal at its current size
+    const startR = S.mode === 'hero' ? heroR() : (S.R || baseR());
+    S.mode = 'sheet'; S.lock = true; S.tx = S.lx = x; S.ty = S.ly = y;
+    if (RM) {
+      S.R = startR;
+      await tween(.45, t => { if (id === devId) S.line = 1 - t; });
+    } else {
+      const end = coverR(x, y);
+      await tween(1.7, t => { if (id === devId) S.R = lerp(startR, end, easeOut(t)); });
+    }
+    if (id !== devId) return;
+    S.line = 0; S.R = 0; S.lock = false; S.developed = true;
+    afterDevelop();
+  }
+  function afterDevelop() {
+    $('#redraw').hidden = false; seg.classList.add('hide'); canvas.classList.add('dev');
+    say(coarse ? 'Swipe sideways to look around. Open the sheet index for all 24 rooms.' : 'Drag to look around. Open the sheet index for all 24 rooms.');
+  }
+  function toDrawing() {
+    devId++;
+    S.mode = 'sheet'; S.developed = false; S.line = 1; S.R = baseR(); S.lock = false;
+    $('#redraw').hidden = true; seg.classList.remove('hide'); canvas.classList.remove('dev');
+    say(`${tap} anywhere on the drawing and the photograph develops from there.`);
+  }
+  $('#redraw').addEventListener('click', () => { toDrawing(); canvas.focus({ preventScroll: true }); scheduleAuto(); });
+  function scheduleAuto() {
+    clearTimeout(devTimer); if (RM) return;
+    devTimer = setTimeout(() => { if (!S.developed && S.mode === 'sheet' && !S.lock) develop(S.lx, S.ly); }, 9000);
+  }
+
+  /* ---------- open a sheet: vellum fades over, the room is laid down as a drawing ---------- */
+  const flip = $('#flip');
+  async function openSheet(i) {
+    const s = byRoom.get(i); if (!s || S.flipping || tour.busy) return;
+    closeIndex();
+    if (S.cur && S.cur.i === i && !S.developed) return;
+    S.flipping = true; clearTimeout(devTimer); devId++;
+    $('#flipNo').textContent = s.no; $('#flipT').textContent = s.name;
+    const h = tour.tex(i);
+    await h.promise;
+    // no door links in this tour: a soft 1.3 s crossfade (tour.cut) while a fresh sheet of vellum fades over the drawing
+    flip.style.visibility = 'visible';
+    const fade = tween(.65, t => { flip.style.opacity = ease(t); });
+    await tour.cut(i, s.yaw, 1.3);
+    await fade;
+    pano.A.pitch = s.pitch ?? (W() < 700 ? .06 : -0.03);
+    S.cur = s; setTitle(s);
+    S.mode = 'sheet'; S.developed = false; S.line = 1; S.R = baseR(); S.lock = false;
+    const r = restPos(); S.tx = r.x; S.ty = r.y; if (!S.hasPtr) { S.lx = r.x; S.ly = r.y; }
+    $('#redraw').hidden = true; seg.classList.remove('hide'); canvas.classList.remove('dev');
+    say(`${tap} anywhere on the drawing and the photograph develops from there.`);
+    S.flipping = false;   // the new drawing is already laid under the vellum
+    await tween(.7, t => { flip.style.opacity = 1 - ease(t); });
+    flip.style.visibility = '';
+    scheduleAuto();
+  }
+
+  /* ---------- index panel ---------- */
+  const ix = $('#index'), ixBtn = $('#ixBtn'), scrim = $('#scrim'), tb = $('#tb');
+  function openIndex() { ix.classList.add('open'); ixBtn.setAttribute('aria-expanded', 'true'); scrim.classList.add('on'); tb.classList.add('away'); setTimeout(() => { const c = ixList.querySelector('[aria-current="true"]') || ixList.querySelector('.ix-item'); ixList.scrollTop = Math.max(0, c.offsetTop - ixList.offsetTop - ixList.clientHeight / 2); c.focus({ preventScroll: true }); stage.scrollTop = 0; }, 60); }
+  function closeIndex() { if (!ix.classList.contains('open')) return; ix.classList.remove('open'); ixBtn.setAttribute('aria-expanded', 'false'); scrim.classList.remove('on'); tb.classList.remove('away'); }
+  ixBtn.addEventListener('click', () => ix.classList.contains('open') ? (closeIndex(), ixBtn.focus()) : openIndex());
+  $('#ixClose').addEventListener('click', () => { closeIndex(); ixBtn.focus(); });
+  scrim.addEventListener('click', closeIndex);
+  addEventListener('keydown', e => { if (e.key === 'Escape' && ix.classList.contains('open')) { e.stopImmediatePropagation(); closeIndex(); ixBtn.focus(); } });
+  ixList.addEventListener('click', e => { const b = e.target.closest('.ix-item'); if (b) { openSheet(+b.dataset.i); canvas.focus({ preventScroll: true }); } });
+  setList.addEventListener('click', e => {
+    const c = e.target.closest('.sheet'); if (!c) return;
+    setModal(true, c);
+    openSheet(+c.dataset.i);
+  });
+  // the drawing list never scrolls the page: the sheet lifts out full screen and closes back in place
+  let modalFrom = null;
+  function setModal(on, from) {
+    if (on === stage.classList.contains('modal')) return;
+    stage.classList.toggle('modal', on); root.classList.toggle('lock', on);
+    $('#closeView').hidden = !on;
+    if (on) { modalFrom = from; stage.setAttribute('role', 'dialog'); stage.setAttribute('aria-modal', 'true'); stage.setAttribute('aria-label', 'Sheet viewer'); }
+    else { stage.removeAttribute('role'); stage.removeAttribute('aria-modal'); stage.removeAttribute('aria-label'); closeIndex(); }
+    canvas.style.display = on || heroVisible ? '' : 'none';
+    pano.resize(); headH = 0;
+    if (on) canvas.focus({ preventScroll: true }); else if (modalFrom) { modalFrom.focus({ preventScroll: true }); modalFrom = null; }
+  }
+  $('#closeView').addEventListener('click', () => setModal(false));
+  addEventListener('keydown', e => { if (e.key === 'Escape' && stage.classList.contains('modal') && !ix.classList.contains('open')) setModal(false); });
+
+  /* ---------- per frame ---------- */
+  const heroR = () => {
+    if (RM) return baseR();
+    const g = Math.pow(clamp((S.p - .06) / .74, 0, 1), 1.7);
+    return lerp(baseR(), coverR(S.lx, S.ly), g * g * (3 - 2 * g));
+  };
+  const needle = $('#needle');
+  let last = performance.now(), headH = 0, heroVisible = true;
+  pano.onframe = now => {
+    const dt = Math.min(.05, (now - last) / 1000); last = now; S.t += dt;
+    tour.idle(dt);
+    const w = W(), h = H();
+    // scroll turns the view slowly, eased and speed-capped (at most ~25 deg/s) so a fast flick never whips it
+    if (!RM && !S.flipping) S.yawDue = (S.yawDue || 0) + (S.p - S.lastP) * .8;
+    if (S.yawDue) { const st = clamp(S.yawDue * (1 - Math.pow(.1, dt)), -.45 * dt, .45 * dt); pano.A.yaw += st; S.yawDue -= st; }
+    S.lastP = S.p;
+    // the light: follows the pointer, or wanders gently when nobody is holding it
+    if (!S.hasPtr && !S.lock && !RM && !down) {
+      const r = restPos();
+      S.tx = r.x + Math.sin(S.t * .37) * w * .07; S.ty = r.y + Math.sin(S.t * .23 + 1) * h * .05;
+    }
+    const k = RM || S.lock ? 1 : 1 - Math.pow(.0009, dt);
+    S.lx += (S.tx - S.lx) * k; S.ly += (S.ty - S.ly) * k;
+
+    let R, line;
+    if (S.mode === 'hero') { R = heroR(); line = R >= coverR(S.lx, S.ly) - .021 ? 0 : 1; }
+    else { R = S.R; line = S.line; }
+    if (S.flipping) { R = 0; line = 1; }
+    const lk = pano.look;
+    lk.lineAmt = line; lk.spot = [S.lx / w, 1 - S.ly / h, line > 0 ? R : 0];
+    lk.vig = .2 * (1 - line); lk.warm = .15;
+    if (line <= 0 && S.mode === 'hero' && !S.developed) { /* scrolled fully into daylight */ }
+
+    // overlays that follow the light
+    const rpx = R * h, r0 = rpx * (1 - SOFT), dark = isDark();
+    const showDraw = line > 0.001;
+    if (dark && showDraw) {
+      const m = R > 0 ? `radial-gradient(circle at ${S.lx}px ${S.ly}px, transparent ${r0}px, rgba(0,0,0,.16) ${lerp(r0, rpx, .25)}px, rgba(0,0,0,.5) ${lerp(r0, rpx, .5)}px, rgba(0,0,0,.84) ${lerp(r0, rpx, .75)}px, #000 ${rpx}px)` : 'none';
+      for (const el of [bpInv, bpTint]) { el.style.display = 'block'; el.style.opacity = line; el.style.webkitMaskImage = el.style.maskImage = m; }
+    } else { bpInv.style.display = bpTint.style.display = 'none'; }
+    if (showDraw && R > 0) {
+      glow.style.opacity = line;
+      glow.style.background = `radial-gradient(circle at ${S.lx}px ${S.ly}px, rgba(255,214,140,.55) 0, rgba(255,210,130,.25) ${r0}px, transparent ${rpx}px)`;
+      const so = line * (1 - clamp((R - baseR()) / (baseR() * 1.4), 0, 1));
+      sun.style.opacity = so;
+      sun.style.width = sun.style.height = (2 * rpx) + 'px';
+      sun.style.transform = `translate(${S.lx - rpx}px, ${S.ly - rpx}px)`;
+    } else { glow.style.opacity = 0; sun.style.opacity = 0; }
+
+    // title block headline folds away as the room comes to light
+    if (!headH) headH = tbHead.firstElementChild.offsetHeight;
+    const fold = S.mode === 'hero' ? clamp((S.p - .35) / .3, 0, 1) : 1;
+    tbHead.style.height = (headH * (1 - ease(fold))) + 'px';
+    tbHead.firstElementChild.style.opacity = 1 - clamp(fold * 2.5, 0, 1);
+    tbHead.style.borderBottomWidth = fold >= 1 ? '0' : '1px';
+    if (S.mode === 'hero' && !S.flipping) {
+      if (line > 0) say((coarse || w < 700 ? 'Drag a finger to move the light. ' : 'Move the light across the drawing. ') + (RM ? `${tap} to bring the room to daylight.` : 'Scroll to bring the room to daylight.'));
+      else say(coarse || w < 700 ? 'Swipe sideways to look around. Open the sheet index for all 24 rooms.' : 'Drag to look around. Open the sheet index for all 24 rooms.');
+      seg.classList.toggle('hide', line <= 0);
+      canvas.classList.toggle('dev', line <= 0);
+    }
+    needle.setAttribute('transform', `rotate(${(pano.A.yaw * 180 / Math.PI) % 360} 14 14)`);
+  };
+  addEventListener('resize', () => { headH = 0; });
+
+  // park the renderer while the sheet is off screen: a 2px canvas costs nothing to draw
+  new IntersectionObserver(([en]) => {
+    heroVisible = en.isIntersecting;
+    if (stage.classList.contains('modal')) return;
+    canvas.style.display = heroVisible ? '' : 'none';
+    pano.resize(); if (heroVisible) headH = 0;
+  }, { rootMargin: '80px 0px' }).observe(hero);
+
+  /* ---------- before / after ---------- */
+  const PAIRS = [[13, 'A-204', 'Bathroom 2'], [9, 'A-109', 'Living Room'], [5, 'A-105', 'Kitchen'], [24, 'A-401', 'Porch']];
+  const ba = $('#ba'), baIn = $('#baIn'), baTabs = $('#baTabs');
+  const setBA = i => {
+    const [r, no, nm] = PAIRS[i];
+    $('#baG').src = `assets/ba${pad(r)}-graded.jpg`; $('#baR').src = `assets/ba${pad(r)}-raw.jpg`;
+    $('#baG').alt = `${nm}, graded`; $('#baR').alt = `${nm}, original`;
+    $('#baCap').textContent = `${no} ${nm}, a 75 degree crop from the 360`;
+    baTabs.querySelectorAll('button').forEach((b, k) => { b.setAttribute('aria-selected', String(k === i)); b.tabIndex = k === i ? 0 : -1; });
+  };
+  PAIRS.forEach(([r, no, nm], k) => {
+    const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab');
+    b.innerHTML = `<span class="no">${no}</span><span class="nm">${nm}</span>`;
+    b.addEventListener('click', () => setBA(k));
+    b.addEventListener('keydown', e => { const d = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 0; if (d) { e.preventDefault(); const n = (k + d + PAIRS.length) % PAIRS.length; setBA(n); baTabs.children[n].focus(); } });
+    baTabs.append(b);
+  });
+  setBA(0);
+  const setX = v => { v = clamp(v, 0, 100); ba.style.setProperty('--x', v + '%'); baIn.value = v; };
+  let baDown = null;
+  ba.addEventListener('pointerdown', e => { baDown = { id: e.pointerId, x: e.clientX, y: e.clientY, h: e.pointerType === 'mouse' }; if (e.pointerType === 'mouse') { ba.setPointerCapture(e.pointerId); move(e); } });
+  const move = e => { const b = ba.getBoundingClientRect(); setX((e.clientX - b.left) / b.width * 100); };
+  ba.addEventListener('pointermove', e => { if (!baDown || e.pointerId !== baDown.id) return; if (!baDown.h && !baDown.go) { if (Math.abs(e.clientX - baDown.x) > Math.abs(e.clientY - baDown.y) && Math.abs(e.clientX - baDown.x) > 4) { baDown.go = true; ba.setPointerCapture(e.pointerId); } else return; } move(e); });
+  ba.addEventListener('pointerup', e => { if (baDown && !baDown.h && !baDown.go && e.pointerType !== 'mouse') move(e); baDown = null; });
+  ba.addEventListener('pointercancel', () => { baDown = null; });
+  ba.addEventListener('click', () => baIn.focus({ preventScroll: true }));
+  baIn.addEventListener('input', () => setX(+baIn.value));
+  setX(50);
+
+  /* ---------- form ---------- */
+  $('#form').addEventListener('submit', e => {
+    e.preventDefault();
+    const f = e.target, name = f.name.value.trim(), email = f.email.value.trim();
+    const msg = $('#formMsg');
+    if (!name) { msg.textContent = 'Please add your name.'; f.name.focus(); return; }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { msg.textContent = 'Please add a valid email address.'; f.email.focus(); return; }
+    f.innerHTML = `<div class="ok" tabindex="-1"><span class="lab">Received, sheet T-001</span><h3>Thank you, ${name.replace(/[<>&"]/g, '')}.</h3><p>Your request for a private showing of 8902 Vine Leaf has been noted, with ${email.replace(/[<>&"]/g, '')} as the way to reach you.</p></div>`;
+    f.querySelector('.ok').focus();
+  });
+})();
+</script>

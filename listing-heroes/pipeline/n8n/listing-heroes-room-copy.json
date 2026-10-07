@@ -1,0 +1,603 @@
+{
+  "name": "listing-heroes \u00b7 room copy",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ],
+      "id": "e6a0107a-5e4c-5a63-8d49-6c5e9a8c7f42"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "listing-heroes-copy",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        400
+      ],
+      "id": "35743b82-30da-54b4-b58d-af8a3eca835f",
+      "webhookId": "cf72be6b-2de4-52cc-a3d8-af829f109817"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Edit these two lines, or POST {\"listing\": \"steinmann-106\"} to the webhook.\nconst repo = '/mnt/llm/listing-heroes';\nconst listing = ($json.body && $json.body.listing) || $json.listing || 'steinmann-106';\nreturn [{ json: { repo, listing } }];"
+      },
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        300
+      ],
+      "id": "0d12e68f-ceca-562a-9bce-e7b26ee2571c"
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $json.repo }}/pipeline/listings/{{ $json.listing }}.json",
+        "options": {}
+      },
+      "name": "Read listing",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        440,
+        300
+      ],
+      "id": "2d5ced8b-8eb2-56c6-bfd2-1d71bd01c3c2"
+    },
+    {
+      "parameters": {
+        "operation": "fromJson",
+        "options": {}
+      },
+      "name": "Parse listing",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        660,
+        300
+      ],
+      "id": "02279f04-5532-559d-8407-fa87e425f1e1"
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $('Config').first().json.repo }}/pipeline/copy/prompts.json",
+        "options": {}
+      },
+      "name": "Read prompts",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        880,
+        300
+      ],
+      "id": "4fe261ac-8bd9-53ea-b612-5e5755fab38d",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "operation": "fromJson",
+        "options": {}
+      },
+      "name": "Parse prompts",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        300
+      ],
+      "id": "1121ed3c-3dc7-57ca-ad9e-381007a1ab79"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Gather everything the copy steps need: repo, listing, prompts, and absolute photo/output folders.\nconst repo = $('Config').first().json.repo;\nconst listing = $('Parse listing').first().json.data;\nconst prompts = $input.first().json.data;\nconst base = `${repo}/pipeline/listings`;\nconst resolve = (rel) => {\n  const parts = (rel.startsWith('/') ? rel : `${base}/${rel}`).split('/');\n  const out = [];\n  for (const s of parts) { if (s === '..') out.pop(); else if (s && s !== '.') out.push(s); }\n  return '/' + out.join('/');\n};\nreturn [{ json: { repo, listing, prompts, photos: resolve(listing.photos_dir), out_dir: resolve(listing.out_dir) } }];\n"
+      },
+      "name": "Copy config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1320,
+        300
+      ],
+      "id": "2c9f1f48-ae04-5d01-aaf8-897369709536"
+    },
+    {
+      "parameters": {
+        "jsCode": "// One item per room in the listing file, with the photo's absolute path.\nconst c = $input.first().json;\nreturn c.listing.rooms.map((r) => ({ json: { room: r.room, photo: r.photo, path: `${c.photos}/${r.photo}.jpg` } }));\n"
+      },
+      "name": "Room list",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1540,
+        300
+      ],
+      "id": "e9ef0536-8406-5611-bf4f-e428795e50c6"
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $json.path }}",
+        "options": {}
+      },
+      "name": "Read room photos",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        1760,
+        300
+      ],
+      "id": "f9bf3864-0b94-5f20-95ad-1a429f03ec08"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Put each room's name back on its photo (Read Files keeps the binary, drops the json).\nreturn $input.all().map((it, i) => ({ json: $('Room list').all()[i].json, binary: it.binary }));\n"
+      },
+      "name": "Attach rooms",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1980,
+        300
+      ],
+      "id": "54a70441-a04b-5e3c-b709-2a9144478abb"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build the Messages API request that drafts room-by-room copy from the room photos + MLS facts.\n// Run once for all items. Items come from \"Read room photos\" (binary.data = the photo, json.room/photo).\nconst cfg = $('Copy config').first().json;           // { prompts, listing }\nconst P = cfg.prompts, L = cfg.listing;\nconst content = [{ type: 'text', text: `Listing: ${L.address}\\nMLS facts:\\n${JSON.stringify(L.facts, null, 2)}\\n\\nOne photo per room follows.` }];\nconst items = $input.all();\nfor (let i = 0; i < items.length; i++) {\n  const it = items[i];\n  const buf = await this.helpers.getBinaryDataBuffer(i, 'data');\n  content.push({ type: 'text', text: `Room: ${it.json.room} (photo id: ${it.json.photo})` });\n  content.push({ type: 'image', source: { type: 'base64', media_type: it.binary.data.mimeType || 'image/jpeg', data: buf.toString('base64') } });\n}\ncontent.push({ type: 'text', text: 'Write the copy for every room above, in the same order, using each photo id as given. Also write a 6 to 10 word headline and a 2 sentence summary for the top of the page.' });\nconst body = {\n  model: P.model,\n  max_tokens: 16000,\n  fallbacks: 'default',\n  output_config: { effort: 'medium', format: { type: 'json_schema', schema: P.draft_schema } },\n  system: P.draft_system,\n  messages: [{ role: 'user', content }],\n};\nreturn [{ json: { body } }];\n"
+      },
+      "name": "Build draft request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2200,
+        300
+      ],
+      "id": "c7aed8d1-7b33-5a6a-844c-bb6b306be682"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "options": {
+          "timeout": 600000
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "anthropic-beta",
+              "value": "server-side-fallback-2026-07-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "name": "Draft copy (Claude)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2420,
+        300
+      ],
+      "id": "3e255eff-373c-52fa-b12d-b0a4633b405d",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "lhAnthropicKey01",
+          "name": "Anthropic API key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pull the JSON answer out of a Messages API response; fail loudly on refusal or truncation.\nconst r = $input.item.json;\nif (r.type === 'error') throw new Error(`Claude API error: ${r.error && r.error.type}: ${r.error && r.error.message}`);\nif (r.stop_reason === 'refusal') throw new Error(`Claude declined (${(r.stop_details || {}).category || 'no category'}): ${(r.stop_details || {}).explanation || ''}`);\nif (r.stop_reason === 'max_tokens') throw new Error('Claude hit max_tokens before finishing; raise max_tokens');\nconst text = (r.content || []).filter((b) => b.type === 'text').map((b) => b.text).join('');\nreturn { json: Object.assign(JSON.parse(text), { _usage: r.usage, _model: r.model }) };\n",
+        "mode": "runOnceForEachItem"
+      },
+      "name": "Read draft",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2640,
+        300
+      ],
+      "id": "933e0f92-2eea-56d7-8341-54aa6897e14d"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build the fair-housing / accuracy review request for the drafted copy.\nconst P = $('Copy config').first().json.prompts, L = $('Copy config').first().json.listing;\nconst draft = $input.first().json;\nconst body = {\n  model: P.model,\n  max_tokens: 16000,\n  fallbacks: 'default',\n  output_config: { effort: 'high', format: { type: 'json_schema', schema: P.check_schema } },\n  system: P.check_system,\n  messages: [{ role: 'user', content: `Listing: ${L.address}\\nMLS facts:\\n${JSON.stringify(L.facts, null, 2)}\\n\\nDraft copy:\\n${JSON.stringify({ headline: draft.headline, summary: draft.summary, rooms: draft.rooms }, null, 2)}\\n\\nReview every room. The headline and summary must pass too; report them with photo \"headline\" or \"summary\".` }],\n};\nreturn [{ json: { body, draft } }];\n"
+      },
+      "name": "Build review request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2860,
+        300
+      ],
+      "id": "13ff520a-089d-5776-aa8a-1165edc643c1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "options": {
+          "timeout": 600000
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "anthropic-beta",
+              "value": "server-side-fallback-2026-07-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "name": "Fair-housing review (Claude)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3080,
+        300
+      ],
+      "id": "f033c898-6ad9-5076-be0c-81fd5ed8680e",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "lhAnthropicKey01",
+          "name": "Anthropic API key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pull the JSON answer out of a Messages API response; fail loudly on refusal or truncation.\nconst r = $input.item.json;\nif (r.type === 'error') throw new Error(`Claude API error: ${r.error && r.error.type}: ${r.error && r.error.message}`);\nif (r.stop_reason === 'refusal') throw new Error(`Claude declined (${(r.stop_details || {}).category || 'no category'}): ${(r.stop_details || {}).explanation || ''}`);\nif (r.stop_reason === 'max_tokens') throw new Error('Claude hit max_tokens before finishing; raise max_tokens');\nconst text = (r.content || []).filter((b) => b.type === 'text').map((b) => b.text).join('');\nreturn { json: Object.assign(JSON.parse(text), { _usage: r.usage, _model: r.model }) };\n",
+        "mode": "runOnceForEachItem"
+      },
+      "name": "Read review",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3300,
+        300
+      ],
+      "id": "66c83a33-b5f0-5f82-b548-7a4e1f6ab807"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Merge the review into the final rooms file the hero pages read (rooms.json).\nconst review = $input.first().json;\nconst draft = $('Build review request').first().json.draft;\nconst fix = (id, text) => { const i = review.issues.find((x) => x.photo === id); return i ? text.split(i.phrase).join(i.rewrite) : text; };\nconst out = {\n  listing: $('Copy config').first().json.listing.id,\n  generated: new Date().toISOString(),\n  model: review._model,\n  fair_housing_passed_first_draft: review.passes,\n  issues_fixed: review.issues,\n  headline: fix('headline', draft.headline),\n  summary: fix('summary', draft.summary),\n  rooms: review.rooms,\n  note: 'Drafted with AI from the listing photos and MLS facts, reviewed for fair-housing language. Read it before publishing.',\n};\nconst data = await this.helpers.prepareBinaryData(Buffer.from(JSON.stringify(out, null, 2)), 'rooms.json', 'application/json');\nreturn [{ json: out, binary: { data } }];\n"
+      },
+      "name": "Final copy",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3520,
+        300
+      ],
+      "id": "6166e76e-3659-56ba-a397-329b736f9688"
+    },
+    {
+      "parameters": {
+        "command": "=mkdir -p {{ $('Copy config').first().json.out_dir }}"
+      },
+      "name": "Make output folder",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        3630,
+        480
+      ],
+      "id": "d1ec54e2-7aad-5572-b79b-47a78bc81d9b",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "return [$('Final copy').first()];"
+      },
+      "name": "Rooms file",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3740,
+        480
+      ],
+      "id": "a6d523d6-02b9-5292-a5c4-ef44a680d3f5"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ $('Copy config').first().json.out_dir }}/rooms.json",
+        "dataPropertyName": "data",
+        "options": {}
+      },
+      "name": "Save rooms.json",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        3960,
+        480
+      ],
+      "id": "82983bce-5560-5224-a58b-78a756208a03"
+    },
+    {
+      "parameters": {
+        "content": "## listing-heroes: room copy\nDrafts room-by-room copy from the room photos + MLS facts in the listing file, then a second Claude pass reviews it for fair-housing language and unsupported claims and returns corrected copy.\n\nCredential: **Header Auth** named \"Anthropic API key\", name `x-api-key`, value your key.\n\nWrites <out_dir>/rooms.json. Read it before it goes live: AI copy still needs a human check.",
+        "height": 420,
+        "width": 520
+      },
+      "name": "README",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        -260
+      ],
+      "id": "224c2ec5-e1e9-59ae-8072-e0c0f8e3802b"
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Read listing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read listing": {
+      "main": [
+        [
+          {
+            "node": "Parse listing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse listing": {
+      "main": [
+        [
+          {
+            "node": "Read prompts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read prompts": {
+      "main": [
+        [
+          {
+            "node": "Parse prompts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse prompts": {
+      "main": [
+        [
+          {
+            "node": "Copy config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Copy config": {
+      "main": [
+        [
+          {
+            "node": "Room list",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Room list": {
+      "main": [
+        [
+          {
+            "node": "Read room photos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read room photos": {
+      "main": [
+        [
+          {
+            "node": "Attach rooms",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach rooms": {
+      "main": [
+        [
+          {
+            "node": "Build draft request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build draft request": {
+      "main": [
+        [
+          {
+            "node": "Draft copy (Claude)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Draft copy (Claude)": {
+      "main": [
+        [
+          {
+            "node": "Read draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read draft": {
+      "main": [
+        [
+          {
+            "node": "Build review request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build review request": {
+      "main": [
+        [
+          {
+            "node": "Fair-housing review (Claude)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fair-housing review (Claude)": {
+      "main": [
+        [
+          {
+            "node": "Read review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read review": {
+      "main": [
+        [
+          {
+            "node": "Final copy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Final copy": {
+      "main": [
+        [
+          {
+            "node": "Make output folder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Make output folder": {
+      "main": [
+        [
+          {
+            "node": "Rooms file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rooms file": {
+      "main": [
+        [
+          {
+            "node": "Save rooms.json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "id": "lhRoomCopy000001",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "tags": []
+}

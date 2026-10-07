@@ -1,0 +1,524 @@
+{
+  "id": "f948586f-1c5c-48dc-81fd-6ef9a09a12c0",
+  "provider": "ricoh360",
+  "name": "Vine Leaf",
+  "address": "8902 Vine Leaf, Schertz, TX",
+  "description": "",
+  "photographer": "Jamie Farley Photography, LLC",
+  "walkthrough_enabled": true,
+  "brand_logo": {
+    "url": "https://jamiefarleyphotography.hd.pics/",
+    "s3": {
+      "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+      "region": "us-west-2",
+      "key": "cc840ad7-df36-4fe8-b3cc-878d4a1f4ed1/original",
+      "preview_key": null,
+      "mime": "image/jpeg"
+    }
+  },
+  "tripod_cover": {
+    "size": 250,
+    "s3": {
+      "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+      "region": "us-west-2",
+      "key": "04ce44b8-ce97-4be7-b4e0-398090e9b035/original",
+      "preview_key": null,
+      "mime": "image/jpeg"
+    }
+  },
+  "thumbnail": {
+    "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+    "region": "us-west-2",
+    "key": "b4d6c650-412d-41a1-99e4-c0190667077d/original",
+    "preview_key": "b4d6c650-412d-41a1-99e4-c0190667077d/preview",
+    "mime": "image/jpeg"
+  },
+  "rooms": [
+    {
+      "index": 1,
+      "id": "88b7ccf5-46e9-4b2b-911c-9e53a116489e",
+      "name": "Foyer",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "b4d6c650-412d-41a1-99e4-c0190667077d/original",
+        "preview_key": "b4d6c650-412d-41a1-99e4-c0190667077d/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "9f1320df-2cc6-4abc-9720-feea6a9bd437/original",
+        "preview_key": "9f1320df-2cc6-4abc-9720-feea6a9bd437/preview",
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 2,
+      "id": "481aea84-1b9f-4309-9e53-734197f874fe",
+      "name": "Hallway",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "cdfcf7c7-0613-46a2-a1eb-ebd9dccfb101/original",
+        "preview_key": "cdfcf7c7-0613-46a2-a1eb-ebd9dccfb101/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "6b212a83-e3ef-4b86-a95d-b76b482ee18e/original",
+        "preview_key": "6b212a83-e3ef-4b86-a95d-b76b482ee18e/preview",
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 3,
+      "id": "9e34c3c5-5d6a-4422-9a6f-8d6a47745efd",
+      "name": "Office",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "f3f9dcc3-de4f-49f1-a128-077b151c2565/original",
+        "preview_key": "f3f9dcc3-de4f-49f1-a128-077b151c2565/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "f3adc541-f0ed-4bd9-9a76-26e070405e6f/original",
+        "preview_key": "f3adc541-f0ed-4bd9-9a76-26e070405e6f/preview",
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 4,
+      "id": "22148f5f-9237-47b3-ad25-06b3ec83634d",
+      "name": "Hallway",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "3178964f-5ed4-4038-9a97-03d2ed3c767f/original",
+        "preview_key": "3178964f-5ed4-4038-9a97-03d2ed3c767f/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "1aafd10d-5e02-409a-a4df-e2efe81c3452/original",
+        "preview_key": "1aafd10d-5e02-409a-a4df-e2efe81c3452/preview",
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 5,
+      "id": "ecc08e65-8f5a-4af6-a4e3-dfe12aad833f",
+      "name": "Kitchen",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "57165bed-e574-45a5-a28a-54d83e259f99/original",
+        "preview_key": "57165bed-e574-45a5-a28a-54d83e259f99/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "457b299d-d172-408f-9991-d9b980357ad6/original",
+        "preview_key": "457b299d-d172-408f-9991-d9b980357ad6/preview",
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 6,
+      "id": "c84e8d06-2b82-46a0-991a-8814573e048b",
+      "name": "Dining Room",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "b28fecb9-89e6-44ab-9df0-084d482ad0f5/original",
+        "preview_key": "b28fecb9-89e6-44ab-9df0-084d482ad0f5/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "c01e7b46-e14c-46bf-8c4c-566bd8a6e404/original",
+        "preview_key": "c01e7b46-e14c-46bf-8c4c-566bd8a6e404/preview",
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 7,
+      "id": "d5d8d6d1-5c63-451c-9570-2bf8592dbe19",
+      "name": "Desk",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "480a9094-b7f2-4b28-91f9-03a5c08f18ea/original",
+        "preview_key": "480a9094-b7f2-4b28-91f9-03a5c08f18ea/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "27a34b4e-c69b-4cfa-8e1a-355c1e7f64a0/original",
+        "preview_key": "27a34b4e-c69b-4cfa-8e1a-355c1e7f64a0/preview",
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 8,
+      "id": "5ca55845-2a45-4e66-85a3-e5c2aeee49b3",
+      "name": "Walkway",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "68123350-9bf3-4aef-a630-5c94a6432583/original",
+        "preview_key": "68123350-9bf3-4aef-a630-5c94a6432583/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "76a04f57-688c-49ec-a706-d2c867e69d0e/original",
+        "preview_key": "76a04f57-688c-49ec-a706-d2c867e69d0e/preview",
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 9,
+      "id": "0c18d880-3339-4463-bc63-ba4ff8c17b98",
+      "name": "Living Room",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "44a7a59e-e083-4683-8d47-5c6c6d937d18/original",
+        "preview_key": "44a7a59e-e083-4683-8d47-5c6c6d937d18/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "dc9b47a9-4ca5-42f2-a77a-d6ee188f9f2b/original",
+        "preview_key": "dc9b47a9-4ca5-42f2-a77a-d6ee188f9f2b/preview",
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 10,
+      "id": "bc49bc34-1927-491c-845e-ea300ee8495c",
+      "name": "Primary",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "84fc1b2c-a0a7-4070-ac3c-f70a0115b8a8/original",
+        "preview_key": "84fc1b2c-a0a7-4070-ac3c-f70a0115b8a8/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "3b493559-3bcc-4997-bceb-2ac03df10e9e/original",
+        "preview_key": "3b493559-3bcc-4997-bceb-2ac03df10e9e/preview",
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 11,
+      "id": "f2ca8384-6664-427c-a022-060e98a5447b",
+      "name": "Primary",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "a411994f-8e95-490a-8d7d-b6f7029544d1/original",
+        "preview_key": "a411994f-8e95-490a-8d7d-b6f7029544d1/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "2f9eade2-5a12-4abd-b20a-e363306aa89f/original",
+        "preview_key": "2f9eade2-5a12-4abd-b20a-e363306aa89f/preview",
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 12,
+      "id": "f4ecc619-aa93-427e-8df2-159863afb990",
+      "name": "Bathroom",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "06bfe4a9-bbe0-4564-905e-372192f99577/original",
+        "preview_key": "06bfe4a9-bbe0-4564-905e-372192f99577/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "e7823d9d-3971-457f-bbf4-675d34ee575f/original",
+        "preview_key": "e7823d9d-3971-457f-bbf4-675d34ee575f/preview",
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 13,
+      "id": "f2af350c-05b6-4796-960b-3d1ca53dd97b",
+      "name": "Bathroom",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "90201c91-ceee-4297-83e2-86925ee5ea2f/original",
+        "preview_key": "90201c91-ceee-4297-83e2-86925ee5ea2f/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "e0c51c03-09dd-4e14-9274-5ca32b76cc91/original",
+        "preview_key": "e0c51c03-09dd-4e14-9274-5ca32b76cc91/preview",
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 14,
+      "id": "46a81c59-085a-4750-afd9-8e3d284cc487",
+      "name": "Closet",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "1826bf4c-f13b-4334-b1e5-9de1e78647de/original",
+        "preview_key": "1826bf4c-f13b-4334-b1e5-9de1e78647de/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "20ecb503-9601-4f4b-97b2-47261848707a/original",
+        "preview_key": "20ecb503-9601-4f4b-97b2-47261848707a/preview",
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 15,
+      "id": "c76e0053-d7b5-49e8-a40d-dce613a7904a",
+      "name": "Laundry",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "88da2f1e-9e02-4812-9e6c-bff53fd873b9/original",
+        "preview_key": "88da2f1e-9e02-4812-9e6c-bff53fd873b9/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "53c98b23-e9a5-404b-acb3-ef77cbfd075b/original",
+        "preview_key": "53c98b23-e9a5-404b-acb3-ef77cbfd075b/preview",
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 16,
+      "id": "334e2381-c2fd-4db6-8060-9e3a0b87660e",
+      "name": "Hallway",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "0d9b740a-b7a0-4dda-bf07-06f86e1b0f9f/original",
+        "preview_key": "0d9b740a-b7a0-4dda-bf07-06f86e1b0f9f/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "edaf5579-28ae-40e5-a0b0-3c2143b3e2dc/original",
+        "preview_key": "edaf5579-28ae-40e5-a0b0-3c2143b3e2dc/preview",
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 17,
+      "id": "38d1f3b4-3d3c-4357-97d7-8268b0174cc2",
+      "name": "Bonus Room",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "f3ee6e3a-3bc6-45a2-a767-6a5d840d041a/original",
+        "preview_key": "f3ee6e3a-3bc6-45a2-a767-6a5d840d041a/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "c260d31f-eeb7-4ff1-8af9-f83cfd4fc562/original",
+        "preview_key": "c260d31f-eeb7-4ff1-8af9-f83cfd4fc562/preview",
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 18,
+      "id": "3985c2c8-b8da-4c68-bd92-a5ff469e82f8",
+      "name": "Bathroom",
+      "enhancement_status": "UNEXECUTED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "9bccdd48-d9ce-4614-8922-7bf658eee325/original",
+        "preview_key": "9bccdd48-d9ce-4614-8922-7bf658eee325/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": null
+    },
+    {
+      "index": 19,
+      "id": "676a1a76-6d2d-4ef8-bc1f-1e1d45bc94e6",
+      "name": "Bedroom",
+      "enhancement_status": "UNEXECUTED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "b82878b5-991f-4d79-bbf5-1b1a586d3dae/original",
+        "preview_key": "b82878b5-991f-4d79-bbf5-1b1a586d3dae/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": null
+    },
+    {
+      "index": 20,
+      "id": "d561089a-7dd6-4d23-98d4-2a3302a07935",
+      "name": "Bedroom",
+      "enhancement_status": "UNEXECUTED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "81a376e0-8d6b-4b8a-be00-bcd804a9fdea/original",
+        "preview_key": "81a376e0-8d6b-4b8a-be00-bcd804a9fdea/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": null
+    },
+    {
+      "index": 21,
+      "id": "9544891b-50c6-437e-a8c2-2335c5050578",
+      "name": "Garage",
+      "enhancement_status": "UNEXECUTED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "390ca730-cbd5-4b08-9b1c-d926e2842dd4/original",
+        "preview_key": "390ca730-cbd5-4b08-9b1c-d926e2842dd4/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": null
+    },
+    {
+      "index": 22,
+      "id": "233e7248-cdb4-45bd-8f21-13645ea3ca2f",
+      "name": "Bedroom",
+      "enhancement_status": "UNEXECUTED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "f495e631-bbac-4a11-8d7a-ae490dddf8a5/original",
+        "preview_key": "f495e631-bbac-4a11-8d7a-ae490dddf8a5/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": null
+    },
+    {
+      "index": 23,
+      "id": "fc058626-d900-477b-a8cd-5b204e132f46",
+      "name": "Bathroom",
+      "enhancement_status": "UNEXECUTED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "a4499e0e-3b76-486f-9667-ed6fab0c9517/original",
+        "preview_key": "a4499e0e-3b76-486f-9667-ed6fab0c9517/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": null
+    },
+    {
+      "index": 24,
+      "id": "f0eee654-b543-47ed-9ed5-8421898dffd1",
+      "name": "Porch",
+      "enhancement_status": "UNEXECUTED",
+      "projection": "EQUIRECT",
+      "hotspots": [],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "a43896d7-2f54-4ed2-88f6-8e1d58d22ac5/original",
+        "preview_key": "a43896d7-2f54-4ed2-88f6-8e1d58d22ac5/preview",
+        "mime": "image/jpeg"
+      },
+      "enhanced": null
+    }
+  ]
+}

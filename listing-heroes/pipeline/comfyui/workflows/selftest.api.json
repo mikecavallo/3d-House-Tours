@@ -1,0 +1,46 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example.png"
+    },
+    "_meta": {
+      "title": "IN image"
+    }
+  },
+  "2": {
+    "class_type": "ImageScale",
+    "inputs": {
+      "image": [
+        "1",
+        0
+      ],
+      "upscale_method": "area",
+      "width": 320,
+      "height": 200,
+      "crop": "center"
+    }
+  },
+  "3": {
+    "class_type": "ImageInvert",
+    "inputs": {
+      "image": [
+        "2",
+        0
+      ]
+    }
+  },
+  "4": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "3",
+        0
+      ],
+      "filename_prefix": "listing-heroes/selftest"
+    },
+    "_meta": {
+      "title": "OUT"
+    }
+  }
+}

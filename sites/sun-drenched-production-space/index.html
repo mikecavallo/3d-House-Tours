@@ -1,0 +1,1547 @@
+<!doctype html>
+<title>Sun-Drenched Production Space</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Martian+Mono:wdth,wght@75..112.5,100..800&display=swap">
+<style>
+:root{
+  color-scheme: dark;
+  --bg:#000;
+  --panel:#070707;
+  --ink:#f2f2ee;
+  --ink2:rgba(242,242,238,.68);
+  --ink3:rgba(242,242,238,.5);
+  --line:rgba(242,242,238,.2);
+  --line2:rgba(242,242,238,.5);
+  --peak:#ff2fbf;           /* sampled from the neon sign in the billiard room window (#d608af), lifted for a monitor */
+  --mask:rgba(0,0,0,.72);
+  --mono:'Martian Mono', ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --disp:'Archivo', 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
+  --fx:0px; --fy:0px; --fw:100vw; --fh:100vh; --fb:100vh; --fr:0px;
+  --gx:0px; --gy:0px; --gw:100vw; --gh:100vh;
+}
+html,body{background:var(--bg);color:var(--ink)}
+html.roam{overflow:hidden}
+body{margin:0;font-family:var(--mono);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+*{box-sizing:border-box}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--peak);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.lab{font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);font-weight:500;line-height:1.2}
+
+/* ---------- stage: the monitor feed ---------- */
+#stage{position:fixed;inset:0;z-index:1;background:#000;overflow:hidden}
+html.roam #stage{z-index:100}
+#stage.covered{visibility:hidden}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;touch-action:pan-y}
+html.roam #cv{pointer-events:auto;touch-action:none;cursor:grab}
+html.roam #cv:active{cursor:grabbing}
+#dip{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none}
+#dip.sw{animation:sw .9s ease-out 1}
+@keyframes sw{0%{opacity:1}100%{opacity:0}}
+
+/* ---------- HUD ---------- */
+#hud{position:absolute;inset:0;z-index:0;pointer-events:none;text-shadow:0 0 2px rgba(0,0,0,.55)}
+#hud button{pointer-events:auto}
+#frame{position:absolute;left:var(--fx);top:var(--fy);width:var(--fw);height:var(--fh);
+  box-shadow:0 0 0 200vmax var(--mask);outline:1px solid rgba(242,242,238,.42)}
+.brk{position:absolute;width:26px;height:26px;border:0 solid var(--ink)}
+.brk.tl{left:-1px;top:-1px;border-left-width:2px;border-top-width:2px}
+.brk.tr{right:-1px;top:-1px;border-right-width:2px;border-top-width:2px}
+.brk.bl{left:-1px;bottom:-1px;border-left-width:2px;border-bottom-width:2px}
+.brk.br{right:-1px;bottom:-1px;border-right-width:2px;border-bottom-width:2px}
+#g169{position:absolute;left:var(--gx);top:var(--gy);width:var(--gw);height:var(--gh)}
+#g169 i{position:absolute;width:12px;height:12px;border:0 dashed rgba(242,242,238,.55)}
+#g169 i:nth-child(1){left:6px;top:6px;border-left-width:1px;border-top-width:1px}
+#g169 i:nth-child(2){right:6px;top:6px;border-right-width:1px;border-top-width:1px}
+#g169 i:nth-child(3){left:6px;bottom:6px;border-left-width:1px;border-bottom-width:1px}
+#g169 i:nth-child(4){right:6px;bottom:6px;border-right-width:1px;border-bottom-width:1px}
+#g169 b{position:absolute;left:24px;top:3px;font-weight:400;font-size:8px;letter-spacing:.14em;color:var(--ink3)}
+#safe{position:absolute;left:calc(var(--fx) + var(--fw)*.05);top:calc(var(--fy) + var(--fh)*.05);width:calc(var(--fw)*.9);height:calc(var(--fh)*.9)}
+#safe i{position:absolute;width:9px;height:9px}
+#safe i::before,#safe i::after{content:"";position:absolute;background:rgba(242,242,238,.5)}
+#safe i::before{left:4px;top:0;width:1px;height:9px}
+#safe i::after{left:0;top:4px;width:9px;height:1px}
+#safe i:nth-child(1){left:-4px;top:-4px}#safe i:nth-child(2){right:-4px;top:-4px}
+#safe i:nth-child(3){left:-4px;bottom:-4px}#safe i:nth-child(4){right:-4px;bottom:-4px}
+#cross{position:absolute;left:calc(var(--fx) + var(--fw)/2);top:calc(var(--fy) + var(--fh)/2);width:0;height:0}
+#cross::before,#cross::after{content:"";position:absolute;background:rgba(242,242,238,.8)}
+#cross::before{left:-11px;top:0;width:22px;height:1px}
+#cross::after{left:0;top:-11px;width:1px;height:22px}
+#level{position:absolute;left:calc(var(--fx) + var(--fw)/2);top:calc(var(--fy) + var(--fh)/2);width:0;height:0}
+#level .h{position:absolute;top:0;height:0;border-top:1px solid rgba(242,242,238,.9);width:46px;box-shadow:0 1px 0 rgba(0,0,0,.45)}
+#level .h.l{right:34px}#level .h.r{left:34px}
+#level.off .h{border-top-style:dashed;border-color:rgba(242,242,238,.6)}
+#level .ref{position:absolute;top:-3px;width:6px;height:7px;border:0 solid rgba(242,242,238,.6)}
+#level .ref.l{right:86px;border-right-width:1px}#level .ref.r{left:86px;border-left-width:1px}
+#level .v{position:absolute;left:92px;top:-6px;font-size:8.5px;letter-spacing:.08em;color:var(--ink2);white-space:nowrap}
+
+#focus{position:absolute;left:0;top:0;width:72px;height:52px;margin:-26px 0 0 -36px;opacity:0;transition:opacity .2s}
+#focus i{position:absolute;width:12px;height:10px;border:0 solid var(--ink)}
+#focus i:nth-child(1){left:0;top:0;border-left-width:2px;border-top-width:2px}
+#focus i:nth-child(2){right:0;top:0;border-right-width:2px;border-top-width:2px}
+#focus i:nth-child(3){left:0;bottom:0;border-left-width:2px;border-bottom-width:2px}
+#focus i:nth-child(4){right:0;bottom:0;border-right-width:2px;border-bottom-width:2px}
+#focus b{position:absolute;left:0;top:100%;margin-top:5px;font-weight:500;font-size:8.5px;letter-spacing:.14em;white-space:nowrap;color:var(--ink);background:rgba(0,0,0,.8);padding:2px 5px 2px 6px;text-shadow:none}
+#focus.lock i{border-color:var(--peak)}
+#focus.lock b{color:var(--peak)}
+
+/* status bars */
+.bar{position:absolute;left:max(16px,var(--fx));right:max(16px,var(--fr));display:flex;align-items:stretch;gap:0}
+#top{top:calc(var(--fy)/2);transform:translateY(-50%)}
+#bot{top:calc(var(--fb) + (100vh - var(--fb))/2);transform:translateY(-50%)}
+.cell{display:flex;flex-direction:column;justify-content:center;gap:3px;padding:0 16px;border-left:1px solid var(--line);min-height:38px}
+.cell:first-child{border-left:0;padding-left:0}
+.cell .val{font-size:14px;font-weight:450;letter-spacing:.02em;line-height:1;white-space:nowrap}
+.cell .val small{font-size:9px;color:var(--ink2);letter-spacing:.1em;margin-left:3px}
+.grow{flex:1;border-left:0}
+#rec{flex-direction:row;align-items:center;gap:10px}
+#rec .dot{width:10px;height:10px;border-radius:50%;background:var(--peak);box-shadow:0 0 8px rgba(255,47,191,.6)}
+#rec .r{font-size:11px;font-weight:600;letter-spacing:.16em;color:var(--peak)}
+#tc{font-size:21px;font-weight:400;letter-spacing:.03em}
+#lensv{min-width:5.5ch;display:inline-block;text-align:right}
+#lensbar{position:relative;width:86px;height:3px;background:var(--line);margin-top:2px}
+#lensbar i{position:absolute;top:-3px;width:1px;height:9px;background:var(--ink)}
+.blink{animation:bl 1s steps(1,end) infinite}
+@keyframes bl{50%{opacity:.25}}
+
+#tl{flex:1;display:flex;align-items:center;padding:0 18px;border-left:1px solid var(--line);min-width:0}
+#tlin{position:relative;flex:1;height:30px;display:flex}
+#tlin button{position:relative;flex:var(--w);border:0;background:none;padding:0;cursor:pointer;text-align:left;border-left:1px solid var(--line2);height:30px}
+#tlin button span{position:absolute;left:6px;top:0;font-size:8.5px;letter-spacing:.12em;color:var(--ink3)}
+#tlin button::after{content:"";position:absolute;left:0;right:0;bottom:6px;height:2px;background:rgba(242,242,238,.18)}
+#tlin button.on span{color:var(--ink)}
+#tlin button.on::after{background:rgba(242,242,238,.5)}
+#tlin button:hover span{color:var(--ink)}
+#ph{position:absolute;top:2px;bottom:0;width:1px;background:var(--ink);left:0}
+#ph::before{content:"";position:absolute;left:-4px;bottom:3px;width:9px;height:9px;background:var(--ink);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+#play{display:none;border:1px solid var(--line2);background:#000;padding:6px 10px;font-size:10px;letter-spacing:.14em;cursor:pointer;margin-right:12px}
+html.rm #play{display:block}
+
+/* slates */
+#slate{position:absolute;left:calc(var(--fx) + max(16px, var(--fw)*.035));bottom:calc(100vh - var(--fb) + max(16px, var(--fh)*.06));
+  width:min(560px, calc(100vw - 32px));background:#000;border:1px solid rgba(242,242,238,.85);transform-origin:0 100%;text-shadow:none}
+#sticks{position:absolute;left:-1px;right:-1px;bottom:100%;height:34px;margin-bottom:6px;transform-origin:0 100%;
+  background:repeating-linear-gradient(115deg,#f2f2ee 0 26px,#000 26px 52px);border:1px solid #f2f2ee}
+#sticks::after{content:"";position:absolute;left:-1px;right:-1px;top:calc(100% + 1px);height:6px;
+  background:repeating-linear-gradient(65deg,#f2f2ee 0 26px,#000 26px 52px);border:1px solid #f2f2ee}
+#slate .s1{display:grid;grid-template-columns:1fr auto;border-bottom:1px solid rgba(242,242,238,.85)}
+#slate .s1 > div{padding:14px 18px 16px}
+#slate .s1 > div + div{border-left:1px solid rgba(242,242,238,.85);display:flex;flex-direction:column;justify-content:space-between;min-width:96px}
+#slate h1{margin:6px 0 0;font-family:var(--disp);font-stretch:125%;font-weight:850;font-size:clamp(26px,3.1vw,40px);line-height:.95;letter-spacing:-.005em;text-transform:uppercase}
+#slate .roll{font-family:var(--disp);font-stretch:125%;font-weight:800;font-size:26px;line-height:1}
+#slate .s2{display:grid;grid-template-columns:repeat(3,1fr)}
+#slate .s2 > div{padding:9px 18px 11px;border-right:1px solid var(--line2)}
+#slate .s2 > div:last-child{border-right:0}
+#slate .s2 .v{font-size:12px;margin-top:3px;white-space:nowrap}
+#slate .s3{display:grid;grid-template-columns:1.4fr 1fr;border-top:1px solid var(--line2)}
+#slate .s3 > div{padding:9px 18px 11px}
+#slate .s3 > div + div{border-left:1px solid var(--line2)}
+#slate .s3 .v{font-size:12px;margin-top:3px}
+#hint{position:absolute;left:calc(var(--fx) + var(--fw) - max(16px, var(--fw)*.035));bottom:calc(100vh - var(--fb) + max(16px, var(--fh)*.06));transform:translateX(-100%);
+  font-size:9.5px;letter-spacing:.16em;color:var(--ink);text-align:right;line-height:1.8;white-space:nowrap;background:rgba(0,0,0,.78);padding:7px 10px;text-shadow:none}
+#hint span{color:var(--ink2)}
+
+#tag{position:absolute;left:calc(var(--fx) + max(16px, var(--fw)*.035));bottom:calc(100vh - var(--fb) + max(16px, var(--fh)*.06));
+  background:#000;border:1px solid rgba(242,242,238,.85);min-width:280px;max-width:calc(100vw - 32px);text-shadow:none;display:none}
+#tag.on{display:block}
+#tag .t1{display:flex;gap:0;border-bottom:1px solid var(--line2)}
+#tag .t1 > div{padding:7px 14px 8px;border-right:1px solid var(--line2)}
+#tag .t1 .v{font-size:12px;margin-top:2px}
+#tag .t2{padding:10px 14px 12px}
+#tag h2{margin:0;font-family:var(--disp);font-stretch:125%;font-weight:850;font-size:clamp(19px,2vw,26px);line-height:1;text-transform:uppercase;letter-spacing:0}
+#tag p{margin:7px 0 0;font-size:10.5px;color:var(--ink2);letter-spacing:.04em}
+#tag p b{font-weight:500;color:var(--ink)}
+
+#cut{position:absolute;left:calc(var(--fx) + var(--fw)/2);top:calc(var(--fy) + 18px);transform:translateX(-50%);
+  border:1.5px solid var(--peak);color:var(--peak);padding:5px 12px 5px 14px;font-size:11px;font-weight:600;letter-spacing:.3em;background:#000;opacity:0;text-shadow:none;transition:opacity .35s}
+#cut.on{opacity:1}
+
+#endc{position:absolute;left:calc(var(--fx) + var(--fw) - max(16px, var(--fw)*.035));bottom:calc(100vh - var(--fb) + max(16px, var(--fh)*.06));transform:translateX(-100%);
+  display:none;flex-direction:column;align-items:stretch;gap:8px;width:260px}
+#endc.on{display:flex}
+.btn{display:flex;justify-content:space-between;align-items:center;gap:14px;border:1px solid var(--ink);background:#000;color:var(--ink);padding:12px 14px;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:none;text-shadow:none}
+.btn:hover,.btn.solid{background:var(--ink);color:#000}
+.btn.solid:hover{background:#fff}
+
+/* roam */
+.roamonly{display:none!important}
+html.roam .roamonly{display:flex!important}
+html.roam .diveonly{display:none!important}
+#doors{position:absolute;inset:0;pointer-events:none}
+.door{position:absolute;left:0;top:0;pointer-events:auto;border:0;background:none;padding:0;cursor:pointer;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:6px}
+.door .bx{position:relative;width:34px;height:26px}
+.door .bx i{position:absolute;width:8px;height:7px;border:0 solid var(--ink)}
+.door .bx i:nth-child(1){left:0;top:0;border-left-width:1.5px;border-top-width:1.5px}
+.door .bx i:nth-child(2){right:0;top:0;border-right-width:1.5px;border-top-width:1.5px}
+.door .bx i:nth-child(3){left:0;bottom:0;border-left-width:1.5px;border-bottom-width:1.5px}
+.door .bx i:nth-child(4){right:0;bottom:0;border-right-width:1.5px;border-bottom-width:1.5px}
+.door .bx::after{content:"";position:absolute;left:50%;top:50%;width:4px;height:4px;margin:-2px;background:var(--ink)}
+.door .nm{background:rgba(0,0,0,.78);border:1px solid var(--line2);padding:3px 7px 4px;font-size:9px;letter-spacing:.12em;white-space:nowrap;text-transform:uppercase;text-shadow:none}
+.door:hover .bx i,.door:focus-visible .bx i{border-color:var(--peak)}
+.door:hover .bx::after,.door:focus-visible .bx::after{background:var(--peak)}
+.door:hover .nm,.door:focus-visible .nm{border-color:var(--peak);color:#fff}
+.door.note .bx::after{width:6px;height:6px;margin:-3px;border-radius:50%}
+.door .card{display:none;max-width:220px;white-space:normal;background:#000;border:1px solid var(--ink);padding:8px 10px;font-size:10px;letter-spacing:.04em;text-transform:none;text-align:left;line-height:1.5}
+.door.open .card{display:block}
+#rbar{position:absolute;left:auto;right:max(16px,var(--fr));top:calc(var(--fb) + (100vh - var(--fb))/2);transform:translateY(-50%);gap:8px;align-items:center}
+.ctl{border:1px solid var(--line2);background:#000;padding:9px 12px;font-size:10px;letter-spacing:.14em;cursor:pointer;line-height:1;text-shadow:none;min-height:34px;white-space:nowrap}
+.ctl:hover{border-color:var(--ink)}
+#stop{display:flex;gap:9px;align-items:center;border-color:var(--ink)}
+#stop i{width:9px;height:9px;background:var(--peak)}
+#roamhint{position:absolute;left:calc(var(--fx) + var(--fw)/2);top:calc(var(--fy) + 18px);transform:translateX(-50%);font-size:9px;letter-spacing:.16em;color:var(--ink);background:rgba(0,0,0,.8);padding:6px 10px;white-space:nowrap;transition:opacity .6s;text-shadow:none}
+.edge{position:absolute;top:calc(var(--fy) + var(--fh)/2);transform:translateY(-50%);border:1px solid var(--line2);background:rgba(0,0,0,.8);padding:8px 10px;font-size:9px;letter-spacing:.14em;cursor:pointer;text-shadow:none;visibility:hidden}
+.edge:hover{border-color:var(--peak)}
+#edgeL{left:calc(var(--fx) + 14px)}#edgeR{right:calc(var(--fr) + 14px)}
+html.port .edge{top:46%}
+
+/* portrait monitors (phones): no letterbox, fewer readouts */
+html.port #frame{box-shadow:none;outline:0}
+html.port #frame .brk{width:20px;height:20px}
+html.port #g169,html.port #safe,html.port .wide,html.port #level .v,html.port #level .ref{display:none}
+html.port #hud::before,html.port #hud::after{content:"";position:absolute;left:0;right:0;pointer-events:none;z-index:-1}
+html.port #hud::before{top:0;height:110px;background:linear-gradient(rgba(0,0,0,.72),rgba(0,0,0,0))}
+html.port #hud::after{bottom:0;height:46%;background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.78) 55%)}
+html.port #top{top:calc(env(safe-area-inset-top,0px) + 16px);transform:none}
+html.port #bot{top:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);transform:none}
+html.port .cell{padding:0 12px;min-height:32px}
+html.port #tc{font-size:16px}
+html.port #tl{padding:0}
+html.port #slate,html.port #tag,html.port #endc{left:16px;right:16px;width:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 70px);transform:none;max-width:none;min-width:0}
+html.port #hint{display:none}
+html.port #slate .s1 > div{padding:12px 14px 13px}
+html.port #slate .s2 > div,html.port #slate .s3 > div{padding:8px 12px 9px}
+html.port #slate h1{font-size:25px}
+html.port #slate .roll{font-size:17px}
+html.port #slate .s1 > div + div{min-width:0;padding:12px 10px 13px}
+html.port #slate .s2 .v,html.port #slate .s3 .v{font-size:10.5px}
+html.port #sticks{height:26px}
+html.port #rbar{left:16px;right:16px;top:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);transform:none;justify-content:space-between}
+html.port.roam #bot{display:none}
+html.port.roam #tag{bottom:calc(env(safe-area-inset-bottom,0px) + 62px)}
+html.port.roam #roamhint{display:none!important}
+html.port .ctl{padding:9px 9px;letter-spacing:.1em}
+html.port #cut{top:calc(env(safe-area-inset-top,0px) + 66px)}
+html.port #level{display:none}
+
+/* ---------- page ---------- */
+#dive{height:1000vh;pointer-events:none}
+html.rm #dive{height:100vh}
+.sheetwrap{position:relative;z-index:2;background:var(--panel)}
+.menu{display:flex;gap:0;border-bottom:1px solid var(--line);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);overflow:hidden}
+.menu > *{padding:12px 20px;border-right:1px solid var(--line);white-space:nowrap}
+.menu .on{background:var(--ink);color:#000}
+.wrap{max-width:1360px;margin:0 auto;padding:0 32px}
+.sechead{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:end;padding:72px 0 28px;border-bottom:1px solid var(--line)}
+.sechead .no{font-size:10px;letter-spacing:.16em;color:var(--ink3);padding-bottom:10px}
+.big{margin:0;font-family:var(--disp);font-stretch:125%;font-weight:850;font-size:clamp(44px,7.4vw,112px);line-height:.86;letter-spacing:-.01em;text-transform:uppercase}
+.lede{display:grid;grid-template-columns:1fr 1fr;gap:32px;padding:28px 0 36px;border-bottom:1px solid var(--line)}
+.lede p{margin:0;font-family:var(--disp);font-stretch:100%;font-weight:400;font-size:19px;line-height:1.45;color:var(--ink);max-width:36em}
+.totals{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line)}
+.totals > div{padding:20px 22px 22px;border-left:1px solid var(--line)}
+.totals > div:first-child{border-left:0;padding-left:0}
+.totals .n{font-family:var(--disp);font-stretch:125%;font-weight:800;font-size:clamp(30px,3.6vw,52px);line-height:1;margin-top:10px;letter-spacing:-.01em}
+.totals .n small{font-family:var(--mono);font-stretch:100%;font-size:10px;font-weight:400;letter-spacing:.12em;margin-left:6px;color:var(--ink2)}
+.cols{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:40px;padding:36px 0 88px}
+.grp{margin:0 0 30px}
+.grp h3{margin:0;display:flex;justify-content:space-between;font-size:9.5px;font-weight:500;letter-spacing:.16em;color:var(--ink2);text-transform:uppercase;padding:0 0 10px;border-bottom:1px solid var(--line2)}
+.thead,.row{display:grid;grid-template-columns:44px minmax(0,1fr) 120px 112px 58px 84px 62px;align-items:center;column-gap:12px}
+.thead{padding:10px 10px 8px;font-size:8.5px;letter-spacing:.14em;color:var(--ink3);text-transform:uppercase}
+.thead span:nth-child(n+3),.row > span:nth-child(n+3){text-align:right}
+.rows{list-style:none;margin:0;padding:0}
+.rows li{border-bottom:1px solid var(--line)}
+.row{width:100%;border:0;background:none;text-align:left;padding:12px 10px;cursor:pointer;font-size:12px;color:var(--ink)}
+.row .sc{color:var(--ink3);font-size:11px}
+.row .nm{font-family:var(--disp);font-stretch:112%;font-weight:700;font-size:15px;letter-spacing:.005em;text-transform:uppercase;line-height:1.15}
+.row .nm small{display:block;font-family:var(--mono);font-stretch:100%;font-weight:400;font-size:9px;letter-spacing:.14em;color:var(--ink3);margin-top:2px}
+.row .dm{white-space:nowrap}
+.row .mm,.row .ar,.row .fm{color:var(--ink2);white-space:nowrap}
+.row .go{font-size:9.5px;letter-spacing:.14em;color:var(--ink3)}
+.row:hover,.row:focus-visible{background:var(--ink);color:#000;outline-offset:-2px}
+.row:hover *,.row:focus-visible *{color:#000!important}
+.na{color:var(--ink3)}
+.side{position:sticky;top:24px;align-self:start;display:flex;flex-direction:column;gap:26px}
+.plan{border:1px solid var(--line2);background:#000}
+.plan .ph{display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line2);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+.plan .ph b{color:var(--ink);font-weight:500}
+.pimg{position:relative;aspect-ratio:2048/1180;overflow:hidden}
+.pimg img{position:absolute;left:0;top:0;width:100%;height:auto;filter:invert(1) grayscale(1) contrast(1.15) brightness(1.05);display:block}
+.hs{position:absolute;transform:translate(-50%,-50%);border:0;background:none;padding:0;cursor:pointer;width:var(--w);height:var(--h)}
+.hs i{position:absolute;width:9px;height:8px;border:0 solid rgba(242,242,238,.85)}
+.hs i:nth-child(1){left:0;top:0;border-left-width:1.5px;border-top-width:1.5px}
+.hs i:nth-child(2){right:0;top:0;border-right-width:1.5px;border-top-width:1.5px}
+.hs i:nth-child(3){left:0;bottom:0;border-left-width:1.5px;border-bottom-width:1.5px}
+.hs i:nth-child(4){right:0;bottom:0;border-right-width:1.5px;border-bottom-width:1.5px}
+.hs b{position:absolute;left:-1px;bottom:100%;margin-bottom:3px;font-size:8px;font-weight:500;letter-spacing:.12em;background:var(--ink);color:#000;padding:2px 5px;white-space:nowrap}
+.hs:hover i,.hs:focus-visible i{border-color:var(--peak)}
+.hs:hover b,.hs:focus-visible b{background:var(--peak);color:#000}
+.north{position:absolute;right:12px;bottom:10px;font-size:9px;letter-spacing:.14em;color:var(--ink2);display:flex;align-items:center;gap:6px}
+.north i{display:block;width:0;height:0;border:5px solid transparent;border-right:9px solid var(--ink2);border-left:0}
+.plan .pf{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line2)}
+.plan .pf > div{padding:10px 14px;border-left:1px solid var(--line2)}
+.plan .pf > div:first-child{border-left:0}
+.plan .pf .v{font-size:13px;margin-top:3px}
+.plan .pn{padding:9px 14px;border-top:1px solid var(--line);font-size:9.5px;color:var(--ink3);letter-spacing:.06em}
+.kit{border:1px solid var(--line2)}
+.kit .ph{padding:10px 14px;border-bottom:1px solid var(--line2);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);display:flex;justify-content:space-between}
+.kit dl{margin:0;display:grid;grid-template-columns:auto 1fr}
+.kit dt,.kit dd{margin:0;padding:12px 14px;border-bottom:1px solid var(--line)}
+.kit dt{font-size:8.5px;letter-spacing:.14em;color:var(--ink3);text-transform:uppercase;padding-top:15px}
+.kit dd{font-size:12.5px}
+.kit dd b{font-family:var(--disp);font-stretch:125%;font-weight:800;font-size:22px;letter-spacing:-.01em;margin-right:6px}
+.kit dl > :nth-last-child(-n+2){border-bottom:0}
+.kit dd button{border:0;background:none;padding:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:12.5px}
+
+/* call sheet */
+.call{border-top:1px solid var(--line);background:#000}
+.callgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:48px;padding:36px 0 96px}
+.callgrid aside p{margin:0 0 16px;font-family:var(--disp);font-size:18px;line-height:1.45;max-width:30em}
+.callgrid aside ul{list-style:none;margin:22px 0 0;padding:0;border-top:1px solid var(--line)}
+.callgrid aside li{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--line);font-size:11px;color:var(--ink2)}
+.callgrid aside li b{font-weight:450;color:var(--ink);text-align:right}
+form.cs{border:1px solid var(--ink);display:grid;grid-template-columns:1fr 1fr 1fr}
+.cs .hd{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--ink);color:#000;font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
+.cs label{display:flex;flex-direction:column;gap:6px;padding:12px 16px 14px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);min-width:0}
+.cs label:focus-within{background:#0d0d0d}
+.cs label:focus-within .lab{color:var(--peak)}
+.cs .c2{grid-column:span 2}.cs .c3{grid-column:1/-1}
+.cs .end{border-right:0}
+.cs input,.cs select,.cs textarea{background:transparent;border:0;border-bottom:1px solid var(--line2);padding:6px 0 7px;font-size:14px;border-radius:0;width:100%;min-width:0;color-scheme:dark}
+.cs input:focus,.cs select:focus,.cs textarea:focus{outline:0;border-bottom-color:var(--peak)}
+.cs select option{background:#000;color:var(--ink)}
+.cs textarea{resize:vertical;min-height:96px;line-height:1.5}
+.cs .ft{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 16px}
+.cs .ft span{font-size:10px;color:var(--ink3);letter-spacing:.06em}
+.cs .ft .btn{min-width:240px}
+.logged{border:1px solid var(--ink);display:none}
+.logged:focus{outline:0}
+.logged.on{display:block}
+.logged .hd{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--ink);font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+.logged .hd b{display:flex;align-items:center;gap:9px;color:var(--peak);font-weight:600}
+.logged .hd b i{width:9px;height:9px;background:var(--peak);border-radius:50%}
+.logged h3{margin:0;padding:22px 16px 6px;font-family:var(--disp);font-stretch:125%;font-weight:850;font-size:clamp(28px,3.6vw,44px);line-height:.95;text-transform:uppercase}
+.logged dl{display:grid;grid-template-columns:auto 1fr;margin:14px 16px 0;border-top:1px solid var(--line)}
+.logged dt,.logged dd{margin:0;padding:8px 0;border-bottom:1px solid var(--line);font-size:12px}
+.logged dt{color:var(--ink3);font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding-right:20px;padding-top:10px}
+.logged p{margin:0;padding:16px;font-size:11.5px;color:var(--ink2);line-height:1.6}
+.logged .ft{padding:0 16px 16px}
+footer.cr{position:relative;z-index:2;background:#000;border-top:1px solid var(--line);font-size:10.5px;color:var(--ink3);letter-spacing:.04em}
+footer.cr .wrap{display:flex;justify-content:space-between;gap:20px;padding-top:18px;padding-bottom:22px}
+
+@media (max-width: 980px){
+  .cols{grid-template-columns:1fr}
+  .side{position:static}
+  .callgrid{grid-template-columns:1fr;gap:28px}
+}
+@media (max-width: 720px){
+  .wrap{padding:0 16px}
+  .menu > *{padding:11px 14px}
+  .menu .wide{display:none}
+  .sechead{grid-template-columns:1fr;gap:10px;padding:52px 0 22px}
+  .sechead .no{padding:0}
+  .big{font-size:clamp(40px,12.5vw,64px)}
+  .lede{grid-template-columns:1fr;gap:14px}
+  .lede p{font-size:16px}
+  .totals{grid-template-columns:1fr 1fr}
+  .totals > div{padding:16px 14px 18px}
+  .totals > div:nth-child(3){border-left:0;padding-left:0}
+  .totals > div:nth-child(n+3){border-top:1px solid var(--line)}
+  .thead{display:none}
+  .row{grid-template-columns:34px minmax(0,1fr) auto;grid-template-areas:"sc nm go" "sc dm dm";row-gap:4px;padding:12px 4px}
+  .row .sc{grid-area:sc;align-self:start;padding-top:2px}
+  .row .nm{grid-area:nm;font-size:14px}
+  .row .go{grid-area:go}
+  .row .dm{grid-area:dm;text-align:left!important;font-size:11px;color:var(--ink2);white-space:normal}
+  .row .mm,.row .ar,.row .fm{display:none}
+  .grp h3{flex-direction:column;gap:4px}
+  .callgrid aside li span{white-space:nowrap}
+  form.cs{grid-template-columns:1fr}
+  .cs .c2,.cs .c3{grid-column:1}
+  .cs label{border-right:0}
+  .cs .ft{flex-direction:column;align-items:stretch}
+  .cs .ft .btn{min-width:0}
+  footer.cr .wrap{flex-direction:column;gap:6px}
+}
+@media (prefers-reduced-motion: reduce){
+  .blink{animation:none}
+  #dip.sw{animation:none}
+}
+</style>
+
+<div id="stage">
+  <canvas id="cv" role="img" aria-label="Camera monitor showing the property. In free roam: drag to look around, scroll or pinch to change the lens, arrow keys to pan."></canvas>
+  <div id="dip"></div>
+  <div id="hud">
+    <div id="frame" aria-hidden="true"><i class="brk tl"></i><i class="brk tr"></i><i class="brk bl"></i><i class="brk br"></i></div>
+    <div id="g169" aria-hidden="true"><i></i><i></i><i></i><i></i><b>16:9</b></div>
+    <div id="safe" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div id="cross" aria-hidden="true"></div>
+    <div id="level" aria-hidden="true"><i class="ref l"></i><i class="h l"></i><i class="h r"></i><i class="ref r"></i><span class="v" id="levelv">0.0°</span></div>
+    <div id="focus" aria-hidden="true"><i></i><i></i><i></i><i></i><b id="focusl">AF</b></div>
+    <div id="doors"></div>
+
+    <div class="bar" id="top" aria-hidden="true">
+      <div class="cell" id="rec"><span class="dot blink"></span><span class="r">REC</span><span id="tc">01:00:00:00</span></div>
+      <div class="cell wide"><span class="lab">FPS</span><span class="val">24.000</span></div>
+      <div class="cell wide"><span class="lab">Shutter</span><span class="val">180.0°</span></div>
+      <div class="cell wide"><span class="lab">ISO</span><span class="val">800</span></div>
+      <div class="cell wide"><span class="lab">WB</span><span class="val">5600K</span></div>
+      <div class="cell grow"></div>
+      <div class="cell"><span class="lab">Lens</span><span class="val"><span id="lensv">24</span><small>MM</small></span><span id="lensbar" class="wide"><i id="lensi"></i></span></div>
+      <div class="cell wide"><span class="lab">Format</span><span class="val">2.39:1</span></div>
+    </div>
+
+    <div class="bar" id="bot">
+      <div class="cell" id="cAlt"><span class="lab" id="altl">ALT</span><span class="val" id="altv">120<small>M</small></span></div>
+      <div class="cell wide"><span class="lab">Tilt</span><span class="val" id="tiltv">0.0°</span></div>
+      <div class="cell wide" id="cHdg"><span class="lab">HDG</span><span class="val" id="hdgv">000°</span></div>
+      <div class="diveonly" id="tl"><button id="play" type="button" aria-label="Play the shots">▶ PLAY</button><div id="tlin" aria-label="Shots"><i id="ph"></i></div></div>
+      <div class="cell wide diveonly"><span class="lab">Roll</span><span class="val" id="clipv">A001 C01</span></div>
+    </div>
+
+    <div id="slate" aria-hidden="false">
+      <div id="sticks" aria-hidden="true"></div>
+      <div class="s1">
+        <div><span class="lab">Production</span><h1>Sun‑Drenched Production Space</h1></div>
+        <div><span class="lab">Roll</span><span class="roll">A001</span></div>
+      </div>
+      <div class="s2">
+        <div><span class="lab">Scene</span><div class="v">01</div></div>
+        <div><span class="lab">Take</span><div class="v">1</div></div>
+        <div><span class="lab">Date</span><div class="v" id="sdate">TODAY</div></div>
+      </div>
+      <div class="s3">
+        <div><span class="lab">Location</span><div class="v">West Town, Chicago, IL</div></div>
+        <div><span class="lab">360 Photography</span><div class="v">Natalie Simmons</div></div>
+      </div>
+    </div>
+    <div id="hint" aria-hidden="true" class="diveonly">SCROLL TO ROLL<br><span>DRONE DIVE, 6 SHOTS</span></div>
+
+    <div id="tag" aria-live="polite">
+      <div class="t1">
+        <div><span class="lab">Scene</span><div class="v" id="tsc">01</div></div>
+        <div><span class="lab">Take</span><div class="v" id="ttk">1</div></div>
+        <div id="tfmw"><span class="lab">Format</span><div class="v" id="tfm">360</div></div>
+      </div>
+      <div class="t2"><h2 id="tloc">EXT. WEST TOWN, CHICAGO / DAY</h2><p id="tsub">Scenery above the property</p></div>
+    </div>
+
+    <div id="cut" aria-hidden="true">DISSOLVE</div>
+
+    <div id="endc" class="diveonly">
+      <button class="btn solid" type="button" id="take">Take the camera <span>▸</span></button>
+      <a class="btn" href="#sheet">Set sheet <span>▾</span></a>
+    </div>
+
+    <div class="bar roamonly" id="rbar">
+      <button class="ctl" type="button" id="prev" aria-label="Previous set">◂ PREV</button>
+      <button class="ctl" type="button" id="next" aria-label="Next set">NEXT ▸</button>
+      <button class="ctl" type="button" id="wide" aria-label="Wider lens">WIDE</button>
+      <button class="ctl" type="button" id="tele" aria-label="Longer lens">TELE</button>
+      <button class="ctl" type="button" id="stop" aria-label="Stop and return to the set sheet"><i></i>STOP</button>
+    </div>
+    <button class="edge roamonly" type="button" id="edgeL">◂&nbsp;&nbsp;<span></span></button>
+    <button class="edge roamonly" type="button" id="edgeR"><span></span>&nbsp;&nbsp;▸</button>
+    <div id="roamhint" class="roamonly" aria-hidden="true">DRAG TO PAN · SCROLL TO ZOOM · FRAMES ARE DOORS · ESC TO STOP</div>
+  </div>
+</div>
+
+<main>
+  <section id="dive" aria-label="Drone dive from above West Town into the loft"></section>
+
+  <div class="sheetwrap" id="sheet">
+    <div class="menu" aria-hidden="true"><span class="on">Set sheet</span><span>Sun-Drenched Production Space</span><span class="wide">West Town, Chicago, IL</span><span class="wide">Photo and film</span></div>
+    <div class="wrap">
+      <div class="sechead">
+        <div class="no">02 / SET SHEET</div>
+        <h2 class="big">The set sheet</h2>
+      </div>
+      <div class="lede">
+        <p>Spacious, open and modern, this loft is ideal for productions of all types. It has a full kitchen, a 75" TV and an optional projector with a 120" screen.</p>
+        <p>Multiple dividers on site partition the space as needed. Every space below is a 360 setup from the tour: pick a row to roll the camera there.</p>
+      </div>
+      <div class="totals">
+        <div><span class="lab">Gross internal area</span><div class="n">1,293<small>SQ FT</small></div></div>
+        <div><span class="lab">Level 1</span><div class="n">852<small>SQ FT</small></div></div>
+        <div><span class="lab">Level 2</span><div class="n">442<small>SQ FT</small></div></div>
+        <div><span class="lab">Setups</span><div class="n" id="nsetups">17<small>360 INT</small></div></div>
+      </div>
+      <div class="cols">
+        <div id="groups"></div>
+        <aside class="side">
+          <div class="plan">
+            <div class="ph"><b>Blocking diagram</b><span>Level 1</span></div>
+            <div class="pimg" id="pimg">
+              <img id="planimg" alt="Floor plan of level 1: kitchen, living room, billiard room, bath and spiral stair" loading="lazy">
+              <span class="north" aria-hidden="true"><i></i>N</span>
+            </div>
+            <div class="pf">
+              <div><span class="lab">Level 1</span><div class="v">852 sq ft</div></div>
+              <div><span class="lab">Level 2</span><div class="v">442 sq ft</div></div>
+              <div><span class="lab">Total</span><div class="v">1,293 sq ft</div></div>
+            </div>
+            <div class="pn">Gross internal area. Sizes and dimensions are approximate.</div>
+          </div>
+          <div class="kit">
+            <div class="ph"><span>Kit on site</span><span>From the listing</span></div>
+            <dl>
+              <dt>Display</dt><dd><b>75"</b>TV</dd>
+              <dt>Projection</dt><dd><b>120"</b>screen, projector optional</dd>
+              <dt>Dividers</dt><dd>Multiple, partition the space as needed</dd>
+              <dt>Kitchen</dt><dd>Full kitchen, <button type="button" data-room="9">roll to it</button></dd>
+              <dt>Laundry</dt><dd>Hobby desk beside the laundry, <button type="button" data-room="19">roll to it</button></dd>
+            </dl>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <section class="call sheetwrap" id="call" aria-labelledby="callh">
+    <div class="menu" aria-hidden="true"><span class="on">Call sheet</span><span>Booking request</span></div>
+    <div class="wrap">
+      <div class="sechead">
+        <div class="no">03 / CALL SHEET</div>
+        <h2 class="big" id="callh">Call sheet</h2>
+      </div>
+      <div class="callgrid">
+        <aside>
+          <p>Planning a shoot here? Fill in the call sheet with your production, date and crew size, and the request is logged.</p>
+          <ul>
+            <li><span>Location</span><b>West Town, Chicago, IL</b></li>
+            <li><span>Space</span><b>1,293 sq ft over two levels</b></li>
+            <li><span>On site</span><b>75" TV, 120" projector screen, dividers</b></li>
+          </ul>
+        </aside>
+        <div>
+          <form class="cs" id="cs" novalidate>
+            <div class="hd"><span>Call sheet</span><span id="cstc">TC 01:00:00:00</span></div>
+            <label class="c2"><span class="lab">Production name</span><input name="prod" required autocomplete="off" placeholder="Working title"></label>
+            <label class="end"><span class="lab">Shoot date</span><input name="date" type="date" required></label>
+            <label><span class="lab">Contact name</span><input name="name" required autocomplete="name"></label>
+            <label><span class="lab">Email</span><input name="email" type="email" required autocomplete="email"></label>
+            <label class="end"><span class="lab">Crew size</span>
+              <select name="crew" required>
+                <option value="">Select</option>
+                <option>1 to 5</option><option>6 to 10</option><option>11 to 20</option><option>21 to 40</option><option>More than 40</option>
+              </select></label>
+            <label class="c3 end"><span class="lab">Message</span><textarea name="msg" rows="4" placeholder="Shoot type, hours, gear, the dividers or projector you need"></textarea></label>
+            <div class="ft"><span id="cserr" aria-live="polite">All fields except the message are needed.</span><button class="btn solid" type="submit">Log booking request <span>▸</span></button></div>
+          </form>
+          <div class="logged" id="logged" tabindex="-1" aria-live="polite">
+            <div class="hd"><b><i></i>Booking request logged</b><span id="lgtc"></span></div>
+            <h3 id="lgprod">Production</h3>
+            <dl id="lgdl"></dl>
+            <p>Noted on this page. This is a concept demo, so nothing was sent and no one has been contacted yet.</p>
+            <div class="ft"><button class="btn" type="button" id="again">New call sheet <span>▸</span></button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="cr"><div class="wrap"><span>Concept demo built from the property's 360 tour. 360 photography: Natalie Simmons.</span><span>Sun-Drenched Production Space · West Town, Chicago, IL</span></div></footer>
+
+<script>window.MEDIA_BASE="media";
+/* pano.js: a small WebGL2 360 engine for listing pages.
+ *
+ * One full-screen shader renders up to two equirect panoramas (layers A and B) so rooms can blend.
+ * Every pixel is a ray: origin = camera offset inside the unit sphere (+ a projection pull-back k),
+ * direction = view basis * screen point. k = 0 is a normal lens, k = 1 is stereographic (little planet),
+ * a camera offset toward a door makes the room stretch past you like you walked forward.
+ *
+ * Looks (uniform "look"): exposure, saturation, warmth, vignette, grain, sepia "develop" amount,
+ * line-drawing amount and a light-reveal spot, plus a soft nadir cap over the tripod.
+ */
+(function (G) {
+  'use strict';
+  const VS = `#version 300 es
+  in vec2 p; out vec2 vUv;
+  void main(){ vUv = p*0.5+0.5; gl_Position = vec4(p,0.,1.); }`;
+
+  const FS = `#version 300 es
+  precision highp float;
+  in vec2 vUv; out vec4 o;
+  uniform sampler2D tA, tB;
+  uniform vec2 res;
+  uniform vec2 shift; // move the projection center (uv units), e.g. to sit a little planet beside a title
+  uniform float aspect, tanH;
+  // per layer: basis (right, up, fwd), camera offset, k, alpha, blur
+  uniform mat3 bA, bB;
+  uniform vec3 offA, offB;
+  uniform float kA, kB, alphaB, blurA, blurB, rollA;
+  uniform float flatA, flatB;    // 1 = flat photo (not equirect), drawn as a cover-fit plate
+  uniform vec4 flatRA, flatRB;   // x,y,scale,aspect of the flat photo
+  // look
+  uniform float expo, sat, warm, vig, grain, time, develop, lineAmt, nadir;
+  uniform vec3 tint; uniform float tintAmt;
+  uniform vec3 spot; // x,y in screen uv, z radius (0 = off): inside the spot the photo shows, outside the line drawing
+  uniform float spotSoft;
+
+  const float PI = 3.14159265359;
+
+  vec2 eq(vec3 d){
+    d = normalize(d);
+    float lon = atan(d.x, -d.z);
+    float lat = asin(clamp(d.y,-1.,1.));
+    return vec2(0.5 + lon/(2.*PI), 0.5 - lat/PI);
+  }
+  vec3 hit(vec3 O, vec3 D){
+    float b = dot(O,D); float c = dot(O,O)-1.;
+    float t = -b + sqrt(max(b*b - c, 0.));
+    return O + t*D;
+  }
+  vec4 samp(sampler2D t, vec3 d, float lod){
+    vec2 uv = eq(d);
+    vec2 uv2 = vec2(fract(uv.x+0.5), uv.y);
+    vec2 dx = dFdx(uv), dy = dFdy(uv), dx2 = dFdx(uv2), dy2 = dFdy(uv2);
+    if (abs(dx2.x) < abs(dx.x)) dx.x = dx2.x;
+    if (abs(dy2.x) < abs(dy.x)) dy.x = dy2.x;
+    if (lod > 0.) return textureLod(t, uv, lod);
+    return textureGrad(t, uv, dx, dy);
+  }
+  vec3 nadirCap(sampler2D t, vec3 d, vec3 col){
+    if (nadir <= 0.) return col;
+    float lat = asin(clamp(normalize(d).y,-1.,1.));
+    float a = smoothstep(-1.12, -1.28, lat) * nadir; // ~ -64 to -73 deg
+    if (a <= 0.) return col;
+    vec3 ring = normalize(vec3(d.x, 0., d.z));
+    vec3 r = ring*cos(-1.05) + vec3(0.,sin(-1.05),0.);
+    vec3 floorc = samp(t, r, 5.5).rgb;
+    vec3 center = textureLod(t, vec2(0.5, 0.97), 9.).rgb;
+    float m = smoothstep(-1.25, -1.5, lat);
+    return mix(col, mix(floorc, mix(floorc, center, .5), m), a);
+  }
+  vec3 layer(sampler2D t, mat3 B, vec3 off, float k, float blur, vec2 sp, float isFlat, vec4 fr){
+    if (isFlat > .5){
+      // cover-fit plate with a little zoom (fr.z) and pan (fr.xy)
+      vec2 q = (vUv - .5);
+      float sa = aspect / fr.w;
+      vec2 uv = vec2(q.x * (sa > 1. ? 1. : sa), q.y * (sa > 1. ? 1./sa : 1.)) / fr.z + .5 + fr.xy;
+      uv.y = 1. - uv.y;
+      return texture(t, clamp(uv, 0., 1.)).rgb;
+    }
+    vec3 D = normalize(B * vec3(sp, 1.));
+    vec3 O = off - B[2]*k;
+    vec3 d = hit(O, D);
+    vec3 c = samp(t, d, 0.).rgb;
+    if (blur > 0.001){
+      // radial rush: samples pulled toward the screen center
+      vec3 acc = c; float w = 1.;
+      for (int i=1;i<6;i++){
+        float s = 1. - blur*float(i)/6.;
+        vec3 Di = normalize(B * vec3(sp*s, 1.));
+        acc += samp(t, hit(O, Di), 1.).rgb; w += 1.;
+      }
+      c = acc/w;
+    }
+    return nadirCap(t, d, c);
+  }
+  float luma(vec3 c){ return dot(c, vec3(.2126,.7152,.0722)); }
+  float hash(vec2 p){ return fract(sin(dot(p, vec2(12.9898,78.233)))*43758.5453); }
+
+  void main(){
+    vec2 sp = ((vUv - shift)*2.-1.) * vec2(aspect,1.) * tanH;
+    vec3 c = layer(tA, bA, offA, kA, blurA, sp, flatA, flatRA);
+    if (alphaB > 0.001){
+      vec3 cb = layer(tB, bB, offB, kB, blurB, sp, flatB, flatRB);
+      c = mix(c, cb, alphaB);
+    }
+    // grade
+    c *= expo;
+    float L = luma(c);
+    c = mix(vec3(L), c, sat);
+    c *= vec3(1.+warm*.06, 1., 1.-warm*.08);
+    if (tintAmt > 0.) c = mix(c, tint * (L*1.15), tintAmt);
+    if (develop > 0.){
+      // albumen print: sepia, crushed blacks lifted, highlights warm, soft
+      vec3 sep = vec3(L*1.07+.04, L*.93+.03, L*.74+.02);
+      sep = mix(sep, vec3(.95,.90,.80), .12);
+      c = mix(c, sep, develop);
+    }
+    if (lineAmt > 0.){
+      // reuse the gradient trick on the composed image of layer A
+      float e = 1.25 / res.y * 2. * tanH;
+      vec3 O = offA - bA[2]*kA; float l[9]; int n=0;
+      for (int j=-1;j<=1;j++) for (int i=-1;i<=1;i++){
+        vec3 D = normalize(bA * vec3(sp + vec2(float(i),float(j))*e, 1.));
+        l[n++] = luma(samp(tA, hit(O,D), 0.4).rgb);
+      }
+      float gx = (l[2]+2.*l[5]+l[8]) - (l[0]+2.*l[3]+l[6]);
+      float gy = (l[6]+2.*l[7]+l[8]) - (l[0]+2.*l[1]+l[2]);
+      float g = smoothstep(.05, .28, sqrt(gx*gx+gy*gy));
+      vec3 paper = vec3(.955,.95,.93);
+      vec3 ink = vec3(.12,.16,.22);
+      vec3 drawn = mix(paper, ink, g*.9);
+      float m = lineAmt;
+      if (spot.z > 0.){
+        vec2 q = (vUv - spot.xy) * vec2(aspect, 1.);
+        float r = length(q);
+        m *= smoothstep(spot.z*(1.-spotSoft), spot.z, r);
+      }
+      c = mix(c, drawn, m);
+    }
+    float v = length((vUv-.5)*vec2(aspect,1.)*.9);
+    c *= mix(1., smoothstep(1.15, .25, v), vig);
+    c += (hash(vUv*res + time) - .5) * grain;
+    o = vec4(c, 1.);
+  }`;
+
+  function compile(gl, type, src) {
+    const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+    return s;
+  }
+
+  const D2R = Math.PI / 180;
+  const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+  const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const easeOut = t => 1 - Math.pow(1 - t, 3);
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const wrapPi = a => { a = (a + Math.PI) % (2 * Math.PI); if (a < 0) a += 2 * Math.PI; return a - Math.PI; };
+  const dirOf = (yaw, pitch) => [Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), -Math.cos(yaw) * Math.cos(pitch)];
+
+  function basis(yaw, pitch, roll) {
+    const f = dirOf(yaw, pitch);
+    let r = [-f[2], 0, f[0]]; const rl = Math.hypot(r[0], r[2]) || 1e-6; r = [r[0] / rl, 0, r[2] / rl];
+    let u = [r[1] * f[2] - r[2] * f[1], r[2] * f[0] - r[0] * f[2], r[0] * f[1] - r[1] * f[0]];
+    if (roll) {
+      const c = Math.cos(roll), s = Math.sin(roll);
+      const r2 = r.map((v, i) => v * c + u[i] * s), u2 = u.map((v, i) => -r[i] * s + v * c); r = r2; u = u2;
+    }
+    return { r, u, f, m: new Float32Array([...r, ...u, ...f]) };
+  }
+
+  class Pano {
+    constructor(canvas, opts = {}) {
+      this.canvas = canvas;
+      const gl = canvas.getContext('webgl2', { antialias: false, alpha: false, preserveDrawingBuffer: !!opts.preserve, powerPreference: 'high-performance' });
+      if (!gl) throw new Error('WebGL2 not available');
+      this.gl = gl;
+      this.aniso = gl.getExtension('EXT_texture_filter_anisotropic');
+      const pr = gl.createProgram();
+      gl.attachShader(pr, compile(gl, gl.VERTEX_SHADER, VS));
+      gl.attachShader(pr, compile(gl, gl.FRAGMENT_SHADER, FS));
+      gl.bindAttribLocation(pr, 0, 'p'); gl.linkProgram(pr);
+      if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(pr));
+      this.pr = pr; gl.useProgram(pr);
+      const vb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, vb);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+      gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+      this.U = {};
+      const n = gl.getProgramParameter(pr, gl.ACTIVE_UNIFORMS);
+      for (let i = 0; i < n; i++) { const a = gl.getActiveUniform(pr, i); this.U[a.name.replace(/\[0\]$/, '')] = gl.getUniformLocation(pr, a.name); }
+      gl.uniform1i(this.U.tA, 0); gl.uniform1i(this.U.tB, 1);
+      this.cache = new Map();
+      this.A = this.layer(); this.B = this.layer(); this.alphaB = 0;
+      this.shift = [0, 0];
+      this.fov = opts.fov || 80; this.dpr = Math.min(opts.dpr || window.devicePixelRatio || 1, opts.maxDpr || 2);
+      this.look = Object.assign({ expo: 1, sat: 1, warm: 0, vig: .25, grain: .018, develop: 0, lineAmt: 0, nadir: 1, tint: [1, 1, 1], tintAmt: 0, spot: [0.5, 0.5, 0], spotSoft: .5 }, opts.look || {});
+      this.t0 = performance.now();
+      this.onframe = null;
+      this.resize();
+      addEventListener('resize', () => this.resize());
+      this.loop = this.loop.bind(this); requestAnimationFrame(this.loop);
+    }
+    layer() { return { tex: null, yaw: 0, pitch: 0, roll: 0, k: 0, off: [0, 0, 0], blur: 0, flat: 0, flatR: [0, 0, 1, 1.5] }; }
+    resize() {
+      const c = this.canvas, w = c.clientWidth, h = c.clientHeight;
+      c.width = Math.max(2, Math.round(w * this.dpr)); c.height = Math.max(2, Math.round(h * this.dpr));
+      this.gl.viewport(0, 0, c.width, c.height);
+    }
+    /* load(url) -> texture handle {tex, w, h, flat}; smUrl paints first, full res swaps in */
+    load(url, smUrl) {
+      if (this.cache.has(url)) return this.cache.get(url);
+      const gl = this.gl;
+      const h = { tex: gl.createTexture(), ready: false, full: false, w: 0, h: 0, flat: false, url };
+      const put = (img, full) => {
+        gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, h.tex);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        if (this.aniso) gl.texParameterf(gl.TEXTURE_2D, this.aniso.TEXTURE_MAX_ANISOTROPY_EXT, 8);
+        h.w = img.naturalWidth || img.width; h.h = img.naturalHeight || img.height;
+        h.flat = h.w / h.h < 1.9; h.ready = true; if (full) h.full = true;
+      };
+      const get = u => new Promise((res, rej) => { const i = new Image(); i.decoding = 'async'; i.onload = () => res(i); i.onerror = rej; i.src = u; });
+      h.promise = (smUrl ? get(smUrl).then(i => { if (!h.full) put(i, false); }) : Promise.resolve())
+        .then(() => h);
+      h.fullPromise = get(url).then(i => (i.decode ? i.decode().catch(() => {}) : 0).then(() => { put(i, true); return h; }));
+      if (!smUrl) h.promise = h.fullPromise;
+      this.cache.set(url, h);
+      return h;
+    }
+    set(L, h) {
+      L.tex = h; L.flat = h && h.flat ? 1 : 0;
+      if (h && h.flat) L.flatR[3] = h.w / h.h;
+    }
+    viewDir() { return dirOf(this.A.yaw, this.A.pitch); }
+    /* screen position of a pano direction (yaw,pitch) for layer L in px; null if behind */
+    project(yaw, pitch, L = this.A) {
+      const b = basis(L.yaw, L.pitch, L.roll), d = dirOf(yaw, pitch);
+      const z = d[0] * b.f[0] + d[1] * b.f[1] + d[2] * b.f[2]; if (z <= 0.05) return null;
+      const x = (d[0] * b.r[0] + d[1] * b.r[1] + d[2] * b.r[2]) / z, y = (d[0] * b.u[0] + d[1] * b.u[1] + d[2] * b.u[2]) / z;
+      const th = Math.tan(this.fov * D2R / 2), w = this.canvas.clientWidth, hh = this.canvas.clientHeight, asp = w / hh;
+      return { x: (x / (asp * th) * .5 + .5) * w, y: (1 - (y / th * .5 + .5)) * hh, z };
+    }
+    /* yaw,pitch under a screen point (px) for layer A, rectilinear */
+    pick(px, py) {
+      const L = this.A, b = basis(L.yaw, L.pitch, L.roll), w = this.canvas.clientWidth, h = this.canvas.clientHeight;
+      const th = Math.tan(this.fov * D2R / 2), sx = (px / w * 2 - 1) * (w / h) * th, sy = (1 - py / h * 2) * th;
+      const d = [b.r[0] * sx + b.u[0] * sy + b.f[0], b.r[1] * sx + b.u[1] * sy + b.f[1], b.r[2] * sx + b.u[2] * sy + b.f[2]];
+      const l = Math.hypot(...d);
+      return { yaw: Math.atan2(d[0], -d[2]), pitch: Math.asin(d[1] / l) };
+    }
+    draw() {
+      const gl = this.gl, U = this.U, A = this.A, B = this.B, lk = this.look;
+      const w = this.canvas.width, h = this.canvas.height;
+      gl.uniform2f(U.res, w, h); gl.uniform1f(U.aspect, w / h);
+      gl.uniform2f(U.shift, this.shift[0], this.shift[1]);
+      gl.uniform1f(U.tanH, Math.tan(this.fov * D2R / 2));
+      const bind = (L, unit, U_b, U_off, U_k, U_blur, U_flat, U_fr) => {
+        gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, L.tex && L.tex.ready ? L.tex.tex : null);
+        gl.uniformMatrix3fv(U_b, false, basis(L.yaw, L.pitch, L.roll).m);
+        gl.uniform3fv(U_off, L.off); gl.uniform1f(U_k, L.k); gl.uniform1f(U_blur, L.blur);
+        gl.uniform1f(U_flat, L.flat); gl.uniform4fv(U_fr, L.flatR);
+      };
+      bind(A, 0, U.bA, U.offA, U.kA, U.blurA, U.flatA, U.flatRA);
+      bind(B, 1, U.bB, U.offB, U.kB, U.blurB, U.flatB, U.flatRB);
+      gl.uniform1f(U.alphaB, B.tex && B.tex.ready ? this.alphaB : 0);
+      gl.uniform1f(U.expo, lk.expo); gl.uniform1f(U.sat, lk.sat); gl.uniform1f(U.warm, lk.warm);
+      gl.uniform1f(U.vig, lk.vig); gl.uniform1f(U.grain, lk.grain); gl.uniform1f(U.develop, lk.develop);
+      gl.uniform1f(U.lineAmt, lk.lineAmt); gl.uniform1f(U.nadir, lk.nadir);
+      gl.uniform3fv(U.tint, lk.tint); gl.uniform1f(U.tintAmt, lk.tintAmt);
+      gl.uniform3fv(U.spot, lk.spot); gl.uniform1f(U.spotSoft, lk.spotSoft);
+      gl.uniform1f(U.time, (performance.now() - this.t0) / 1000 % 100);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+    loop(t) {
+      if (this.onframe) this.onframe(t);
+      if (this.A.tex && this.A.tex.ready) this.draw();
+      requestAnimationFrame(this.loop);
+    }
+  }
+
+  /* Tour: a graph of rooms with solved headings. walk() moves through a door like a dolly shot. */
+  class Tour {
+    constructor(pano, layout, base, opts = {}) {
+      this.p = pano; this.L = layout; this.base = base; this.opts = opts;
+      this.rooms = new Map(layout.rooms.map(r => [r.i, r]));
+      this.cur = null; this.busy = false;
+      this.dragging = false; this.vel = 0; this.vy = 0; this.auto = opts.auto ?? 0.02;
+    }
+    url(i, sm) { return `${this.base}/${String(i).padStart(2, '0')}${sm ? '-sm' : ''}.jpg`; }
+    tex(i) { return this.p.load(this.url(i), this.url(i, true)); }
+    async show(i, yaw = 0, pitch = 0) {
+      const h = this.tex(i); await h.promise; this.p.set(this.p.A, h);
+      Object.assign(this.p.A, { yaw, pitch, k: 0, off: [0, 0, 0], blur: 0 }); this.p.alphaB = 0;
+      this.cur = this.rooms.get(i); this.prefetch(i); return this.cur;
+    }
+    prefetch(i) { const r = this.rooms.get(i); if (!r) return; for (const l of r.links) this.tex(l.to); }
+    link(from, to) { const r = this.rooms.get(from); return r && r.links.find(l => l.to === to); }
+    /* heading-consistent yaw in room b for a world direction seen as yaw y in room a */
+    carry(a, b, y) {
+      const ra = this.rooms.get(a), rb = this.rooms.get(b);
+      if (!ra || !rb || ra.comp !== rb.comp) return null;
+      return wrapPi(ra.heading + y - rb.heading);
+    }
+    /* walk to room j. dur seconds. Returns a promise. */
+    async walk(j, opts = {}) {
+      if (this.busy || !this.cur || j === this.cur.i) return;
+      this.busy = true;
+      const p = this.p, A = p.A, B = p.B, i = this.cur.i;
+      const lk = this.link(i, j);
+      const hB = this.tex(j); await hB.promise;
+      const doorYaw = lk ? lk.yaw : A.yaw;
+      let doorPitch = lk ? clamp(lk.pitch, -0.35, 0.25) : 0;
+      // 1) turn toward the door
+      const y0 = A.yaw, p0 = A.pitch, dy = wrapPi(doorYaw - y0), turnPitch = clamp(doorPitch * .5, -.2, .15);
+      const pace = this.opts.pace || 1, rush = this.opts.blur ?? 1;
+      const turnT = (opts.turn ?? clamp(Math.abs(dy) / 2.4, .25, .9)) * pace;
+      await this.tween(turnT, t => { const e = ease(t); A.yaw = y0 + dy * e; A.pitch = lerp(p0, turnPitch, e); });
+      // 2) dolly through
+      const arrive = this.carry(i, j, doorYaw);
+      p.set(B, hB);
+      const by = arrive ?? 0;
+      Object.assign(B, { yaw: by, pitch: A.pitch, roll: 0, k: 0, blur: 0 });
+      const fwdA = dirOf(doorYaw, 0), fwdB = dirOf(by, 0), D = opts.dist ?? this.opts.dist ?? .82, fov0 = p.fov;
+      const dur = (opts.dur ?? 1.15) * pace, pulse = this.opts.pulse ?? 6;
+      await this.tween(dur, t => {
+        const e = ease(t);
+        A.off = fwdA.map(v => v * D * easeOut(Math.min(1, t * 1.15)));
+        B.off = fwdB.map(v => -v * D * (1 - e));
+        A.blur = Math.sin(Math.PI * t) * .10 * rush; B.blur = Math.sin(Math.PI * t) * .08 * rush;
+        p.alphaB = clamp((t - .28) / .5, 0, 1); p.alphaB = p.alphaB * p.alphaB * (3 - 2 * p.alphaB);
+        p.fov = fov0 + Math.sin(Math.PI * t) * pulse;
+        B.pitch = lerp(A.pitch, 0, e) ; B.yaw = by;
+      });
+      // swap
+      p.set(A, hB); Object.assign(A, { yaw: by, pitch: B.pitch, off: [0, 0, 0], blur: 0, k: 0 });
+      p.alphaB = 0; p.fov = fov0; Object.assign(B, { off: [0, 0, 0], blur: 0 });
+      this.cur = this.rooms.get(j); this.prefetch(j);
+      this.busy = false;
+      if (this.onroom) this.onroom(this.cur);
+    }
+    /* crossfade to a room that has no door link (or another component) */
+    async cut(j, yaw = 0, dur = .9) {
+      if (this.busy) return; this.busy = true;
+      const p = this.p, A = p.A, B = p.B, hB = this.tex(j); await hB.promise;
+      p.set(B, hB); Object.assign(B, { yaw, pitch: 0, k: 0, off: [0, 0, 0] });
+      const fov0 = p.fov;
+      await this.tween(dur, t => {
+        const e = ease(t); p.alphaB = e; A.off = dirOf(A.yaw, 0).map(v => v * .35 * e);
+        B.off = dirOf(yaw, 0).map(v => -v * .3 * (1 - e)); p.fov = fov0 + Math.sin(Math.PI * t) * 4;
+      });
+      p.set(A, hB); Object.assign(A, { yaw, pitch: 0, off: [0, 0, 0] }); p.alphaB = 0; p.fov = fov0;
+      this.cur = this.rooms.get(j); this.prefetch(j); this.busy = false;
+      if (this.onroom) this.onroom(this.cur);
+    }
+    tween(sec, f) {
+      return new Promise(res => {
+        const t0 = performance.now();
+        const step = now => { const t = Math.min(1, (now - t0) / (sec * 1000)); f(t); t < 1 ? requestAnimationFrame(step) : res(); };
+        requestAnimationFrame(step);
+      });
+    }
+    /* drag to look, wheel/pinch zoom */
+    attach(el) {
+      const p = this.p; let lx = 0, ly = 0, id = null, moved = 0;
+      el.addEventListener('pointerdown', e => { id = e.pointerId; lx = e.clientX; ly = e.clientY; moved = 0; this.dragging = true; el.setPointerCapture(id); this.vel = 0; this.vy = 0; });
+      el.addEventListener('pointermove', e => {
+        if (e.pointerId !== id) return;
+        const s = p.fov * D2R / el.clientHeight; const dx = e.clientX - lx, dy = e.clientY - ly;
+        moved += Math.abs(dx) + Math.abs(dy);
+        if (!this.busy) { p.A.yaw -= dx * s; p.A.pitch = clamp(p.A.pitch + dy * s, -1.3, 1.3); }
+        this.vel = -dx * s; this.vy = dy * s; lx = e.clientX; ly = e.clientY;
+      });
+      const up = e => { if (e.pointerId !== id) return; id = null; this.dragging = false; this.lastMoved = moved; };
+      el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+      el.addEventListener('wheel', e => { if (this.opts.wheelZoom === false) return; e.preventDefault(); p.fov = clamp(p.fov + e.deltaY * .04, 35, 100); }, { passive: false });
+    }
+    idle(dt) {
+      const A = this.p.A;
+      if (this.busy || this.dragging) return;
+      A.yaw += this.vel; A.pitch = clamp(A.pitch + this.vy, -1.3, 1.3);
+      this.vel *= .92; this.vy *= .9;
+      if (Math.abs(this.vel) < 1e-4) A.yaw += this.auto * dt;
+    }
+  }
+
+  G.PanoKit = { Pano, Tour, basis, dirOf, wrapPi, clamp, ease, easeOut, lerp, D2R };
+})(window);
+
+</script>
+<script>
+(async function () {
+  'use strict';
+  const MEDIA = window.MEDIA_BASE || '../../media/west-town-loft';
+  const { Pano, Tour, dirOf, wrapPi, clamp, ease, easeOut, lerp, D2R } = PanoKit;
+  const $ = s => document.querySelector(s);
+  const root = document.documentElement;
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (RM) { root.classList.add('rm'); $('#hint').innerHTML = 'PRESS PLAY<br><span>OR PICK A SHOT BELOW</span>'; }
+  const easeIn = t => t * t * t;
+  const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+  const pad = (n, w = 2) => String(n).padStart(w, '0');
+
+  // slate date: the day it is viewed
+  { const d = new Date(); $('#sdate').textContent = pad(d.getMonth() + 1) + '.' + pad(d.getDate()) + '.' + String(d.getFullYear()).slice(2); }
+
+  // ---------- frame geometry ----------
+  let W = innerWidth, H = innerHeight, port = false, FY = 0, FB = 0;
+  function layoutFrame() {
+    W = innerWidth; H = innerHeight; port = W / H < 1.15;
+    root.classList.toggle('port', port);
+    const hud = $('#hud').style;
+    let fw, fh;
+    if (port) { fw = W; fh = H; }
+    else { fw = Math.min(W, H * 2.39); fh = fw / 2.39; if (fh > H) { fh = H; fw = fh * 2.39; } }
+    const fx = (W - fw) / 2, fy = (H - fh) / 2; FY = fy; FB = fy + fh;
+    let gw = Math.min(W, H * 16 / 9), gh = gw * 9 / 16;
+    const set = (k, v) => root.style.setProperty(k, v.toFixed(1) + 'px');
+    set('--fx', fx); set('--fy', fy); set('--fw', fw); set('--fh', fh); set('--fb', fy + fh); set('--fr', W - fx - fw);
+    set('--gx', (W - gw) / 2); set('--gy', (H - gh) / 2); set('--gw', gw); set('--gh', gh);
+  }
+  layoutFrame();
+  addEventListener('resize', () => { layoutFrame(); });
+
+  // ---------- data ----------
+  const L = await (await fetch(MEDIA + '/layout.json')).json();
+  $('#planimg').src = MEDIA + '/floorplan.jpg';
+
+  function parseName(raw) {
+    const m = raw.match(/^(.*?)\s*\(([^)]*)\)\s*$/);
+    let name = (m ? m[1] : raw).trim(), dims = null;
+    if (m) {
+      const parts = m[2].split(/\s*[xX]\s*/);
+      if (parts.length === 2) {
+        const d = parts.map(p => { const q = p.match(/(\d+)\s*['’]\s*(\d+)?/); return q ? { ft: +q[1], inch: +(q[2] || 0) } : null; });
+        if (d[0] && d[1]) dims = d;
+      }
+    }
+    name = name.replace(/^Above of the/i, 'Above the').replace(/([a-z])(\d)/g, '$1 $2');
+    return { name, dims };
+  }
+  const fi = d => `${d.ft}'${d.inch}"`;
+  const ftv = d => d.ft + d.inch / 12;
+  const EXT = [1, 2, 20, 21, 22, 23];
+  const META = new Map();
+  for (const r of L.rooms) {
+    const p = parseName(r.name);
+    const ext = EXT.includes(r.i);
+    META.set(r.i, Object.assign(p, { i: r.i, ext, flat: !!r.flat, level: ext ? 0 : (r.i >= 12 ? 2 : 1) }));
+  }
+  // set list: group takes of the same space (same name and dimensions)
+  const ORDER = [1, 2, 20, 21, 22, 23, ...L.rooms.map(r => r.i).filter(i => !EXT.includes(i)).sort((a, b) => a - b)];
+  const SETS = [];
+  for (const i of ORDER) {
+    const m = META.get(i), key = m.name + '|' + (m.dims ? m.dims.map(fi).join('x') : '');
+    let s = SETS.find(s => s.key === key);
+    if (!s) { s = { key, sc: SETS.length + 1, rooms: [], m }; SETS.push(s); }
+    s.rooms.push(i); m.sc = s.sc; m.tk = s.rooms.length; m.set = s;
+  }
+  const slugLine = m => (m.ext ? 'EXT. ' : 'INT. ') + m.name.toUpperCase() + ' / DAY';
+  const dimText = m => m.dims ? fi(m.dims[0]) + ' × ' + fi(m.dims[1]) : '';
+  const metric = m => m.dims ? (ftv(m.dims[0]) * .3048).toFixed(2) + ' × ' + (ftv(m.dims[1]) * .3048).toFixed(2) + ' m' : '';
+  const area = m => m.dims ? Math.round(ftv(m.dims[0]) * ftv(m.dims[1])) : null;
+
+  // ---------- set sheet markup ----------
+  {
+    const groups = [
+      { t: 'Exterior · Aerial', sub: 'Drone', f: s => s.m.ext },
+      { t: 'Interior · Level 1', sub: '852 sq ft', f: s => !s.m.ext && s.m.level === 1 },
+      { t: 'Interior · Level 2', sub: '442 sq ft, via the spiral stair', f: s => !s.m.ext && s.m.level === 2 },
+    ];
+    let html = '';
+    for (const g of groups) {
+      html += `<section class="grp"><h3><span>${g.t}</span><span>${g.sub}</span></h3>
+        <div class="thead" aria-hidden="true"><span>SC</span><span>Space</span><span>Ft</span><span>Metric</span><span>Sq ft</span><span>Format</span><span></span></div><ul class="rows">`;
+      for (const s of SETS.filter(g.f)) {
+        const m = s.m, fmt = (m.flat ? 'STILL' : '360') + (s.rooms.length > 1 ? ' · ' + s.rooms.length + ' TK' : '');
+        const kind = m.i === 1 ? 'Aerial 360, high over the neighborhood' : m.flat ? 'Drone still' : (s.rooms.length > 1 ? s.rooms.length + ' camera positions' : '1 camera position');
+        const dm = m.dims ? dimText(m) : m.ext ? '' : '<span class="na">not listed</span>';
+        html += `<li><button class="row" type="button" data-room="${s.rooms[0]}" aria-label="Roll to ${m.name}${m.dims ? ', ' + dimText(m).replace(/'/g, ' ft ').replace(/"/g, ' in') : ''}">
+          <span class="sc">${pad(s.sc)}</span>
+          <span class="nm">${m.name}<small>${kind}</small></span>
+          <span class="dm">${dm}</span>
+          <span class="mm">${m.dims ? metric(m) : ''}</span>
+          <span class="ar">${m.dims ? '≈' + area(m) : ''}</span>
+          <span class="fm">${fmt}</span>
+          <span class="go">ROLL ▸</span></button></li>`;
+      }
+      html += '</ul></section>';
+    }
+    $('#groups').innerHTML = html;
+    $('#nsetups').innerHTML = L.rooms.filter(r => !EXT.includes(r.i)).length + '<small>360 SETUPS</small>';
+    // blocking diagram hotspots (positions in % of the cropped plan)
+    const HS = [[9, 31.3, 47, 22, 17], [6, 31.3, 76.5, 22, 17], [5, 65.4, 75.2, 22, 17], [10, 36.6, 16.6, 18, 15], [11, 71.5, 41.5, 10, 26]];
+    const pimg = $('#pimg');
+    for (const [i, x, y, w, h] of HS) {
+      const m = META.get(i), b = document.createElement('button');
+      b.type = 'button'; b.className = 'hs'; b.dataset.room = i;
+      b.style.cssText = `left:${x}%;top:${y}%;--w:${w}%;--h:${h}%`;
+      b.setAttribute('aria-label', 'Roll to ' + m.name);
+      b.innerHTML = `<i></i><i></i><i></i><i></i><b>SC ${pad(m.sc)} ${i === 11 ? 'STAIR ' : ''}▸</b>`;
+      pimg.appendChild(b);
+    }
+  }
+
+  // ---------- engine ----------
+  const cv = $('#cv');
+  const pano = new Pano(cv, { fov: 90, look: { vig: .16, grain: .012 } });
+  const tour = new Tour(pano, L, MEDIA, { auto: RM ? 0 : 0.016, pace: 1.9, dist: .5, blur: 0, pulse: 1.5 });
+  tour.attach(cv);
+  const A = pano.A, B = pano.B;
+  let drawOn = true;
+  const _draw = pano.draw.bind(pano);
+  pano.draw = () => { if (drawOn) _draw(); };
+
+  const F = v => port ? Math.min(112, v * 1.22) : v;
+  const lensMm = () => 18 / (Math.tan(pano.fov * D2R / 2) * (cv.clientWidth / cv.clientHeight));
+  let sampling = false;   // true while measuring camera motion: touch no textures
+  function plate(Ly, i, tx, ty, z) {
+    const h = sampling ? { w: 0, h: 0 } : tour.tex(i); if (!sampling) pano.set(Ly, h);
+    const asp = h.w && h.h ? h.w / h.h : 1.5, sa = (cv.clientWidth / cv.clientHeight) / asp;
+    const hx = .5 * (sa > 1 ? 1 : sa) / z, hy = .5 * (sa > 1 ? 1 / sa : 1) / z;
+    Ly.flatR = [clamp(tx - .5, -(.5 - hx), .5 - hx), clamp(.5 - ty, -(.5 - hy), .5 - hy), z, asp];
+    Object.assign(Ly, { off: [0, 0, 0], blur: 0, k: 0 });
+  }
+  function sphere(Ly, i, yaw, pitch) {
+    if (!sampling) pano.set(Ly, tour.tex(i));
+    Object.assign(Ly, { yaw, pitch, roll: 0, k: 0, off: [0, 0, 0], blur: 0 });
+  }
+  const ready = i => tour.tex(i).ready;
+
+  // ---------- the dive ----------
+  // Motion rules: every camera move is eased (sine), scroll is followed with a ~0.5 s ease and a hard
+  // speed limit derived from how much the camera moves at that point (about 30 degrees per second at most),
+  // shots change with 1 s dissolves, never flash frames.
+  const es = t => .5 - .5 * Math.cos(Math.PI * clamp(t, 0, 1));
+  const lk34 = tour.link(3, 4), DOOR = lk34 ? lk34.yaw : 2.15, BY = tour.carry(3, 4, DOOR) ?? 2.1;
+  const DOORP = clamp(lk34 ? lk34.pitch : -.3, -.35, .25) * .5;
+  const WALK = { dist: .5, pulse: 1.5 };
+  const SEGS = [
+    { a: 0, room: 1, cutIn: true, alt: [120, 80], sub: 'Scenery above the property · 360 aerial', loc: 'EXT. WEST TOWN, CHICAGO / DAY',
+      run(t, P) {
+        const u = es(t);
+        sphere(P, 1, lerp(.62, .035, u), lerp(port ? -.24 : -.03, -.66, u));
+        return { fov: lerp(F(92), F(46), u), tilt: P.pitch / D2R, focus: u > .3 ? { yaw: .035, pitch: -.72, lock: u > .72, label: u > .72 ? 'AF LOCK' : 'AF' } : null };
+      } },
+    { a: .17, room: 22, cutIn: true, alt: [80, 60], flat: true, sub: 'Upper right, closer on the building', loc: 'EXT. THE BUILDING / DAY',
+      run(t, P) {
+        const u = es(t), z = lerp(1.08, 1.55, u);
+        plate(P, 22, lerp(.47, .52, u), lerp(.52, .6, u), z);
+        return { tilt: -38, lens: 24 * z, focus: { x: .5, y: .5, lock: u > .5, label: u > .5 ? 'AF LOCK' : 'AF' } };
+      } },
+    { a: .29, room: 23, cutIn: true, alt: [60, 40], flat: true, sub: 'Above the property, straight down', loc: 'EXT. ROOF, TOP DOWN / DAY',
+      run(t, P) {
+        const u = es(t), z = lerp(1.02, 1.5, u);
+        plate(P, 23, lerp(.5, .52, u), lerp(.42, .3, u), z);
+        return { tilt: -90, lens: 24 * z, focus: null };
+      } },
+    { a: .41, room: 2, cutIn: true, alt: [40, 9], flat: true, sub: 'Front side, toward the entrance', loc: 'EXT. FRONT SIDE / DAY',
+      run(t, P) {
+        const u = es(t), z = lerp(1.02, 1.9, u);
+        plate(P, 2, lerp(.5, .53, u), lerp(.5, .72, u), z);
+        return { tilt: lerp(-14, -6, u), lens: 24 * z, focus: u > .2 ? { x: .5, y: .5, lock: u > .6, label: u > .6 ? 'AF LOCK' : 'AF' } : null };
+      } },
+    { a: .54, room: 3, need: [4], cutIn: true, alt: null, sub: 'Entrance and hallway, walking in', loc: 'INT. ENTRANCE, HALLWAY / DAY', walkFrom: .55,
+      run(t, P, Q) {
+        if (t < .55 || !Q) {
+          const u = es(Math.min(t, .55) / .55);
+          sphere(P, 3, lerp(1.0, DOOR, u), lerp(-.03, DOORP, u));
+          return { fov: lerp(F(84), F(78), u), tilt: P.pitch / D2R, focus: u > .55 ? { yaw: DOOR, pitch: lk34 ? lk34.pitch : -.4, lock: u > .9, label: '1ST FLOOR ▸' } : null };
+        }
+        // the door walk, scrubbed, with the same gentle settings as the tour walk
+        const w = (t - .55) / .45, e = es(w);
+        sphere(P, 3, DOOR, DOORP); sphere(Q, 4, BY, lerp(DOORP, -.04, e));
+        const fA = dirOf(DOOR, 0), fB = dirOf(BY, 0), D = WALK.dist;
+        P.off = fA.map(v => v * D * e);
+        Q.off = fB.map(v => -v * D * (1 - e));
+        const ab = clamp((w - .25) / .5, 0, 1);
+        return { fov: F(78) + Math.sin(Math.PI * w) * WALK.pulse, alphaB: ab * ab * (3 - 2 * ab), tilt: lerp(DOORP, -.04, e) / D2R, walk: true };
+      } },
+    { a: .82, room: 4, cutIn: false, alt: null, sub: 'The main floor, under the vaults', loc: 'INT. 1ST FLOOR / DAY',
+      run(t, P) {
+        const u = es(t / .85);
+        sphere(P, 4, lerp(BY, 1.4, u), lerp(-.04, -.02, u));
+        return { fov: lerp(F(78), F(72), u), tilt: P.pitch / D2R, focus: u > .55 ? { yaw: .99, pitch: .1, lock: u > .9, label: 'NEON' } : null };
+      } },
+  ];
+  SEGS.forEach((s, k) => { s.b = k < SEGS.length - 1 ? SEGS[k + 1].a : 1; s.sc = META.get(s.room).sc; });
+  const STILL = [0, .5, .5, .55, .3, .9];
+
+  // speed limit table: degrees of apparent camera motion per unit of dive progress, sampled per shot
+  const MAXDEG = 30, VMAX = .06, NS = 60;
+  function motionTable() {
+    sampling = true;
+    for (const s of SEGS) {
+      const P = pano.layer(), Q = pano.layer(); const rows = [];
+      let prev = null;
+      for (let i = 0; i <= NS; i++) {
+        const t = i / NS, r = s.run(t, P, Q);
+        const cur = { yaw: P.yaw, pitch: P.pitch, fov: r.fov || 0, fr: P.flatR.slice(), off: P.off.slice(), qoff: Q.off.slice(), walk: !!r.walk };
+        if (prev) {
+          let d;
+          if (s.flat) d = Math.abs(Math.log(cur.fr[2] / prev.fr[2])) * 70 + Math.hypot(cur.fr[0] - prev.fr[0], cur.fr[1] - prev.fr[1]) * 90;
+          else d = Math.hypot(wrapPi(cur.yaw - prev.yaw) * Math.cos(cur.pitch), cur.pitch - prev.pitch) / D2R + Math.abs(cur.fov - prev.fov) * .7
+            + (Math.hypot(...cur.off.map((v, j) => v - prev.off[j])) + Math.hypot(...cur.qoff.map((v, j) => v - prev.qoff[j]))) * 60;
+          // a walk through a door should never take less than about 2.5 s
+          if (cur.walk) d = Math.max(d, MAXDEG * 2.5 / ((1 - s.walkFrom) * NS));
+          rows.push(d * NS / (s.b - s.a));   // deg per unit progress
+        }
+        prev = cur;
+      }
+      s.rate = rows;
+    }
+    sampling = false;
+  }
+  function allowedSpeed(p) {
+    let k = SEGS.findIndex(s => p < s.b); if (k < 0) k = SEGS.length - 1;
+    const s = SEGS[k], i = clamp(Math.floor((p - s.a) / (s.b - s.a) * NS), 0, NS - 1);
+    let r = 0; for (let j = Math.max(0, i - 2); j <= Math.min(NS - 1, i + 2); j++) r = Math.max(r, s.rate[j]);
+    return Math.min(VMAX, MAXDEG / Math.max(r, 1));
+  }
+
+  // timeline buttons
+  const tlin = $('#tlin');
+  SEGS.forEach((s, k) => {
+    const b = document.createElement('button'); b.type = 'button'; b.style.setProperty('--w', ((s.b - s.a) * 100).toFixed(1));
+    b.innerHTML = `<span>${pad(s.sc)}</span>`; b.setAttribute('aria-label', 'Shot ' + (k + 1) + ': ' + s.loc);
+    b.addEventListener('click', () => gotoShot(k));
+    tlin.appendChild(b);
+  });
+  const tlBtns = [...tlin.querySelectorAll('button')];
+
+  // loading: the first two shots now, then one shot ahead
+  tour.tex(1); tour.tex(22);
+  const want = new Set([1, 22]);
+  function need(k) { for (const j of [k, k + 1]) { const s = SEGS[j]; if (!s) continue; for (const r of [s.room, ...(s.need || [])]) if (!want.has(r)) { want.add(r); tour.tex(r); } } }
+
+  // ---------- state ----------
+  let mode = 'dive';
+  let target = 0, sp = 0, lastSeg = -1, rmSeg = 0, playing = null;
+  let jump = null, xf = null;
+  const diveEl = $('#dive');
+  function diveRange() { return Math.max(1, diveEl.offsetHeight - innerHeight); }
+  function readScroll() {
+    if (RM) return;
+    const nt = clamp(scrollY / diveRange(), 0, 1);
+    // a big jump (anchor link, Home or End, a shot marker) fades through black instead of racing the camera
+    if (Math.abs(nt - target) > .2 && Math.abs(nt - sp) > .2 && mode === "dive") jump = { t0: performance.now(), done: false };
+    target = nt;
+  }
+  addEventListener('scroll', readScroll, { passive: true });
+  target = clamp(scrollY / diveRange(), 0, 1); sp = target;
+
+  function gotoShot(k) {
+    if (RM) { stopPlay(); rmSeg = k; return; }
+    const s = SEGS[k];
+    scrollTo({ top: (s.a + (k === 0 ? 0 : .01)) * diveRange(), behavior: 'auto' });
+  }
+  function stopPlay() { if (playing) { clearInterval(playing); playing = null; $('#play').textContent = '▶ PLAY'; } }
+  $('#play').addEventListener('click', () => {
+    if (playing) return stopPlay();
+    $('#play').textContent = '■ HOLD';
+    if (rmSeg === SEGS.length - 1) rmSeg = 0;
+    playing = setInterval(() => { rmSeg = Math.min(SEGS.length - 1, rmSeg + 1); if (rmSeg === SEGS.length - 1) stopPlay(); }, 4200);
+  });
+
+  // ---------- HUD writers ----------
+  const T0 = performance.now();
+  const el = { tc: $('#tc'), lens: $('#lensv'), lensi: $('#lensi'), alt: $('#altv'), cAlt: $('#cAlt'), tilt: $('#tiltv'), hdg: $('#hdgv'), cHdg: $('#cHdg'),
+    level: $('#level'), levelv: $('#levelv'), focus: $('#focus'), focusl: $('#focusl'), cut: $('#cut'), dip: $('#dip'), ph: $('#ph'), clip: $('#clipv'),
+    slate: $('#slate'), sticks: $('#sticks'), hint: $('#hint'), tag: $('#tag'), endc: $('#endc'), stage: $('#stage') };
+  const cache = {};
+  const put = (k, v) => { if (cache[k] !== v) { cache[k] = v; el[k].textContent = v; } };
+  const minus = v => (v < -0.05 ? '−' : '') + Math.abs(v).toFixed(1);
+  function tcNow() {
+    const fr = Math.floor((performance.now() - T0) / 1000 * 24) + 24 * 3600;
+    return pad(Math.floor(fr / 86400) % 24) + ':' + pad(Math.floor(fr / 1440) % 60) + ':' + pad(Math.floor(fr / 24) % 60) + ':' + pad(fr % 24);
+  }
+  let cutTimer = 0;
+  function showDissolve() { el.cut.classList.add('on'); clearTimeout(cutTimer); cutTimer = setTimeout(() => el.cut.classList.remove('on'), 1100); }
+  function setTag(sc, tk, fmt, loc, sub) {
+    $('#tsc').textContent = pad(sc); $('#ttk').textContent = tk; $('#tfm').textContent = fmt;
+    $('#tloc').textContent = loc; $('#tsub').innerHTML = sub;
+  }
+  function readouts(info) {
+    put('tc', tcNow());
+    const mm = info.lens ?? lensMm();
+    put('lens', String(Math.round(mm)));
+    el.lensi.style.left = (clamp(Math.log(mm / 8) / Math.log(200 / 8), 0, 1) * 100).toFixed(1) + '%';
+    const tl = info.tilt ?? 0;
+    put('tilt', minus(tl) + '°');
+    const lv = clamp(tl * 2.2, -70, 70);
+    el.level.style.transform = `translateY(${(-lv).toFixed(1)}px)`;
+    el.level.classList.toggle('off', Math.abs(tl) > .5);
+    put('levelv', minus(tl) + '°');
+    el.level.style.opacity = info.flat ? 0 : 1;
+    if (info.alt != null) { el.cAlt.style.display = ''; const av = Math.round(info.alt); if (cache.altn !== av) { cache.altn = av; el.alt.innerHTML = av + '<small>M</small>'; } }
+    else el.cAlt.style.display = 'none';
+    if (info.hdg != null) { el.cHdg.style.display = ''; put('hdg', pad(Math.round(info.hdg), 3) + '°'); } else el.cHdg.style.display = 'none';
+    // focus box
+    const f = info.focus;
+    let shown = false;
+    if (f) {
+      let pt = null;
+      if (f.x != null) pt = { x: f.x * W, y: f.y * H };
+      else pt = pano.project(f.yaw, f.pitch);
+      if (pt && pt.x > 40 && pt.x < W - 40 && pt.y > 40 && pt.y < H - 40) {
+        el.focus.style.transform = `translate(${pt.x.toFixed(1)}px,${pt.y.toFixed(1)}px)`;
+        el.focus.classList.toggle('lock', !!f.lock); put('focusl', f.label || 'AF'); shown = true;
+      }
+    }
+    el.focus.style.opacity = shown ? 1 : 0;
+  }
+
+  // ---------- frame loop ----------
+  let last = performance.now();
+  motionTable();
+  const segOf = p => { const k = SEGS.findIndex(s => p < s.b); return k < 0 ? SEGS.length - 1 : k; };
+  const tOf = (k, p) => clamp((p - SEGS[k].a) / (SEGS[k].b - SEGS[k].a), 0, 1);
+  pano.onframe = now => {
+    const dt = Math.min(.1, (now - last) / 1000); last = now;
+    if (mode === 'roam') return roamFrame(dt, now);
+    // is the stage covered by the sheet?
+    const covered = scrollY > diveEl.offsetHeight + 4;
+    drawOn = !covered; el.stage.classList.toggle('covered', covered);
+    if (covered) { if (jump) { jump = null; el.dip.style.opacity = 0; } sp = target; return; }
+    let k, t;
+    if (RM) { k = rmSeg; t = STILL[k]; sp = SEGS[k].a + t * (SEGS[k].b - SEGS[k].a); }
+    else {
+      if (jump) {
+        const e = (now - jump.t0) / 1000;
+        if (!jump.done && e >= .45) { jump.done = true; sp = target; lastSeg = -2; }
+        el.dip.style.opacity = (e < .45 ? es(e / .45) : 1 - es((e - .45) / .7)).toFixed(3);
+        if (e > 1.15) { jump = null; el.dip.style.opacity = 0; }
+      }
+      if (!jump || jump.done) {
+        // soft follow (about 0.5 s) with a hard speed limit
+        let v = (target - sp) * (1 - Math.exp(-dt / .5)) / Math.max(dt, 1e-3);
+        const vmax = allowedSpeed(sp);
+        v = clamp(v, -vmax, vmax);
+        sp += v * dt;
+        if (Math.abs(target - sp) < 1e-5) sp = target;
+      }
+      k = segOf(sp); t = tOf(k, sp);
+    }
+    need(k);
+    const s = SEGS[k];
+    if (!ready(s.room) || (s.need && t >= .5 && !s.need.every(ready))) { put('tc', tcNow()); return; }
+    // dissolve between shots: the old shot holds its last frame in layer B and fades out over 1 s
+    if (k !== lastSeg) {
+      if (lastSeg >= 0 && (k > lastSeg ? s : SEGS[lastSeg]).cutIn) { xf = { from: lastSeg, tf: k > lastSeg ? 1 : 0, t0: now }; showDissolve(); }
+      else xf = null;
+      lastSeg = k;
+      setTag(s.sc, 1, s.flat ? 'STILL' : '360', s.loc, s.sub);
+      put('clip', 'A001 C' + pad(k + 1));
+      tlBtns.forEach((b, j) => b.classList.toggle('on', j === k));
+    }
+    pano.alphaB = 0; Object.assign(B, { off: [0, 0, 0], blur: 0 });
+    const xe = xf ? (now - xf.t0) / 1000 : 9;
+    let info;
+    if (xe < 1 && !(s.walkFrom != null && t >= s.walkFrom)) {
+      info = s.run(t, A, null);
+      const old = SEGS[xf.from].run(xf.tf, B, null);
+      pano.fov = info.fov || old.fov || pano.fov;
+      pano.alphaB = 1 - es(xe);
+    } else {
+      xf = null;
+      info = s.run(t, A, B);
+      if (info.fov) pano.fov = info.fov;
+      if (info.alphaB != null) pano.alphaB = info.alphaB;
+    }
+    info.alt = s.alt ? lerp(s.alt[0], s.alt[1], t) : null;
+    info.flat = !!s.flat;
+    const inB = info.walk && pano.alphaB > .5;
+    if (!s.flat && s.room !== 1) info.hdg = ((L.rooms.find(r => r.i === (inB ? 4 : s.room)).heading + (inB ? B.yaw : A.yaw)) / D2R % 360 + 360) % 360;
+    else if (s.room === 1) info.hdg = ((A.yaw / D2R) % 360 + 360) % 360;
+    readouts(info);
+    // head slate claps, then drops away
+    const pg = RM ? (k === 0 ? 0 : 1) : sp;
+    const clap = RM ? 0 : sstep(.002, .012, pg);
+    el.sticks.style.transform = `rotate(${(-13 * (1 - clap)).toFixed(2)}deg)`;
+    const gone = RM ? (k === 0 ? 0 : 1) : sstep(.016, .045, pg);
+    el.slate.style.opacity = (1 - gone).toFixed(3);
+    el.slate.style.transform = `translateY(${(gone * 30).toFixed(1)}px)`;
+    el.slate.style.visibility = gone >= 1 ? 'hidden' : 'visible';
+    el.hint.style.opacity = (1 - sstep(.0, .015, pg)).toFixed(3);
+    el.tag.classList.toggle('on', gone > .6);
+    el.tag.style.opacity = sstep(.6, 1, gone).toFixed(3);
+    // playhead
+    el.ph.style.left = (sp * 100).toFixed(2) + '%';
+    const end = RM ? k === SEGS.length - 1 : sp > .95;
+    el.endc.classList.toggle('on', end);
+    el.tag.style.visibility = end && port ? 'hidden' : 'visible';
+  };
+
+  // ---------- free roam ----------
+  let roomIdx = 4, ret = null, kb = 0;
+  const doors = $('#doors');
+  let markers = [];
+  function buildMarkers() {
+    doors.innerHTML = ''; markers = [];
+    const r = L.rooms.find(r => r.i === roomIdx), m = META.get(roomIdx);
+    if (m.flat) return;
+    const seen = new Set();
+    for (const l of r.links) {
+      if (seen.has(l.to)) continue; seen.add(l.to);
+      const t = META.get(l.to), b = document.createElement('button');
+      b.type = 'button'; b.className = 'door';
+      b.setAttribute('aria-label', 'Walk to ' + t.name + (t.tk > 1 ? ', take ' + t.tk : ''));
+      b.innerHTML = `<span class="bx"><i></i><i></i><i></i><i></i></span><span class="nm">${t.name}${t.set.rooms.length > 1 ? ' · TK ' + t.tk : ''}</span>`;
+      b.addEventListener('click', () => go(l.to));
+      doors.appendChild(b); markers.push({ b, yaw: l.yaw, pitch: l.pitch, door: true });
+    }
+    for (const n of r.notes || []) {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'door note'; b.setAttribute('aria-expanded', 'false');
+      b.innerHTML = `<span class="bx"><i></i><i></i><i></i><i></i></span><span class="nm">NOTE · ${n.title}</span><span class="card">${n.title} beside the laundry.</span>`;
+      b.addEventListener('click', () => { const o = b.classList.toggle('open'); b.setAttribute('aria-expanded', o); });
+      doors.appendChild(b); markers.push({ b, yaw: n.yaw, pitch: n.pitch });
+    }
+  }
+  function roamTag() {
+    const m = META.get(roomIdx);
+    const bits = [];
+    if (m.dims) bits.push(`<b>${dimText(m)}</b>`, metric(m), '≈' + area(m) + ' sq ft');
+    else bits.push(m.flat ? 'Drone still' : m.i === 1 ? '360 aerial' : 'Dimensions not listed');
+    setTag(m.sc, m.tk, m.flat ? 'STILL' : '360', slugLine(m), bits.join(' · '));
+  }
+  async function go(j) {
+    if (tour.busy) return;
+    const a = META.get(roomIdx), b = META.get(j);
+    const same = !a.flat && !b.flat && L.rooms.find(r => r.i === roomIdx).comp === L.rooms.find(r => r.i === j).comp;
+    if (RM || !same) return xfade(j, tour.carry(roomIdx, j, A.yaw) ?? defYaw(j));
+    await tour.walk(j);
+  }
+  tour.onroom = r => { roomIdx = r.i; buildMarkers(); roamTag(); };
+  const defYaw = i => {
+    const fixed = { 1: .62, 3: .3, 4: 1.0, 5: .8, 19: 1.35 }[i];
+    if (fixed != null) return fixed;
+    const r = L.rooms.find(r => r.i === i);
+    if (!r || r.flat || !r.links.length) return 0;
+    // face the door nearest the photo's center, a little off axis so the room reads too
+    const l = r.links.reduce((a, b) => Math.abs(b.yaw) < Math.abs(a.yaw) ? b : a);
+    return l.yaw - Math.sign(l.yaw || 1) * .3;
+  };
+  async function enterRoam(i, yaw, pitch) {
+    ret = document.activeElement;
+    mode = 'roam'; stopPlay();
+    root.classList.add('roam'); drawOn = true; el.stage.classList.remove('covered');
+    pano.alphaB = 0; Object.assign(B, { off: [0, 0, 0], blur: 0 });
+    el.slate.style.visibility = 'hidden'; el.endc.classList.remove('on');
+    el.tag.classList.add('on'); el.tag.style.opacity = 1; el.tag.style.visibility = 'visible';
+    if (!RM) { el.dip.classList.remove('sw'); void el.dip.offsetWidth; el.dip.classList.add('sw'); }
+    roomIdx = i; kb = 0;
+    tour.busy = false;
+    await tour.show(i, yaw ?? defYaw(i), pitch ?? 0);
+    if (yaw == null) pano.fov = F(72);
+    buildMarkers(); roamTag();
+    $('#roamhint').style.opacity = 1; setTimeout(() => $('#roamhint').style.opacity = 0, 5000);
+    $('#stop').focus({ preventScroll: true });
+  }
+  function exitRoam() {
+    if (mode !== 'roam') return;
+    mode = 'dive'; root.classList.remove('roam'); doors.innerHTML = ''; markers = [];
+    lastSeg = -1;
+    if (ret && ret.focus && document.contains(ret)) ret.focus({ preventScroll: true });
+  }
+  function roamFrame(dt, now) {
+    const m = META.get(roomIdx);
+    if (m.flat) {
+      const a0 = tour.auto; tour.auto = 0; tour.idle(dt); tour.auto = a0;
+      A.yaw = clamp(A.yaw, -1.6, 1.6); A.pitch = clamp(A.pitch, -1, 1);
+      kb += dt;
+      const z = clamp(F(72) / pano.fov, .85, 3) * (RM ? 1.04 : 1.04 + .035 * Math.sin(kb * .25));
+      if (!tour.busy) plate(A, roomIdx, .5 + A.yaw * .18, .5 - A.pitch * .18, Math.max(1, z));
+      readouts({ lens: 24 * Math.max(1, z), tilt: { 2: -10, 20: -30, 21: -30, 22: -38, 23: -90 }[roomIdx] ?? 0, flat: true, alt: null });
+    } else {
+      tour.idle(dt);
+      const h = L.rooms.find(r => r.i === roomIdx).heading;
+      readouts({ tilt: A.pitch / D2R, hdg: (((h + A.yaw) / D2R) % 360 + 360) % 360 });
+    }
+    // markers, and counts of doors off either edge of frame
+    let nl = 0, nr = 0; edgeT.l = edgeT.r = null;
+    for (const mk of markers) {
+      const p = tour.busy ? null : pano.project(mk.yaw, mk.pitch);
+      // doors far above or below the frame (a stair down) pin to the frame edge
+      if (p && mk.door) p.y = clamp(p.y, port ? 120 : FY + 40, port ? H - 230 : FB - 40);
+      if (!p || p.x < 24 || p.x > W - 24 || p.y < 70 || p.y > H - 110) {
+        mk.b.style.visibility = 'hidden';
+        if (mk.door && !tour.busy) {
+          const d = wrapPi(mk.yaw - A.yaw);
+          if (d < 0) { nl++; if (edgeT.l == null || d > edgeT.l) edgeT.l = d; } else { nr++; if (edgeT.r == null || d < edgeT.r) edgeT.r = d; }
+        }
+        continue;
+      }
+      mk.b.style.visibility = 'visible';
+      mk.b.style.transform = `translate(${p.x.toFixed(1)}px,${p.y.toFixed(1)}px) translate(-50%,-13px)`;
+    }
+    const lab = n => n + (n > 1 ? ' DOORS' : ' DOOR');
+    edgeL.style.visibility = nl ? 'visible' : 'hidden'; if (nl) put2(edgeL, lab(nl));
+    edgeR.style.visibility = nr ? 'visible' : 'hidden'; if (nr) put2(edgeR, lab(nr));
+  }
+  const edgeL = $('#edgeL'), edgeR = $('#edgeR'), edgeT = { l: null, r: null };
+  const put2 = (b, v) => { const sp = b.querySelector('span'); if (sp.textContent !== v) sp.textContent = v; };
+  function panBy(d) {
+    if (d == null || tour.busy) return;
+    const y0 = A.yaw, y1 = A.yaw + d;
+    if (RM) { A.yaw = y1; return; }
+    tour.vel = 0; tour.tween(Math.max(1.2, Math.abs(d) / D2R / 40), t => { A.yaw = lerp(y0, y1, es(t)); });
+  }
+  edgeL.addEventListener('click', () => panBy(edgeT.l));
+  edgeR.addEventListener('click', () => panBy(edgeT.r));
+  // pinch zoom (wheel zoom comes from tour.attach)
+  {
+    const pts = new Map(); let p0 = null;
+    const dist = () => { const [a, b] = [...pts.values()]; return Math.hypot(a[0] - b[0], a[1] - b[1]) || 1; };
+    cv.addEventListener('pointerdown', e => { pts.set(e.pointerId, [e.clientX, e.clientY]); if (pts.size === 2) p0 = { d: dist(), f: pano.fov }; });
+    cv.addEventListener('pointermove', e => { if (!pts.has(e.pointerId)) return; pts.set(e.pointerId, [e.clientX, e.clientY]); if (pts.size === 2 && p0) pano.fov = clamp(p0.f * p0.d / dist(), 30, 110); });
+    const up = e => { pts.delete(e.pointerId); if (pts.size < 2) p0 = null; };
+    cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+  }
+  const zoom = f => { pano.fov = clamp(pano.fov * f, 30, 110); };
+  $('#wide').addEventListener('click', () => zoom(1.18));
+  $('#tele').addEventListener('click', () => zoom(1 / 1.18));
+  $('#stop').addEventListener('click', exitRoam);
+  const step = d => { const s = META.get(roomIdx).set; const k = (SETS.indexOf(s) + d + SETS.length) % SETS.length; enterRoamKeep(SETS[k].rooms[0]); };
+  const enterRoamKeep = i => xfade(i, defYaw(i));
+  // a 1 s dissolve to another room (instant with reduced motion)
+  async function xfade(j, yaw, pitch = 0) {
+    if (tour.busy) return;
+    const from = META.get(roomIdx), to = META.get(j);
+    tour.busy = true; doors.innerHTML = ''; markers = [];
+    const h = tour.tex(j); await h.promise;
+    if (!RM) {
+      showDissolve();
+      if (to.flat) plate(B, j, .5, .5, 1.04); else sphere(B, j, yaw, pitch);
+      if (from.flat && !to.flat) pano.fov = F(72);
+      await tour.tween(1, t => { pano.alphaB = es(t); });
+    }
+    tour.busy = false;
+    await tour.show(j, yaw, pitch);
+    if (to.flat || from.flat) pano.fov = F(72);
+    roomIdx = j; kb = 0; buildMarkers(); roamTag();
+  }
+  $('#prev').addEventListener('click', () => step(-1));
+  $('#next').addEventListener('click', () => step(1));
+  addEventListener('keydown', e => {
+    if (mode !== 'roam') return;
+    if (e.key === 'Escape') { e.preventDefault(); exitRoam(); }
+    else if (e.key === 'ArrowLeft' && !tour.busy) A.yaw -= .12;
+    else if (e.key === 'ArrowRight' && !tour.busy) A.yaw += .12;
+    else if (e.key === '+' || e.key === '=') zoom(1 / 1.12);
+    else if (e.key === '-') zoom(1.12);
+  });
+  // keep keyboard focus inside the monitor while rolling
+  $('#stage').addEventListener('keydown', e => {
+    if (mode !== 'roam' || e.key !== 'Tab') return;
+    const f = [...$('#stage').querySelectorAll('button')].filter(b => b.offsetParent !== null && getComputedStyle(b).visibility !== 'hidden');
+    if (!f.length) return;
+    const i = f.indexOf(document.activeElement);
+    if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+    else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+  });
+
+  $('#take').addEventListener('click', () => enterRoam(4, A.yaw, A.pitch));
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-room]'); if (!b || b.closest('#stage')) return;
+    enterRoam(+b.dataset.room);
+  });
+
+  // ---------- call sheet ----------
+  const form = $('#cs'), logged = $('#logged');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const d = Object.fromEntries(new FormData(form));
+    const miss = ['prod', 'date', 'name', 'email', 'crew'].filter(k => !String(d[k] || '').trim());
+    const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email || '');
+    form.querySelectorAll('[name]').forEach(f => f.removeAttribute('aria-invalid'));
+    if (miss.length || !emailOk) {
+      if (!emailOk && !miss.includes('email')) miss.push('email');
+      miss.forEach(k => form.querySelector(`[name="${k}"]`).setAttribute('aria-invalid', 'true'));
+      $('#cserr').textContent = 'Missing: ' + miss.map(k => ({ prod: 'production name', date: 'shoot date', name: 'contact name', email: 'a valid email', crew: 'crew size' })[k]).join(', ') + '.';
+      $('#cserr').style.color = 'var(--peak)';
+      form.querySelector(`[name="${miss[0]}"]`).focus();
+      return;
+    }
+    const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+    $('#lgprod').textContent = d.prod;
+    $('#lgtc').textContent = 'TC ' + tcNow();
+    const dd = new Date(d.date + 'T12:00:00');
+    const rows = [['Shoot date', isNaN(dd) ? d.date : dd.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })],
+      ['Crew', d.crew], ['Contact', d.name + ', ' + d.email]];
+    if (String(d.msg || '').trim()) rows.push(['Message', d.msg]);
+    $('#lgdl').innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
+    form.hidden = true; logged.classList.add('on'); logged.focus();
+  });
+  $('#again').addEventListener('click', () => { form.reset(); form.hidden = false; logged.classList.remove('on'); $('#cserr').textContent = 'All fields except the message are needed.'; $('#cserr').style.color = ''; form.querySelector('input').focus(); });
+  setInterval(() => { $('#cstc').textContent = 'TC ' + tcNow(); }, 1000 / 6);
+})();
+</script>

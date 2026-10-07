@@ -1,0 +1,3467 @@
+{
+  "id": "e049a16a-dd80-45d3-8d65-d8062a19edec",
+  "provider": "ricoh360",
+  "name": "47 Ross Avenue, San Anselmo",
+  "address": "47 Ross Avenue, San Anselmo, CA",
+  "description": "",
+  "photographer": "Natalie Simmons",
+  "walkthrough_enabled": false,
+  "brand_logo": {
+    "url": "https://www.ravephoto.com",
+    "s3": {
+      "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+      "region": "us-west-2",
+      "key": "b53285fb-e212-4de6-a2a3-d9e54ef5197f/original",
+      "preview_key": null,
+      "mime": "image/png"
+    }
+  },
+  "tripod_cover": {
+    "size": 250,
+    "s3": {
+      "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+      "region": "us-west-2",
+      "key": "663b6eb5-5e44-47da-a7da-6188331dbb67/original",
+      "preview_key": null,
+      "mime": "image/jpeg"
+    }
+  },
+  "thumbnail": {
+    "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+    "region": "us-west-2",
+    "key": "fec2fb05-0a58-48a3-8b61-5b470d042f67/original",
+    "preview_key": null,
+    "mime": "image/jpeg"
+  },
+  "rooms": [
+    {
+      "index": 1,
+      "id": "eb2e06c6-a731-4f4b-b557-0f02c590f8da",
+      "name": "Great Room",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "6b24ad8a-2e01-4d9b-9184-a8c03e8bfc18",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.020877085337170698,
+            "yaw": -0.7772166210721565
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "7a902543-f657-4762-85c0-37e92f99bd65",
+            "name": "Backyard",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b2186d90-1d6b-45a7-8e51-48050873109e/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "cf5acf56-5a35-47f1-94a0-a6c5f1c0d140/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "ddeb2282-0ee2-4440-9e09-837980c49545",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.005857304088122461,
+            "yaw": 0.06366997639343452
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "36210c9c-2be3-4b14-95f9-fa0a07f259ac",
+            "name": "Deck",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "c854aabe-6c04-420f-b7b0-1ea27e26c2e4/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "c62c0adb-87f4-4613-b70b-d73ea177ce2b/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "3c9251d8-8881-4bc3-a7e2-b7aaa14b71e4",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.27115524590913864,
+            "yaw": 1.729968119177232
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "c128c8af-a965-4cd3-bdae-03cda83b9dbf",
+            "name": "Kitchen",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "64493e59-e21d-4857-97fa-87a4a4ec1e55/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "698796ba-f0d9-422d-976a-6564d66c40b0/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "de533088-6315-4ef3-8d2c-831f5ec6e724",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.07612912722282061,
+            "yaw": -3.091029275576007
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "d39d6629-33af-4536-bf9a-c31963b3887a",
+            "name": "Stairs 1",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "8f36ed2d-c1c7-499f-8277-50498f4eca5f/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "fb4bfa8f-a4ed-4eeb-8f34-c759211e09bd/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "74abb409-d0a0-4943-9a4d-a279c17e5ae0",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.14377541201115385,
+            "yaw": -0.3712200515340154
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "14b315ea-db50-4272-8cdc-103853f38efd",
+            "name": "Dining Room",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "32e49151-634f-4724-b0ec-672da1e1df5f/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b701d819-dd66-47a2-aa5c-b431a24f2192/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "fec2fb05-0a58-48a3-8b61-5b470d042f67/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "85df525e-e41d-4d5a-8204-dca10da2c72a/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 2,
+      "id": "14b315ea-db50-4272-8cdc-103853f38efd",
+      "name": "Dining Room",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "882bd067-e4f8-46a5-ac6d-2c3cffd9927a",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.5269812759916075,
+            "yaw": -1.8665660875928793
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "eb2e06c6-a731-4f4b-b557-0f02c590f8da",
+            "name": "Great Room",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "85df525e-e41d-4d5a-8204-dca10da2c72a/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "fec2fb05-0a58-48a3-8b61-5b470d042f67/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "941f7c3f-f531-4c3e-936d-dd9e946670bb",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.0032802265402818165,
+            "yaw": -2.621638161793399
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "d39d6629-33af-4536-bf9a-c31963b3887a",
+            "name": "Stairs 1",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "8f36ed2d-c1c7-499f-8277-50498f4eca5f/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "fb4bfa8f-a4ed-4eeb-8f34-c759211e09bd/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "4e74b6b5-58f2-4bf6-824e-522cab893c3d",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.03343722226873602,
+            "yaw": -1.9399703478124444
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "04042a75-097b-49b8-a5ef-614e933f553c",
+            "name": "Living Room",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b5126d15-6814-4d7b-b9f3-99b215aefc91/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "61bb8885-efd3-4e7f-a5de-5b9e6722671b/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "c3611d98-8dab-4a75-9849-45b4c4db71b9",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.08937880065532156,
+            "yaw": -0.7717909058375767
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "36210c9c-2be3-4b14-95f9-fa0a07f259ac",
+            "name": "Deck",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "c854aabe-6c04-420f-b7b0-1ea27e26c2e4/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "c62c0adb-87f4-4613-b70b-d73ea177ce2b/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "a8ee7695-e85e-4e37-bff5-06eef043f017",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.0671579491206824,
+            "yaw": 2.873239057566863
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "c128c8af-a965-4cd3-bdae-03cda83b9dbf",
+            "name": "Kitchen",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "64493e59-e21d-4857-97fa-87a4a4ec1e55/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "698796ba-f0d9-422d-976a-6564d66c40b0/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "b701d819-dd66-47a2-aa5c-b431a24f2192/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "32e49151-634f-4724-b0ec-672da1e1df5f/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 3,
+      "id": "36210c9c-2be3-4b14-95f9-fa0a07f259ac",
+      "name": "Deck",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "d53b33c5-28ca-4b6c-b143-322ec3ca08c6",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.44053247304043097,
+            "yaw": -0.33720569543918266
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "eb2e06c6-a731-4f4b-b557-0f02c590f8da",
+            "name": "Great Room",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "85df525e-e41d-4d5a-8204-dca10da2c72a/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "fec2fb05-0a58-48a3-8b61-5b470d042f67/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "5e5c87f3-10c2-4c65-9a53-83d6120133f2",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.1553862846525078,
+            "yaw": -1.1447508091906755
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "14b315ea-db50-4272-8cdc-103853f38efd",
+            "name": "Dining Room",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "32e49151-634f-4724-b0ec-672da1e1df5f/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b701d819-dd66-47a2-aa5c-b431a24f2192/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "93ce2c70-b055-41b0-ad98-de0441b2abc4",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.2914665705023687,
+            "yaw": 0.838053254369509
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "7a902543-f657-4762-85c0-37e92f99bd65",
+            "name": "Backyard",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b2186d90-1d6b-45a7-8e51-48050873109e/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "cf5acf56-5a35-47f1-94a0-a6c5f1c0d140/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "1cb7a0bf-2051-4451-95c4-ecb5421aa35b",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.05431784403206308,
+            "yaw": -0.19137559957128225
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "04042a75-097b-49b8-a5ef-614e933f553c",
+            "name": "Living Room",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b5126d15-6814-4d7b-b9f3-99b215aefc91/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "61bb8885-efd3-4e7f-a5de-5b9e6722671b/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "c62c0adb-87f4-4613-b70b-d73ea177ce2b/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "c854aabe-6c04-420f-b7b0-1ea27e26c2e4/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 4,
+      "id": "7a902543-f657-4762-85c0-37e92f99bd65",
+      "name": "Backyard",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "638f25d4-eced-4062-8ca7-0ac837a6f044",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.19995998965840478,
+            "yaw": 2.763044529539334
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "36210c9c-2be3-4b14-95f9-fa0a07f259ac",
+            "name": "Deck",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "c854aabe-6c04-420f-b7b0-1ea27e26c2e4/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "c62c0adb-87f4-4613-b70b-d73ea177ce2b/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "a9e32ef6-2b1f-465e-bc4e-5ecee59d0ab7",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.7454963226007116,
+            "yaw": 2.742102880230023
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "f2e64c36-85ca-481c-ac1b-c68359efba75",
+            "name": "View Deck",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "eb5b4ec3-778a-4388-b07a-b44fc229ab6c/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "ff7e162f-b0d1-421c-9ebf-80404c9c767d/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "cf5acf56-5a35-47f1-94a0-a6c5f1c0d140/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "b2186d90-1d6b-45a7-8e51-48050873109e/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 5,
+      "id": "c128c8af-a965-4cd3-bdae-03cda83b9dbf",
+      "name": "Kitchen",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "dfb84bb7-93af-439a-907a-cd989c58c401",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.03997023689093737,
+            "yaw": 1.1679583165091518
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "eb2e06c6-a731-4f4b-b557-0f02c590f8da",
+            "name": "Great Room",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "85df525e-e41d-4d5a-8204-dca10da2c72a/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "fec2fb05-0a58-48a3-8b61-5b470d042f67/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "5a614068-efd7-4208-8b2f-9b76f6ab38d1",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.009597833651774579,
+            "yaw": 0.3817726762691045
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "04042a75-097b-49b8-a5ef-614e933f553c",
+            "name": "Living Room",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b5126d15-6814-4d7b-b9f3-99b215aefc91/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "61bb8885-efd3-4e7f-a5de-5b9e6722671b/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "fa24a281-79d9-4fbc-a84f-4025f718d1a3",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.040608420936470324,
+            "yaw": -0.3209281405764024
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "d39d6629-33af-4536-bf9a-c31963b3887a",
+            "name": "Stairs 1",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "8f36ed2d-c1c7-499f-8277-50498f4eca5f/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "fb4bfa8f-a4ed-4eeb-8f34-c759211e09bd/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "c065a0a7-ae78-4500-b5ec-36024478ba1d",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.209456931843798,
+            "yaw": 1.6153733845046485
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "14b315ea-db50-4272-8cdc-103853f38efd",
+            "name": "Dining Room",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "32e49151-634f-4724-b0ec-672da1e1df5f/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b701d819-dd66-47a2-aa5c-b431a24f2192/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "698796ba-f0d9-422d-976a-6564d66c40b0/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "64493e59-e21d-4857-97fa-87a4a4ec1e55/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 6,
+      "id": "04042a75-097b-49b8-a5ef-614e933f553c",
+      "name": "Living Room",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "c3f87183-92ba-4b1f-8376-68a27af17d72",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.0834763727046326,
+            "yaw": -0.03933302266308658
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "14b315ea-db50-4272-8cdc-103853f38efd",
+            "name": "Dining Room",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "32e49151-634f-4724-b0ec-672da1e1df5f/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b701d819-dd66-47a2-aa5c-b431a24f2192/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "bb8d9e6a-49ff-422e-8f6a-b7ecc4c95898",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.019123646213557777,
+            "yaw": -0.30786051867157127
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "36210c9c-2be3-4b14-95f9-fa0a07f259ac",
+            "name": "Deck",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "c854aabe-6c04-420f-b7b0-1ea27e26c2e4/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "c62c0adb-87f4-4613-b70b-d73ea177ce2b/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "6b230249-a087-4aa5-9d3e-fb5f4d608c3b",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.022645460762248604,
+            "yaw": 0.7503009669839429
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "c128c8af-a965-4cd3-bdae-03cda83b9dbf",
+            "name": "Kitchen",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "64493e59-e21d-4857-97fa-87a4a4ec1e55/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "698796ba-f0d9-422d-976a-6564d66c40b0/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "5e571307-bd99-4894-9846-dfd5d6288d5d",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.18727633652692255,
+            "yaw": 2.457896776393179
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "d39d6629-33af-4536-bf9a-c31963b3887a",
+            "name": "Stairs 1",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "8f36ed2d-c1c7-499f-8277-50498f4eca5f/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "fb4bfa8f-a4ed-4eeb-8f34-c759211e09bd/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "6dff2c97-0472-4db7-bf6f-e1ee8e6f7634",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.11455006543883073,
+            "yaw": 2.8597259493611418
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "dc48839e-3b05-4cc7-9b17-1b3b1a5a9972",
+            "name": "Foyer",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "26ed9d3c-74f2-481e-9fc7-6be3b8fa6cdb/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "d7af4d84-3f37-450f-95db-c0fa50700b52/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "564110d9-24fd-4ba3-add3-b4cbd79f0bca",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.16517340931314095,
+            "yaw": 2.866489346590992
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "f7946e4e-ee3c-4de7-b376-b4a1610dc7a6",
+            "name": "Half Bath",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "934eaa5d-a9ce-4a3d-9aef-91766e3c0064/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "26c43308-0c91-4f7b-a261-a7e6df1ce72b/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "61bb8885-efd3-4e7f-a5de-5b9e6722671b/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "b5126d15-6814-4d7b-b9f3-99b215aefc91/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 7,
+      "id": "d39d6629-33af-4536-bf9a-c31963b3887a",
+      "name": "Stairs 1",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "a5dc631f-efc3-4b11-886c-413dd129963c",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.34324776768715637,
+            "yaw": -1.1764852634020553
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "eb2e06c6-a731-4f4b-b557-0f02c590f8da",
+            "name": "Great Room",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "85df525e-e41d-4d5a-8204-dca10da2c72a/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "fec2fb05-0a58-48a3-8b61-5b470d042f67/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "47a7d625-cd09-4b70-b23b-9f53644a283f",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.036022284074064714,
+            "yaw": -1.430792534874712
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "14b315ea-db50-4272-8cdc-103853f38efd",
+            "name": "Dining Room",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "32e49151-634f-4724-b0ec-672da1e1df5f/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b701d819-dd66-47a2-aa5c-b431a24f2192/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "7b4cf5d3-8aee-44ba-aca1-b67ee51aa4ae",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.004971801338285786,
+            "yaw": -1.120950646736219
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "c128c8af-a965-4cd3-bdae-03cda83b9dbf",
+            "name": "Kitchen",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "64493e59-e21d-4857-97fa-87a4a4ec1e55/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "698796ba-f0d9-422d-976a-6564d66c40b0/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "53e2f131-5ce5-4c91-9053-5c3357aded05",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.17906314305726667,
+            "yaw": -1.9116007993247415
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "04042a75-097b-49b8-a5ef-614e933f553c",
+            "name": "Living Room",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b5126d15-6814-4d7b-b9f3-99b215aefc91/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "61bb8885-efd3-4e7f-a5de-5b9e6722671b/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "9fbf81b6-6f39-41a2-b780-35f5bfcc01d2",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.21052996082622855,
+            "yaw": -0.5739920546733792
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "5a48eeb1-8ba7-4c78-81ac-b90b61c103f3",
+            "name": "Stairs 2",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "c9e0ca48-3142-4fcc-992b-7620c916e80e/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "e0296091-90cd-420c-a0db-b0f3d4b75770/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "ed5e8f8d-5d76-4be8-a3dc-25af0c0d7ee9",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.0905617830066312,
+            "yaw": 0.9291192958408541
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "dc48839e-3b05-4cc7-9b17-1b3b1a5a9972",
+            "name": "Foyer",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "26ed9d3c-74f2-481e-9fc7-6be3b8fa6cdb/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "d7af4d84-3f37-450f-95db-c0fa50700b52/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "06b88902-3400-45c0-b8fd-bde3beb5457b",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.08594953348169554,
+            "yaw": 0.740288563779
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "f7946e4e-ee3c-4de7-b376-b4a1610dc7a6",
+            "name": "Half Bath",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "934eaa5d-a9ce-4a3d-9aef-91766e3c0064/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "26c43308-0c91-4f7b-a261-a7e6df1ce72b/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "fb4bfa8f-a4ed-4eeb-8f34-c759211e09bd/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "8f36ed2d-c1c7-499f-8277-50498f4eca5f/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 8,
+      "id": "dc48839e-3b05-4cc7-9b17-1b3b1a5a9972",
+      "name": "Foyer",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "f67ad3db-d890-41aa-9dde-74958279be9f",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.14380534375812104,
+            "yaw": -3.0761475583994784
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "f7946e4e-ee3c-4de7-b376-b4a1610dc7a6",
+            "name": "Half Bath",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "934eaa5d-a9ce-4a3d-9aef-91766e3c0064/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "26c43308-0c91-4f7b-a261-a7e6df1ce72b/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "8c690c9d-ef22-4783-b448-e612fe40d696",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.10095604595121443,
+            "yaw": 3.056852687383765
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "04042a75-097b-49b8-a5ef-614e933f553c",
+            "name": "Living Room",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b5126d15-6814-4d7b-b9f3-99b215aefc91/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "61bb8885-efd3-4e7f-a5de-5b9e6722671b/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "d7af4d84-3f37-450f-95db-c0fa50700b52/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "26ed9d3c-74f2-481e-9fc7-6be3b8fa6cdb/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 9,
+      "id": "f7946e4e-ee3c-4de7-b376-b4a1610dc7a6",
+      "name": "Half Bath",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "fd42981a-dd10-45f5-ae46-df05879a20f1",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.0635727120324745,
+            "yaw": 1.2455057340033928
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "dc48839e-3b05-4cc7-9b17-1b3b1a5a9972",
+            "name": "Foyer",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "26ed9d3c-74f2-481e-9fc7-6be3b8fa6cdb/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "d7af4d84-3f37-450f-95db-c0fa50700b52/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "86e16f86-0fa4-43e7-a893-d23e494dc0bd",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.007796373924051636,
+            "yaw": 2.1871763662995125
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "04042a75-097b-49b8-a5ef-614e933f553c",
+            "name": "Living Room",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b5126d15-6814-4d7b-b9f3-99b215aefc91/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "61bb8885-efd3-4e7f-a5de-5b9e6722671b/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "26c43308-0c91-4f7b-a261-a7e6df1ce72b/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "934eaa5d-a9ce-4a3d-9aef-91766e3c0064/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 10,
+      "id": "5a48eeb1-8ba7-4c78-81ac-b90b61c103f3",
+      "name": "Stairs 2",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "1e2b907d-5024-4f81-aa2a-ed1fbee142c9",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.5892786048901932,
+            "yaw": -0.42376791787910584
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "d39d6629-33af-4536-bf9a-c31963b3887a",
+            "name": "Stairs 1",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "8f36ed2d-c1c7-499f-8277-50498f4eca5f/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "fb4bfa8f-a4ed-4eeb-8f34-c759211e09bd/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "d6cba373-2faf-4307-a4ba-9937e0aac3cd",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.06423187496233496,
+            "yaw": -0.9416761443151742
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "8952dcc8-e5f3-4f36-aaad-0e40eb467537",
+            "name": "Lounge",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b463b34d-696e-4d46-8170-240d994ed9cf/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "adbdb2fa-57d1-42f7-a8c4-7bdaaca199fb/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "7a2d04ee-00de-4b06-86ae-2bf1e80703a0",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.3384758259379037,
+            "yaw": -2.3202659469089344
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "c0e5a57d-7f5f-46b6-ada5-68236cad7130",
+            "name": "Bedroom 2",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "fcf9a140-92a4-4fb9-a9f4-9c62a7ab917c/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "ae8b43ba-c799-4478-90e9-50b86d148387/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "9639ee7f-bb90-4809-a1f3-c502a9b98f9b",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.030887466259780894,
+            "yaw": -1.237588181758909
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "dbf2f441-3184-4c5c-a9ab-9fa042c47292",
+            "name": "Bedroom 3",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "3dc4d210-ea6a-4c67-ad5a-20667f41ed13/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b7e77be3-5d0f-4c7a-8f5c-ac11836257b0/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "68b8113d-793b-4419-917b-b186ebeae267",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.15732081205895554,
+            "yaw": -1.4940649083217572
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "b50cc805-0a62-4155-9443-737d62433ad8",
+            "name": "Laundry",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "fa54486b-62ec-4995-8a1e-e7178156b3c9/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "f443e2d4-5aed-487c-a7cb-fb13fdcc73f7/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "a870addd-a259-4fc5-a839-c82cffa72175",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.17499872018217033,
+            "yaw": 2.809871387663695
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "666277bb-fe16-4929-870b-d67218a7ae78",
+            "name": "Guest Bathroom",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "32a50b34-228f-468c-8593-b0aed4b8b16a/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "7a6fa627-b180-4add-b3a6-2f0eb67b19fd/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "e9bdf622-90ef-456e-8d0a-d1d268ef873a",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.3131452890807669,
+            "yaw": -0.9753099638651133
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "6cef17d7-0f08-4f08-b7f7-4169a72490a6",
+            "name": "Hallway",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "9202ce1c-c6c7-44f9-bcfa-5f178c53f082/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b0e3d628-8d02-4fdc-8dae-49e1abc550b1/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "e0296091-90cd-420c-a0db-b0f3d4b75770/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "c9e0ca48-3142-4fcc-992b-7620c916e80e/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 11,
+      "id": "8952dcc8-e5f3-4f36-aaad-0e40eb467537",
+      "name": "Lounge",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "7771c7c9-21f0-4586-81d8-bd7bb38357fe",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.02148158698600433,
+            "yaw": 2.9731441183855365
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "0a0df777-3a5b-4e05-956e-d229b19b90f5",
+            "name": "Bedroom 4",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "f90dec2e-5bcc-42fb-97f3-60edf6e69552/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "e2b11c85-2cda-4272-a71e-16b8260cfd43/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "ee9d37cb-8703-4a19-9de0-a8d11e496108",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.054378271269547085,
+            "yaw": -1.9808817221745407
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "1e8c43b6-5096-46e5-bfbb-e2a10d92c59d",
+            "name": "Main Bedroom Suite",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "ecdeab45-d7d3-4535-8f1e-c573d478195f/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "30466cf1-e288-4796-830f-7dd854bb7693/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "9a20755a-6d4f-4898-b5f3-d96c824cfe03",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.02669235539659809,
+            "yaw": -1.7318580974698214
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "e519ebcc-b63a-40f8-90da-24473db313f0",
+            "name": "Main Bathroom",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "8c34d508-6972-4b2e-83a4-0ade7e9fdf98/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "81ac4d2d-c7af-412d-8f26-10af3548aa62/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "da2e7bb8-9680-479e-95eb-de379b9107c0",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.17952618432406098,
+            "yaw": 0.014573891178699228
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "6cef17d7-0f08-4f08-b7f7-4169a72490a6",
+            "name": "Hallway",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "9202ce1c-c6c7-44f9-bcfa-5f178c53f082/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b0e3d628-8d02-4fdc-8dae-49e1abc550b1/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "adbdb2fa-57d1-42f7-a8c4-7bdaaca199fb/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "b463b34d-696e-4d46-8170-240d994ed9cf/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 12,
+      "id": "1e8c43b6-5096-46e5-bfbb-e2a10d92c59d",
+      "name": "Main Bedroom Suite",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "9e149618-8265-489f-8556-2927117cc417",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.023691525895596754,
+            "yaw": 0.2055558334449028
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "8952dcc8-e5f3-4f36-aaad-0e40eb467537",
+            "name": "Lounge",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b463b34d-696e-4d46-8170-240d994ed9cf/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "adbdb2fa-57d1-42f7-a8c4-7bdaaca199fb/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "c6e1ab8f-ac42-480c-a2b2-7e73a393016f",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.26824674148381966,
+            "yaw": 2.317630563062335
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "bf8cafcf-22b8-449d-a70a-d5fdd22126ef",
+            "name": "Main Bedroom",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "e7d932fc-ff1d-41f7-8352-dcfd0d0052b2/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "31fc618c-bb49-4132-b630-654d2c726f65/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "5fbb99a6-86a3-406f-8e51-3214bf2b71aa",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.0032304238893949844,
+            "yaw": -2.9261084645405013
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "e519ebcc-b63a-40f8-90da-24473db313f0",
+            "name": "Main Bathroom",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "8c34d508-6972-4b2e-83a4-0ade7e9fdf98/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "81ac4d2d-c7af-412d-8f26-10af3548aa62/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "47631606-305b-4e50-8fa7-c36671564229",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.04121941835780518,
+            "yaw": 2.022914523200744
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "f2e64c36-85ca-481c-ac1b-c68359efba75",
+            "name": "View Deck",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "eb5b4ec3-778a-4388-b07a-b44fc229ab6c/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "ff7e162f-b0d1-421c-9ebf-80404c9c767d/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "30466cf1-e288-4796-830f-7dd854bb7693/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "ecdeab45-d7d3-4535-8f1e-c573d478195f/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 13,
+      "id": "bf8cafcf-22b8-449d-a70a-d5fdd22126ef",
+      "name": "Main Bedroom",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "b134d381-dee1-4226-9e5a-afa5db1d32d6",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.05710095298860374,
+            "yaw": -0.940570384120381
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "1e8c43b6-5096-46e5-bfbb-e2a10d92c59d",
+            "name": "Main Bedroom Suite",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "ecdeab45-d7d3-4535-8f1e-c573d478195f/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "30466cf1-e288-4796-830f-7dd854bb7693/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "839a5141-3c7b-47aa-90aa-c373f6f0bbc0",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.14430593478076936,
+            "yaw": 1.5443149349715952
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "f2e64c36-85ca-481c-ac1b-c68359efba75",
+            "name": "View Deck",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "eb5b4ec3-778a-4388-b07a-b44fc229ab6c/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "ff7e162f-b0d1-421c-9ebf-80404c9c767d/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "31fc618c-bb49-4132-b630-654d2c726f65/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "e7d932fc-ff1d-41f7-8352-dcfd0d0052b2/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 14,
+      "id": "f2e64c36-85ca-481c-ac1b-c68359efba75",
+      "name": "View Deck",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "3d2e0b59-b873-4e6a-a094-469c29d80c06",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.594605852497228,
+            "yaw": 1.3967535014993153
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "7a902543-f657-4762-85c0-37e92f99bd65",
+            "name": "Backyard",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b2186d90-1d6b-45a7-8e51-48050873109e/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "cf5acf56-5a35-47f1-94a0-a6c5f1c0d140/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "9a7c9a51-9684-4c6f-99bf-047a67fc1c2c",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.024792949395163077,
+            "yaw": -2.040067520375171
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "1e8c43b6-5096-46e5-bfbb-e2a10d92c59d",
+            "name": "Main Bedroom Suite",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "ecdeab45-d7d3-4535-8f1e-c573d478195f/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "30466cf1-e288-4796-830f-7dd854bb7693/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "b34af7e7-205a-4730-9da8-14cf8d96474a",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.3987691119256276,
+            "yaw": -2.530983334477799
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "bf8cafcf-22b8-449d-a70a-d5fdd22126ef",
+            "name": "Main Bedroom",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "e7d932fc-ff1d-41f7-8352-dcfd0d0052b2/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "31fc618c-bb49-4132-b630-654d2c726f65/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "ff7e162f-b0d1-421c-9ebf-80404c9c767d/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "eb5b4ec3-778a-4388-b07a-b44fc229ab6c/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 15,
+      "id": "e519ebcc-b63a-40f8-90da-24473db313f0",
+      "name": "Main Bathroom",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "538e3d57-1ee3-4012-ae1e-2413c430a67d",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.03250166423290679,
+            "yaw": -0.6026520151827128
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "8952dcc8-e5f3-4f36-aaad-0e40eb467537",
+            "name": "Lounge",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b463b34d-696e-4d46-8170-240d994ed9cf/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "adbdb2fa-57d1-42f7-a8c4-7bdaaca199fb/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "555052f8-3e5c-4946-a532-e269ff3d2ce2",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.38185979352745036,
+            "yaw": -0.572499930479994
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "1e8c43b6-5096-46e5-bfbb-e2a10d92c59d",
+            "name": "Main Bedroom Suite",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "ecdeab45-d7d3-4535-8f1e-c573d478195f/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "30466cf1-e288-4796-830f-7dd854bb7693/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "2a9cc653-0ece-4c29-9dff-8686fae9f439",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.15832532557928225,
+            "yaw": -2.216431709382796
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "9ac0795f-cd27-4825-9fdd-dbd301eed183",
+            "name": "Shower",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "12614d29-de5e-4524-8d41-69c59a7cb360/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "4168b750-d38d-4a2d-bf9b-723defa9ecd7/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "81ac4d2d-c7af-412d-8f26-10af3548aa62/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "8c34d508-6972-4b2e-83a4-0ade7e9fdf98/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 16,
+      "id": "9ac0795f-cd27-4825-9fdd-dbd301eed183",
+      "name": "Shower",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "30117b8c-2faf-4174-bc74-bce7ea26b337",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.1359195817547718,
+            "yaw": -1.1102594778827282
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "e519ebcc-b63a-40f8-90da-24473db313f0",
+            "name": "Main Bathroom",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "8c34d508-6972-4b2e-83a4-0ade7e9fdf98/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "81ac4d2d-c7af-412d-8f26-10af3548aa62/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "4168b750-d38d-4a2d-bf9b-723defa9ecd7/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "12614d29-de5e-4524-8d41-69c59a7cb360/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 17,
+      "id": "0a0df777-3a5b-4e05-956e-d229b19b90f5",
+      "name": "Bedroom 4",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "fc4380ef-1c96-4c76-8a28-90477889fbb0",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.022947929429935954,
+            "yaw": 0.9910131367803476
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "8952dcc8-e5f3-4f36-aaad-0e40eb467537",
+            "name": "Lounge",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b463b34d-696e-4d46-8170-240d994ed9cf/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "adbdb2fa-57d1-42f7-a8c4-7bdaaca199fb/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "e2b11c85-2cda-4272-a71e-16b8260cfd43/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "f90dec2e-5bcc-42fb-97f3-60edf6e69552/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 18,
+      "id": "6cef17d7-0f08-4f08-b7f7-4169a72490a6",
+      "name": "Hallway",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "564783db-ba22-4cd8-a761-e6aa556ed341",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.21676493201055358,
+            "yaw": 2.619770443939938
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "666277bb-fe16-4929-870b-d67218a7ae78",
+            "name": "Guest Bathroom",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "32a50b34-228f-468c-8593-b0aed4b8b16a/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "7a6fa627-b180-4add-b3a6-2f0eb67b19fd/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "cb02a4a0-b0da-4add-8815-240374fc3b13",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.33670741275738436,
+            "yaw": -1.9583702417564481
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "dbf2f441-3184-4c5c-a9ab-9fa042c47292",
+            "name": "Bedroom 3",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "3dc4d210-ea6a-4c67-ad5a-20667f41ed13/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b7e77be3-5d0f-4c7a-8f5c-ac11836257b0/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "d00918d4-7597-4f97-88a0-d283baa59e9b",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.07729335828291894,
+            "yaw": 3.0381609476600566
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "b50cc805-0a62-4155-9443-737d62433ad8",
+            "name": "Laundry",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "fa54486b-62ec-4995-8a1e-e7178156b3c9/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "f443e2d4-5aed-487c-a7cb-fb13fdcc73f7/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "d863daa8-c4ca-44b7-9498-d2307cff5b21",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.10910057165799181,
+            "yaw": -0.4224147634977715
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "8952dcc8-e5f3-4f36-aaad-0e40eb467537",
+            "name": "Lounge",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b463b34d-696e-4d46-8170-240d994ed9cf/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "adbdb2fa-57d1-42f7-a8c4-7bdaaca199fb/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "afd5013c-c1cb-4c68-8757-d524bb7c627e",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.21159007921634299,
+            "yaw": 2.0767390317960093
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "5a48eeb1-8ba7-4c78-81ac-b90b61c103f3",
+            "name": "Stairs 2",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "c9e0ca48-3142-4fcc-992b-7620c916e80e/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "e0296091-90cd-420c-a0db-b0f3d4b75770/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "b0e3d628-8d02-4fdc-8dae-49e1abc550b1/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "9202ce1c-c6c7-44f9-bcfa-5f178c53f082/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 19,
+      "id": "dbf2f441-3184-4c5c-a9ab-9fa042c47292",
+      "name": "Bedroom 3",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "af802e45-7c83-45f2-9785-df2d673cb013",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.15236748921316945,
+            "yaw": 2.004208850975182
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "6cef17d7-0f08-4f08-b7f7-4169a72490a6",
+            "name": "Hallway",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "9202ce1c-c6c7-44f9-bcfa-5f178c53f082/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b0e3d628-8d02-4fdc-8dae-49e1abc550b1/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "b7e77be3-5d0f-4c7a-8f5c-ac11836257b0/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "3dc4d210-ea6a-4c67-ad5a-20667f41ed13/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 20,
+      "id": "c0e5a57d-7f5f-46b6-ada5-68236cad7130",
+      "name": "Bedroom 2",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "f70e7bec-4775-4b34-9662-f7b38c1b4689",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.16291915544648106,
+            "yaw": -1.4947082594821008
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "5a48eeb1-8ba7-4c78-81ac-b90b61c103f3",
+            "name": "Stairs 2",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "c9e0ca48-3142-4fcc-992b-7620c916e80e/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "e0296091-90cd-420c-a0db-b0f3d4b75770/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "ae8b43ba-c799-4478-90e9-50b86d148387/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "fcf9a140-92a4-4fb9-a9f4-9c62a7ab917c/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 21,
+      "id": "666277bb-fe16-4929-870b-d67218a7ae78",
+      "name": "Guest Bathroom",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "d4b52971-e19b-4c94-96c3-d99e09c1b2dd",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.512616540689887,
+            "yaw": -2.4563914139244662
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "5a48eeb1-8ba7-4c78-81ac-b90b61c103f3",
+            "name": "Stairs 2",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "c9e0ca48-3142-4fcc-992b-7620c916e80e/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "e0296091-90cd-420c-a0db-b0f3d4b75770/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "7db304b1-0a37-48ee-aa32-0cee27c059db",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.20202778004795618,
+            "yaw": -2.7195288477349493
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "6cef17d7-0f08-4f08-b7f7-4169a72490a6",
+            "name": "Hallway",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "9202ce1c-c6c7-44f9-bcfa-5f178c53f082/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b0e3d628-8d02-4fdc-8dae-49e1abc550b1/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "a03d1053-be36-43fb-9da2-5bb1ca789ea8",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.10659648388064014,
+            "yaw": -2.70587294975919
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "8952dcc8-e5f3-4f36-aaad-0e40eb467537",
+            "name": "Lounge",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b463b34d-696e-4d46-8170-240d994ed9cf/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "adbdb2fa-57d1-42f7-a8c4-7bdaaca199fb/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "d82185f0-e427-4e75-a405-b402d67d711d",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.018999904916064736,
+            "yaw": -2.982571701475825
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "b50cc805-0a62-4155-9443-737d62433ad8",
+            "name": "Laundry",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "fa54486b-62ec-4995-8a1e-e7178156b3c9/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "f443e2d4-5aed-487c-a7cb-fb13fdcc73f7/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "7a6fa627-b180-4add-b3a6-2f0eb67b19fd/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "32a50b34-228f-468c-8593-b0aed4b8b16a/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    },
+    {
+      "index": 22,
+      "id": "b50cc805-0a62-4155-9443-737d62433ad8",
+      "name": "Laundry",
+      "enhancement_status": "COMPLETED",
+      "projection": "EQUIRECT",
+      "hotspots": [
+        {
+          "__typename": "Tourpath",
+          "id": "34616d2f-1a4e-4cfd-bbde-24680fed35fb",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.39444694397348634,
+            "yaw": 2.1427375913782996
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "5a48eeb1-8ba7-4c78-81ac-b90b61c103f3",
+            "name": "Stairs 2",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "c9e0ca48-3142-4fcc-992b-7620c916e80e/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "e0296091-90cd-420c-a0db-b0f3d4b75770/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "df111936-ab8e-4217-9349-cd2131b1a4bb",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.39653797099771104,
+            "yaw": -0.15913564955689452
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "6cef17d7-0f08-4f08-b7f7-4169a72490a6",
+            "name": "Hallway",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "9202ce1c-c6c7-44f9-bcfa-5f178c53f082/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b0e3d628-8d02-4fdc-8dae-49e1abc550b1/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "aecf5e5a-e2c8-45a7-afec-29b33141217c",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.23943127558108657,
+            "yaw": 2.983592569879913
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "666277bb-fe16-4929-870b-d67218a7ae78",
+            "name": "Guest Bathroom",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "32a50b34-228f-468c-8593-b0aed4b8b16a/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "7a6fa627-b180-4add-b3a6-2f0eb67b19fd/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "11e5328b-b281-496e-8cde-dbed14e3665d",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": 0.013328011020291797,
+            "yaw": -2.811593310504996
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "c0e5a57d-7f5f-46b6-ada5-68236cad7130",
+            "name": "Bedroom 2",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "fcf9a140-92a4-4fb9-a9f4-9c62a7ab917c/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "ae8b43ba-c799-4478-90e9-50b86d148387/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "7df7425f-649e-4ebe-897d-52a186f84a57",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.0499666083882957,
+            "yaw": -0.7146711710520677
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "dbf2f441-3184-4c5c-a9ab-9fa042c47292",
+            "name": "Bedroom 3",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "3dc4d210-ea6a-4c67-ad5a-20667f41ed13/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b7e77be3-5d0f-4c7a-8f5c-ac11836257b0/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        },
+        {
+          "__typename": "Tourpath",
+          "id": "5d0eeb7e-670c-45a0-97b4-d2cfe8d6862b",
+          "position": {
+            "__typename": "EquirectPosition",
+            "fov": 0,
+            "pitch": -0.0964669833669749,
+            "yaw": -0.1515616599045373
+          },
+          "toRoom": {
+            "__typename": "Room",
+            "id": "8952dcc8-e5f3-4f36-aaad-0e40eb467537",
+            "name": "Lounge",
+            "enhancedImage": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "b463b34d-696e-4d46-8170-240d994ed9cf/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            },
+            "image": {
+              "__typename": "Image",
+              "file": {
+                "__typename": "S3Object",
+                "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+                "key": "adbdb2fa-57d1-42f7-a8c4-7bdaaca199fb/original",
+                "mimeType": "image/jpeg",
+                "region": "us-west-2",
+                "previewKey": null
+              }
+            }
+          }
+        }
+      ],
+      "original": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "f443e2d4-5aed-487c-a7cb-fb13fdcc73f7/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      },
+      "enhanced": {
+        "bucket": "r360-tours-storage-production-mediabucket-179aa4dkzb2oh",
+        "region": "us-west-2",
+        "key": "fa54486b-62ec-4995-8a1e-e7178156b3c9/original",
+        "preview_key": null,
+        "mime": "image/jpeg"
+      }
+    }
+  ]
+}

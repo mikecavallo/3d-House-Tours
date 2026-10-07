@@ -1,0 +1,1202 @@
+<!doctype html>
+<title>The Noe Valley Victorian</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+DW+Pica:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Old+Standard+TT:wght@400;700&display=swap">
+<style>
+:root{
+  color-scheme: dark;
+  /* the album leaf, the mounts, the print, the gilt */
+  --leaf:#17110d; --leaf-2:#211812; --leaf-3:#2b2018;
+  --oxblood:#4a1a1c; --oxblood-2:#5c2326; --choc:#3b2619; --ebony:#141010;
+  --gilt:#c9a45b; --gilt-hi:#efd690; --gilt-lo:#8a6a2e;
+  --albumen:#efe3c8; --albumen-2:#e2d0aa; --ink:#2a1a10; --ink-2:#5a3e27;
+  --text:#ebe0ca; --muted:#b9aa8d; --faint:#8d7e66;
+  --oak:#b5682a;
+  --display:"IM Fell DW Pica","IM Fell English",Georgia,"Times New Roman",serif;
+  --script:"IM Fell French Canon","IM Fell DW Pica",Georgia,serif;
+  --sc:"IM Fell English SC","IM Fell DW Pica",Georgia,serif;
+  --body:"Newsreader","Libre Caslon Text",Georgia,serif;
+  --util:"Old Standard TT","Bodoni 72",Didot,Georgia,serif;
+  --noise:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.7 0 0 0 -0.22'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  --fiber:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='.012 .2' numOctaves='2' seed='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0 0 0 -0.16'/></filter><rect width='100%' height='100%' filter='url(%23f)'/></svg>");
+  --gilt-grad:linear-gradient(135deg,#f2dc9c 0%,#a07a34 22%,#ecd08a 46%,#7f5f27 70%,#d9b96d 100%);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--leaf);color:var(--text);font:400 18px/1.55 var(--body);font-optical-sizing:auto;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.locked{overflow:hidden}
+.leaf{position:relative;background:
+  radial-gradient(120% 80% at 50% 0%, rgba(92,35,38,.22), transparent 60%),
+  var(--noise), var(--leaf)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gilt-hi);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- shared: the cabinet card ---------- */
+.mount{position:relative;display:block;padding:2px;border-radius:12px;background:var(--gilt-grad);
+  box-shadow:0 1px 0 rgba(255,240,200,.12),0 22px 44px -18px rgba(0,0,0,.85),0 4px 10px rgba(0,0,0,.45)}
+.board{position:relative;display:block;border-radius:10px;background:var(--fiber),var(--noise),var(--oxblood);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.55),inset 0 0 0 4px rgba(255,220,160,.05),inset 0 0 40px rgba(0,0,0,.35)}
+.board.choc{background:linear-gradient(170deg,rgba(255,255,255,.05),transparent 40%,rgba(0,0,0,.18)),var(--noise),var(--choc)}
+.board.ebony{background:linear-gradient(170deg,rgba(255,255,255,.06),transparent 40%,rgba(0,0,0,.18)),var(--noise),var(--ebony)}
+.print{position:relative;display:block;overflow:hidden;background:var(--albumen);
+  box-shadow:0 0 0 1px rgba(0,0,0,.55),0 0 0 6px rgba(0,0,0,.0),0 0 0 7px rgba(201,164,91,.55)}
+.imprint{display:block;text-align:center;line-height:1}
+.imprint .who{display:block;font:italic 400 1.35em/1 var(--script);letter-spacing:.01em;
+  background:linear-gradient(180deg,#f6e2a6,#c39a4c 55%,#9c7633);-webkit-background-clip:text;background-clip:text;color:transparent}
+.imprint .where{display:block;margin-top:.45em;font:400 .62em/1 var(--sc);letter-spacing:.32em;color:var(--gilt);padding-left:.32em}
+.plate-no{position:absolute;bottom:10px;right:14px;font:700 10px/1 var(--util);letter-spacing:.14em;color:var(--gilt);opacity:.85}
+
+/* ---------- hero ---------- */
+.hero{height:175vh;height:175svh;position:relative}
+.hero-in{position:sticky;top:0;height:100vh;height:100svh;display:grid;grid-template-columns:minmax(300px,.82fr) minmax(0,1.6fr);
+  gap:clamp(24px,4vw,64px);align-items:center;padding:clamp(20px,4vh,48px) clamp(16px,4vw,64px);max-width:1560px;margin:0 auto}
+.masthead{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;padding:18px clamp(16px,4vw,64px) 0;
+  font:400 13px/1 var(--sc);letter-spacing:.24em;color:var(--muted);pointer-events:none}
+.copy .kicker{font:400 15px/1.3 var(--sc);letter-spacing:.2em;color:var(--gilt);margin:0 0 18px}
+.copy h1{font:400 clamp(52px,6.4vw,104px)/.92 var(--display);letter-spacing:-.015em;margin:0;color:#f3ead6}
+.copy h1 em{font-family:var(--script);font-style:italic;color:var(--gilt-hi);letter-spacing:0}
+.copy h1 .l2{display:block;margin-top:.08em}
+.copy .lede{max-width:30em;margin:26px 0 0;color:var(--muted);font-size:18px}
+.copy .lede b{font-weight:500;color:var(--text)}
+.copy .acts{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:28px}
+.btn-gilt{appearance:none;border:0;cursor:pointer;padding:2px;border-radius:999px;background:var(--gilt-grad)}
+.btn-gilt>span{display:block;padding:12px 22px 11px;border-radius:999px;background:var(--oxblood);font:400 17px/1 var(--display);color:#f4e7c8;letter-spacing:.02em}
+.btn-gilt:hover>span{background:var(--oxblood-2)}
+.cue{font:italic 400 16px/1 var(--display);color:var(--muted);text-decoration:none;border-bottom:1px solid rgba(201,164,91,.4);padding-bottom:3px}
+.stage{display:flex;flex-direction:column;align-items:center;gap:18px;min-width:0}
+.hero-card{width:min(100%,calc((100svh - 250px) * 1.36));transform:rotate(-.6deg)}
+.hero-card .board{padding:clamp(12px,1.8vw,26px) clamp(12px,1.8vw,26px) 0}
+.hero-card .print{aspect-ratio:3/2}
+.hero-card .imprint{padding:clamp(12px,1.6vw,20px) 0 clamp(12px,1.6vw,20px);font-size:clamp(15px,1.5vw,22px)}
+.print canvas,.print img.ph{position:absolute;inset:0;width:100%;height:100%;display:block}
+.print img.ph{object-fit:cover}
+#heroCanvas{opacity:0;transition:opacity .6s}
+#heroCanvas.on{opacity:1}
+.print .paper{position:absolute;inset:0;pointer-events:none;background:var(--albumen);mix-blend-mode:multiply;opacity:var(--paper,.6)}
+.print .fox{position:absolute;inset:0;pointer-events:none;opacity:var(--fox,1);
+  background:radial-gradient(130% 120% at 50% 50%, transparent 55%, rgba(90,55,25,.38) 100%),var(--noise);mix-blend-mode:multiply}
+.print .gloss{position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.07),transparent 35%,transparent 70%,rgba(255,255,255,.04))}
+
+/* the brass rule */
+.brass{width:min(100%,calc((100svh - 250px) * 1.36));display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px}
+.brass .end{font:400 19px/1 var(--display);color:var(--gilt)}
+.brass .end.r{font-style:italic;font-family:var(--script)}
+.rule{position:relative;height:52px}
+.rule .ticks{position:absolute;left:14px;right:14px;top:31px;height:9px;
+  background:repeating-linear-gradient(90deg,rgba(201,164,91,.75) 0 1px,transparent 1px calc(100%/26));opacity:.7}
+.rule .ticks::after{content:"";position:absolute;inset:0;top:-4px;background:repeating-linear-gradient(90deg,rgba(239,214,144,.9) 0 1px,transparent 1px calc(100%/5.2))}
+.readout{position:absolute;top:-6px;left:calc(14px + (100% - 28px) * var(--t,0));transform:translateX(-50%);font:400 15px/1 var(--util);letter-spacing:.12em;color:var(--gilt-hi);white-space:nowrap;pointer-events:none}
+input.time{-webkit-appearance:none;appearance:none;position:absolute;left:0;right:0;top:14px;width:100%;height:22px;margin:0;background:transparent;cursor:ew-resize;touch-action:none}
+input.time::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:linear-gradient(180deg,#f6e3a7,#b88d3e 45%,#6f501c 60%,#d8b56a);box-shadow:inset 0 1px 1px rgba(0,0,0,.45),0 1px 2px rgba(0,0,0,.5)}
+input.time::-moz-range-track{height:6px;border-radius:3px;background:linear-gradient(180deg,#f6e3a7,#b88d3e 45%,#6f501c 60%,#d8b56a)}
+input.time::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;margin-top:-11px;border-radius:50%;border:0;
+  background:radial-gradient(circle at 35% 30%,#fff3c9 0 12%,#e2c071 30%,#9a7330 70%,#5d4317 100%);box-shadow:0 2px 6px rgba(0,0,0,.6),inset 0 -2px 3px rgba(0,0,0,.35)}
+input.time::-moz-range-thumb{width:28px;height:28px;border-radius:50%;border:0;background:radial-gradient(circle at 35% 30%,#fff3c9 0 12%,#e2c071 30%,#9a7330 70%,#5d4317 100%);box-shadow:0 2px 6px rgba(0,0,0,.6)}
+input.time:focus-visible{outline:none}
+input.time:focus-visible::-webkit-slider-thumb{outline:2px solid var(--gilt-hi);outline-offset:3px}
+
+/* ---------- foreword + list of plates ---------- */
+.fore{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(32px,6vw,110px);max-width:1240px;margin:0 auto;padding:clamp(56px,8vh,96px) clamp(16px,4vw,64px) 40px}
+.orn{display:block;width:120px;height:14px;color:var(--gilt);margin:0 0 22px}
+.fore h2,.sec-head h2{font:400 clamp(34px,3.6vw,54px)/1.02 var(--display);margin:0 0 22px;color:#f1e7d1}
+.fore h2 em,.sec-head h2 em{font-family:var(--script);color:var(--gilt-hi)}
+.fore p{margin:0 0 1em;max-width:34em}
+.fore p.first::first-letter{float:left;font:400 5.1em/.78 var(--display);color:var(--gilt-hi);padding:.06em .1em 0 0}
+.fore .attr{font:400 14px/1.4 var(--sc);letter-spacing:.14em;color:var(--faint)}
+.plates{border-top:1px solid rgba(201,164,91,.45);padding-top:16px}
+.plates h3{font:400 14px/1 var(--sc);letter-spacing:.3em;color:var(--gilt);margin:0 0 14px}
+.plates ol{list-style:none;margin:0;padding:0}
+.plates a{display:flex;align-items:baseline;gap:10px;padding:7px 0;color:var(--text);text-decoration:none;font:400 19px/1.25 var(--display)}
+.plates a .n{font:400 13px/1 var(--util);color:var(--gilt);min-width:2.6em;letter-spacing:.06em}
+.plates a .dots{flex:1;border-bottom:1px dotted rgba(185,170,141,.45);transform:translateY(-5px)}
+.plates a .m{font:400 13px/1 var(--util);color:var(--muted);letter-spacing:.06em}
+.plates a:hover .t{color:var(--gilt-hi)}
+
+/* ---------- album ---------- */
+.album{max-width:1320px;margin:0 auto;padding:60px clamp(16px,4vw,64px) 80px}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:24px;border-bottom:1px solid rgba(201,164,91,.35);padding-bottom:18px;margin-bottom:clamp(40px,7vh,80px)}
+.sec-head h2{margin:0}
+.sec-head p{margin:0;max-width:24em;color:var(--muted);font-size:16px}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:clamp(28px,4vw,64px);row-gap:clamp(56px,8vh,96px)}
+.cards>figure:nth-child(3n+2){margin-top:110px}
+.cards>figure:nth-child(3n){margin-top:40px}
+figure.cc{margin:0;--dev:1;--wash:1}
+.cc .open{appearance:none;-webkit-appearance:none;border:0;margin:0;width:100%;text-align:inherit;font:inherit;color:inherit;display:block;cursor:zoom-in;border-radius:12px;transform:rotate(var(--r,0deg));transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.cc .open:hover,.cc .open:focus-visible{transform:translateY(-8px) rotate(0deg)}
+.cc .open:focus-visible{outline:2px solid var(--gilt-hi);outline-offset:6px}
+.cc .board{padding:16px 16px 0}
+.cc .print{aspect-ratio:3/4}
+.cc .print img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+  filter:brightness(calc(1 + var(--wash) * 1.9)) sepia(var(--dev)) saturate(calc(1 - var(--dev) * .25)) contrast(calc(1 - var(--dev) * .1))}
+.cc .print .paper{opacity:calc(var(--dev) * .55)}
+.cc .print .fox{opacity:calc(.12 + var(--dev) * .88)}
+.cc .imprint{padding:13px 0 15px;font-size:16px}
+.cc .open .hint{position:absolute;left:50%;bottom:12px;transform:translate(-50%,6px);opacity:0;transition:.35s;font:400 12px/1 var(--sc);letter-spacing:.2em;color:#f6ecd4;background:rgba(23,17,13,.72);padding:8px 12px 7px;border-radius:2px;white-space:nowrap}
+.cc .open:hover .hint,.cc .open:focus-visible .hint{opacity:1;transform:translate(-50%,0)}
+.cc .open.loading .hint{opacity:1;transform:translate(-50%,0)}
+.cc figcaption{padding:22px 4px 0}
+.cc .cap{font:400 25px/1.15 var(--display);color:#f1e7d1;margin:0}
+.cc .cap .no{color:var(--gilt)}
+.cc .mod{display:block;margin-top:6px;font:400 12px/1.2 var(--util);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.cc .note{margin:12px 0 0;font:italic 300 17px/1.45 var(--body);color:#d9ccb2;max-width:24em}
+.cc .note .tag{font:normal 400 11px/1 var(--util);letter-spacing:.16em;text-transform:uppercase;color:var(--gilt);margin-right:6px}
+
+/* ---------- plan plate ---------- */
+.plan-sec{max-width:1240px;margin:0 auto;padding:40px clamp(16px,4vw,64px) 90px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,6vw,96px);align-items:center}
+.plan-card{transform:rotate(.5deg)}
+.plan-card .board{padding:20px 20px 0}
+.plan-card .print{background:radial-gradient(120% 90% at 40% 30%,#f4ead3,var(--albumen) 60%,#e3d2ad)}
+.plan-wrap{position:relative}
+.plan-wrap img{display:block;width:100%;height:auto}
+.plan-wrap .hs{position:absolute;appearance:none;border:0;padding:0;margin:0;background:transparent;cursor:zoom-in;border-radius:2px;transition:background .25s}
+.plan-wrap .hs:hover,.plan-wrap .hs:focus-visible,.plan-wrap .hs.lit{background:rgba(201,150,60,.28)}
+.plan-wrap .hs .key{position:absolute;left:var(--kx,50%);top:var(--ky,50%);transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;
+  display:grid;place-items:center;font:400 15px/1 var(--display);color:#fff4d6;background:radial-gradient(circle at 35% 30%,#7a2c2f,#3e1214);box-shadow:0 0 0 1.5px #c9a45b,0 2px 5px rgba(0,0,0,.35)}
+.plan-card .imprint{padding:14px 0 16px;font-size:17px}
+.plan-copy .legend{list-style:none;margin:26px 0 0;padding:0;border-top:1px solid rgba(201,164,91,.35)}
+.plan-copy .legend button{all:unset;box-sizing:border-box;display:flex;width:100%;gap:14px;align-items:baseline;padding:11px 2px;border-bottom:1px solid rgba(201,164,91,.18);cursor:pointer;font:400 20px/1.2 var(--display)}
+.plan-copy .legend button:focus-visible{outline:2px solid var(--gilt-hi);outline-offset:2px}
+.plan-copy .legend .k{font:400 15px/1 var(--display);color:var(--gilt);width:1.4em}
+.plan-copy .legend .m{margin-left:auto;font:400 12px/1 var(--util);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.plan-copy .legend button:hover .t{color:var(--gilt-hi)}
+.plan-copy p{color:var(--muted);max-width:30em}
+.plan-copy blockquote{margin:0 0 0;font:italic 400 22px/1.4 var(--display);color:#efe4cc;max-width:26em}
+
+/* ---------- calling card ---------- */
+.call{padding:60px 16px 110px;display:grid;place-items:center;gap:34px}
+.call .lead{text-align:center;max-width:34em}
+.call .lead h2{font:400 clamp(34px,3.6vw,54px)/1.05 var(--display);margin:0 0 12px;color:#f1e7d1}
+.call .lead p{margin:0;color:var(--muted)}
+.cardwrap{filter:drop-shadow(0 18px 26px rgba(0,0,0,.6)) drop-shadow(0 2px 3px rgba(0,0,0,.4));width:min(620px,100%);transform:rotate(-1.2deg)}
+.calling{position:relative;background:radial-gradient(140% 120% at 30% 20%,rgba(255,255,255,.35),transparent 60%),linear-gradient(160deg,#f6eedb,#ece0c3 60%,#e2d1ad);color:var(--ink);padding:clamp(26px,4vw,44px) clamp(22px,4.4vw,52px) clamp(26px,3.6vw,40px);transition:clip-path .7s cubic-bezier(.3,.7,.2,1)}
+.calling::before{content:"";position:absolute;inset:12px;border:1px solid rgba(90,62,39,.35);pointer-events:none}
+.calling::after{content:"";position:absolute;top:0;right:0;width:64px;height:64px;pointer-events:none;
+  background:linear-gradient(45deg,#d7c39b 0,#efe2c4 46%,rgba(0,0,0,.18) 50%,transparent 50.5%);transform-origin:100% 0;transform:scale(0);width:var(--fold,56px);height:var(--fold,56px);transition:transform .7s cubic-bezier(.3,.7,.2,1)}
+.calling.folded::after{transform:scale(1)}
+.calling h3{margin:0 auto;max-width:calc(100% - 60px);text-align:center;font:italic 400 clamp(30px,4.4vw,44px)/1.05 var(--script);color:var(--ink)}
+.calling .addr{display:block;text-align:center;margin:10px 0 24px;font:400 13px/1.3 var(--sc);letter-spacing:.26em;color:var(--ink-2)}
+.calling .row{display:grid;grid-template-columns:1fr 1fr;gap:6px 26px}
+.calling label{display:block;font:400 12px/1 var(--sc);letter-spacing:.2em;color:var(--ink-2);margin-top:12px}
+.calling input,.calling textarea{display:block;width:100%;border:0;border-bottom:1px solid rgba(42,26,16,.55);background:transparent;color:var(--ink);font:400 19px/1.35 var(--display);padding:6px 0 5px;border-radius:0}
+.calling textarea{resize:vertical;min-height:62px;background:repeating-linear-gradient(180deg,transparent 0 30px,rgba(42,26,16,.4) 30px 31px);border-bottom:0;line-height:31px;padding:0}
+.calling input:focus-visible,.calling textarea:focus-visible{outline:none;border-bottom-color:var(--oxblood);box-shadow:0 2px 0 -1px var(--oxblood)}
+.calling textarea:focus-visible{box-shadow:none;background:repeating-linear-gradient(180deg,transparent 0 30px,rgba(74,26,28,.75) 30px 31px)}
+.calling .send{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:22px;flex-wrap:wrap}
+.calling .send small{font:italic 400 15px/1.3 var(--display);color:var(--ink-2);max-width:20em}
+.calling button[type=submit]{appearance:none;cursor:pointer;border:1px solid var(--ink);background:var(--ink);color:#f3e7cb;font:400 17px/1 var(--display);padding:12px 22px 11px;letter-spacing:.03em}
+.calling button[type=submit]:hover{background:var(--oxblood)}
+.calling .done{display:none;text-align:center;padding:26px 0 8px}
+.calling .done p{margin:.3em auto;max-width:26em;font:400 19px/1.45 var(--display)}
+.calling .done p.s{font:italic 400 15px/1.4 var(--body);color:var(--ink-2)}
+.calling.sent form{display:none}
+.calling.sent .done{display:block}
+
+footer{border-top:1px solid rgba(201,164,91,.28);padding:26px clamp(16px,4vw,64px) 34px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--faint);font:400 14px/1.45 var(--body)}
+footer .r{font:400 12px/1.6 var(--sc);letter-spacing:.2em}
+
+/* ---------- the opened print ---------- */
+.viewer{position:fixed;z-index:50;left:0;top:0;width:100vw;height:100vh;overflow:hidden;background:#0d0a08;border-radius:3px}
+.viewer[hidden]{display:none}
+.viewer canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+.viewer canvas:active{cursor:grabbing}
+.viewer .vframe{position:absolute;inset:0;pointer-events:none;border:clamp(6px,1vw,12px) solid var(--oxblood);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.6),inset 0 0 0 2px var(--gilt),inset 0 0 60px rgba(0,0,0,.35)}
+.viewer .ui{transition:opacity .4s}
+.viewer:not(.full) .ui{opacity:0;pointer-events:none}
+.plaque{position:absolute;left:clamp(18px,2.4vw,34px);top:clamp(18px,2.4vw,34px);padding:2px;border-radius:8px;background:var(--gilt-grad);max-width:min(380px,calc(100% - 150px))}
+.plaque>div{border-radius:6px;background:var(--noise),var(--oxblood);padding:12px 18px 13px}
+.plaque .pl-no{display:block;font:700 11px/1 var(--util);letter-spacing:.2em;color:var(--gilt)}
+.plaque h2{margin:6px 0 0;font:400 clamp(22px,2.4vw,32px)/1.05 var(--display);color:#f4ead2}
+.plaque .pl-mod{display:block;margin-top:6px;font:400 11px/1 var(--util);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.vclose{position:absolute;right:clamp(18px,2.4vw,34px);top:clamp(18px,2.4vw,34px);appearance:none;border:0;cursor:pointer;padding:2px;border-radius:999px;background:var(--gilt-grad)}
+.vclose>span{display:flex;gap:10px;align-items:center;padding:11px 18px 10px;border-radius:999px;background:var(--ink);color:#f4e7c8;font:400 16px/1 var(--display)}
+.vclose b{font:400 22px/.6 var(--display)}
+.vbar{position:absolute;left:50%;bottom:clamp(18px,2.4vw,30px);transform:translateX(-50%);display:flex;align-items:center;gap:12px;
+  padding:9px 16px;border-radius:999px;background:rgba(20,14,10,.78);box-shadow:0 0 0 1px rgba(201,164,91,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.vbar .e{font:400 15px/1 var(--display);color:var(--gilt)}
+.vbar .e.r{font-family:var(--script);font-style:italic}
+.vbar .wrap{position:relative;width:min(220px,40vw);height:28px}
+.vbar input.time{top:3px}
+.vhint{position:absolute;left:50%;bottom:calc(clamp(18px,2.4vw,30px) + 58px);transform:translateX(-50%);margin:0;font:italic 400 15px/1.3 var(--display);color:#f3e8cf;text-shadow:0 1px 3px rgba(0,0,0,.9);white-space:nowrap;transition:opacity .8s}
+.marks{position:absolute;inset:0;pointer-events:none}
+.door{position:absolute;left:0;top:0;pointer-events:auto;appearance:none;border:0;background:none;cursor:pointer;padding:0;display:flex;flex-direction:column;align-items:center;gap:8px;transform:translate(-50%,-50%)}
+.door .ring{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle,rgba(239,214,144,.95) 0 4px,rgba(20,14,10,.35) 5px 100%);box-shadow:0 0 0 2px var(--gilt-hi),0 0 0 4px rgba(20,14,10,.45),0 3px 10px rgba(0,0,0,.6);transition:transform .25s}
+.door .lbl{font:400 15px/1 var(--display);color:#f6ecd4;background:rgba(20,14,10,.74);padding:7px 11px 6px;border-radius:2px;white-space:nowrap;box-shadow:0 0 0 1px rgba(201,164,91,.45)}
+.door:hover .ring,.door:focus-visible .ring{transform:scale(1.18)}
+.door:focus-visible{outline:none}.door:focus-visible .lbl{outline:2px solid var(--gilt-hi)}
+.door.note .ring{width:26px;height:26px;background:var(--oxblood);display:grid;place-items:center;font:400 16px/1 var(--display);color:var(--gilt-hi)}
+.door.note .lbl{display:none;max-width:260px;white-space:normal;font:italic 400 15px/1.35 var(--body);text-align:left}
+.door.note.show .lbl{display:block}
+.door.note .lbl b{display:block;font:normal 400 11px/1 var(--util);letter-spacing:.16em;text-transform:uppercase;color:var(--gilt);margin-bottom:5px}
+.marks.hide .door{opacity:0;pointer-events:none}
+
+/* ---------- reveal ---------- */
+.rise{opacity:0;transform:translateY(18px);transition:opacity .7s,transform .7s cubic-bezier(.2,.7,.2,1)}
+.rise.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rise{opacity:1;transform:none;transition:none}.cc .open{transition:none}.calling,.calling::after{transition:none}}
+
+/* ---------- smaller screens ---------- */
+@media (max-width:1100px){
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cards>figure:nth-child(n){margin-top:0}
+  .cards>figure:nth-child(2n){margin-top:90px}
+}
+@media (max-width:860px){
+  .hero{height:160svh}
+  .hero-in{grid-template-columns:1fr;align-content:center;gap:18px;padding:52px 16px 20px}
+  .masthead{font-size:11px;letter-spacing:.18em;padding-top:16px}
+  .copy .kicker{font-size:12px;margin-bottom:10px}
+  .copy h1{font-size:clamp(44px,12vw,64px)}
+  .copy .lede{font-size:16px;margin-top:12px}
+  .copy .acts{margin-top:14px}
+  .copy .acts .cue{display:none}
+  .btn-gilt>span{padding:10px 18px 9px;font-size:16px}
+  .hero-card,.brass{width:100%}
+  .stage{gap:8px}
+  .fore,.plan-sec{grid-template-columns:1fr}
+  .plan-card{order:-1}
+  .sec-head{flex-direction:column;align-items:start}
+}
+@media (max-width:620px){
+  body{font-size:17px}
+  .cards{grid-template-columns:1fr;row-gap:64px}
+  .cards>figure:nth-child(n){margin-top:0}
+  .cards>figure{padding:0 10px}
+  .calling .row{grid-template-columns:1fr}
+  .plaque{max-width:calc(100% - 120px)}
+  .plaque>div{padding:9px 12px 10px}
+  .vclose>span{padding:10px 13px 9px;font-size:0;gap:0}
+  .vclose>span b{font-size:24px}
+  .vhint{font-size:14px}
+  .door .lbl{font-size:13px}
+  .masthead span:last-child{display:none}
+}
+@media (max-height:700px) and (min-width:861px){.copy .lede{display:none}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="orn" viewBox="0 0 120 14"><path d="M0 7h46M74 7h46" stroke="currentColor" stroke-width="1"/><path d="M60 1l6 6-6 6-6-6z" fill="none" stroke="currentColor"/><circle cx="60" cy="7" r="1.6" fill="currentColor"/><circle cx="50" cy="7" r="1.2" fill="currentColor"/><circle cx="70" cy="7" r="1.2" fill="currentColor"/></symbol>
+</svg>
+
+<div class="leaf">
+<section class="hero" id="top" aria-label="The front of the house">
+  <div class="hero-in">
+    <div class="masthead" aria-hidden="true"><span>No. 4250 Twenty-Third Street</span><span>Noe Valley &middot; San Francisco</span></div>
+    <div class="copy">
+      <p class="kicker">A Queen Anne Victorian by Wm. Mooser</p>
+      <h1>Developed,<span class="l2"><em>1893</em> to today.</span></h1>
+      <p class="lede">Built in 1893 at <b>4250 Twenty-Third Street</b>, in the heart of Noe Valley. Drag the brass rule, or turn the page, to bring the print up to the present.</p>
+      <div class="acts">
+        <button class="btn-gilt" id="enter" type="button"><span>Step through the gate</span></button>
+        <a class="cue" href="#foreword">Turn the page</a>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="mount hero-card">
+        <div class="board">
+          <span class="plate-no">No. 1</span>
+          <div class="print" id="heroPrint">
+            <img class="ph" id="heroImg" alt="The front of 4250 Twenty-Third Street: a Queen Anne Victorian with a turret, bay windows and a white front stair" src="">
+            <canvas id="heroCanvas" aria-hidden="true"></canvas>
+            <span class="paper"></span><span class="fox"></span><span class="gloss"></span>
+          </div>
+          <span class="imprint"><span class="who">Natalie Simmons</span><span class="where">San Francisco</span></span>
+        </div>
+      </div>
+      <div class="brass">
+        <span class="end">1893</span>
+        <div class="rule">
+          <span class="ticks" aria-hidden="true"></span>
+          <span class="readout" id="readout" aria-hidden="true">1893</span>
+          <input class="time" id="timeRule" type="range" min="0" max="1000" value="0" aria-label="Develop the print, from 1893 to today" aria-valuetext="1893">
+        </div>
+        <span class="end r">today</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="fore" id="foreword">
+  <div class="rise">
+    <svg class="orn" aria-hidden="true"><use href="#orn"/></svg>
+    <h2>A house of <em>grand proportions</em></h2>
+    <p class="first">Built in 1893 by architect Wm. Mooser, this home is one of a kind. The main level includes grand proportions, from soaring ceilings to oversized rooms.</p>
+    <p>The gracious formal dining room, the expansive living room with gas fireplace and the chef&rsquo;s kitchen have been custom designed. Below, a grand staircase leads to four bedrooms, two baths, a family room and a laundry room. Each bedroom has its own view of the lush, verdant garden.</p>
+    <p class="attr">From the listing description</p>
+  </div>
+  <nav class="plates rise" aria-label="List of plates">
+    <h3>List of Plates</h3>
+    <ol id="plateList"></ol>
+  </nav>
+</section>
+
+<section class="album" id="album" aria-label="The album">
+  <div class="sec-head rise">
+    <h2>The <em>Album</em></h2>
+    <p>Nine views of the main house, mounted in order. Each print develops as it comes to hand. Open any card to stand in the room.</p>
+  </div>
+  <div class="cards" id="cards"></div>
+</section>
+
+<section class="plan-sec" id="plan" aria-label="Plan of the lower floor">
+  <div class="mount plan-card rise">
+    <div class="board ebony">
+      <span class="plate-no">No. 11</span>
+      <div class="print">
+        <div class="plan-wrap" id="planWrap">
+          <img id="planImg" alt="Architect's plan of the lower floor: family room, bedrooms, mud room, laundry, baths, the lower hall, the deck with its spiral stair" src="" width="1200" height="1444">
+        </div>
+        <span class="fox" style="--fox:.35"></span>
+      </div>
+      <span class="imprint"><span class="who">Plan of the Lower Floor</span><span class="where">Artist&rsquo;s drawing</span></span>
+    </div>
+  </div>
+  <div class="plan-copy rise">
+    <svg class="orn" aria-hidden="true"><use href="#orn"/></svg>
+    <h2 class="sr">Plan of the Lower Floor</h2>
+    <blockquote>&ldquo;Descend the grand staircase to discover 4 bedrooms, 2 baths, a family room, and laundry room.&rdquo;</blockquote>
+    <ul class="legend" id="legend"></ul>
+    <p>Rooms keyed in gilt open in 360. Square footage is approximate per the artist&rsquo;s drawing.</p>
+  </div>
+</section>
+
+<section class="call" id="showing" aria-label="Book a private showing">
+  <div class="lead rise">
+    <svg class="orn" aria-hidden="true" style="margin:0 auto 20px"><use href="#orn"/></svg>
+    <h2>Leave your card</h2>
+    <p>A private showing of 4250 Twenty-Third Street, at an hour that suits you.</p>
+  </div>
+  <div class="cardwrap rise">
+    <div class="calling" id="calling">
+      <h3>Book a private showing</h3>
+      <span class="addr">4250 Twenty-Third Street &middot; Noe Valley</span>
+      <form id="callForm" novalidate>
+        <div class="row">
+          <div><label for="fName">Name</label><input id="fName" name="name" autocomplete="name" required></div>
+          <div><label for="fEmail">Email</label><input id="fEmail" name="email" type="email" autocomplete="email" required></div>
+        </div>
+        <label for="fMsg">Message</label>
+        <textarea id="fMsg" name="message" rows="2" placeholder=""></textarea>
+        <div class="send">
+          <small id="formNote">A day and an hour you prefer is helpful.</small>
+          <button type="submit">Leave your card</button>
+        </div>
+      </form>
+      <div class="done" role="status" aria-live="polite">
+        <p>Thank you<span id="doneName"></span>. Your request for a private showing has been noted.</p>
+        <p class="s">Corner turned down, as a card left in person once was.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Concept demo built from the property&rsquo;s 360 tour. 360 photography: Natalie Simmons.</span>
+  <span class="r">Wm. Mooser, architect &middot; 1893</span>
+</footer>
+</div>
+
+<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-labelledby="vTitle">
+  <canvas id="vc" tabindex="0" aria-label="360 view of the room. Drag to look around, or use the arrow keys."></canvas>
+  <div class="vframe" aria-hidden="true"></div>
+  <div class="marks ui" id="marks"></div>
+  <div class="plaque ui"><div><span class="pl-no" id="vNo"></span><h2 id="vTitle"></h2><span class="pl-mod" id="vMod"></span></div></div>
+  <button class="vclose ui" id="vClose" type="button" aria-label="Close the room and return to the album"><span>Return to the album <b aria-hidden="true">&times;</b></span></button>
+  <p class="vhint ui" id="vHint">Drag to look about. Gilt rings lead through the house.</p>
+  <div class="vbar ui">
+    <span class="e">1893</span>
+    <div class="wrap"><input class="time" id="vTime" type="range" min="0" max="1000" value="1000" aria-label="Print tone, from 1893 to today"></div>
+    <span class="e r">today</span>
+  </div>
+</div>
+
+<script>window.MEDIA_BASE="media";
+/* pano.js: a small WebGL2 360 engine for listing pages.
+ *
+ * One full-screen shader renders up to two equirect panoramas (layers A and B) so rooms can blend.
+ * Every pixel is a ray: origin = camera offset inside the unit sphere (+ a projection pull-back k),
+ * direction = view basis * screen point. k = 0 is a normal lens, k = 1 is stereographic (little planet),
+ * a camera offset toward a door makes the room stretch past you like you walked forward.
+ *
+ * Looks (uniform "look"): exposure, saturation, warmth, vignette, grain, sepia "develop" amount,
+ * line-drawing amount and a light-reveal spot, plus a soft nadir cap over the tripod.
+ */
+(function (G) {
+  'use strict';
+  const VS = `#version 300 es
+  in vec2 p; out vec2 vUv;
+  void main(){ vUv = p*0.5+0.5; gl_Position = vec4(p,0.,1.); }`;
+
+  const FS = `#version 300 es
+  precision highp float;
+  in vec2 vUv; out vec4 o;
+  uniform sampler2D tA, tB;
+  uniform vec2 res;
+  uniform vec2 shift; // move the projection center (uv units), e.g. to sit a little planet beside a title
+  uniform float aspect, tanH;
+  // per layer: basis (right, up, fwd), camera offset, k, alpha, blur
+  uniform mat3 bA, bB;
+  uniform vec3 offA, offB;
+  uniform float kA, kB, alphaB, blurA, blurB, rollA;
+  uniform float flatA, flatB;    // 1 = flat photo (not equirect), drawn as a cover-fit plate
+  uniform vec4 flatRA, flatRB;   // x,y,scale,aspect of the flat photo
+  // look
+  uniform float expo, sat, warm, vig, grain, time, develop, lineAmt, nadir;
+  uniform vec3 tint; uniform float tintAmt;
+  uniform vec3 spot; // x,y in screen uv, z radius (0 = off): inside the spot the photo shows, outside the line drawing
+  uniform float spotSoft;
+
+  const float PI = 3.14159265359;
+
+  vec2 eq(vec3 d){
+    d = normalize(d);
+    float lon = atan(d.x, -d.z);
+    float lat = asin(clamp(d.y,-1.,1.));
+    return vec2(0.5 + lon/(2.*PI), 0.5 - lat/PI);
+  }
+  vec3 hit(vec3 O, vec3 D){
+    float b = dot(O,D); float c = dot(O,O)-1.;
+    float t = -b + sqrt(max(b*b - c, 0.));
+    return O + t*D;
+  }
+  vec4 samp(sampler2D t, vec3 d, float lod){
+    vec2 uv = eq(d);
+    vec2 uv2 = vec2(fract(uv.x+0.5), uv.y);
+    vec2 dx = dFdx(uv), dy = dFdy(uv), dx2 = dFdx(uv2), dy2 = dFdy(uv2);
+    if (abs(dx2.x) < abs(dx.x)) dx.x = dx2.x;
+    if (abs(dy2.x) < abs(dy.x)) dy.x = dy2.x;
+    if (lod > 0.) return textureLod(t, uv, lod);
+    return textureGrad(t, uv, dx, dy);
+  }
+  vec3 nadirCap(sampler2D t, vec3 d, vec3 col){
+    if (nadir <= 0.) return col;
+    float lat = asin(clamp(normalize(d).y,-1.,1.));
+    float a = smoothstep(-1.12, -1.28, lat) * nadir; // ~ -64 to -73 deg
+    if (a <= 0.) return col;
+    vec3 ring = normalize(vec3(d.x, 0., d.z));
+    vec3 r = ring*cos(-1.05) + vec3(0.,sin(-1.05),0.);
+    vec3 floorc = samp(t, r, 5.5).rgb;
+    vec3 center = textureLod(t, vec2(0.5, 0.97), 9.).rgb;
+    float m = smoothstep(-1.25, -1.5, lat);
+    return mix(col, mix(floorc, mix(floorc, center, .5), m), a);
+  }
+  vec3 layer(sampler2D t, mat3 B, vec3 off, float k, float blur, vec2 sp, float isFlat, vec4 fr){
+    if (isFlat > .5){
+      // cover-fit plate with a little zoom (fr.z) and pan (fr.xy)
+      vec2 q = (vUv - .5);
+      float sa = aspect / fr.w;
+      vec2 uv = vec2(q.x * (sa > 1. ? 1. : sa), q.y * (sa > 1. ? 1./sa : 1.)) / fr.z + .5 + fr.xy;
+      uv.y = 1. - uv.y;
+      return texture(t, clamp(uv, 0., 1.)).rgb;
+    }
+    vec3 D = normalize(B * vec3(sp, 1.));
+    vec3 O = off - B[2]*k;
+    vec3 d = hit(O, D);
+    vec3 c = samp(t, d, 0.).rgb;
+    if (blur > 0.001){
+      // radial rush: samples pulled toward the screen center
+      vec3 acc = c; float w = 1.;
+      for (int i=1;i<6;i++){
+        float s = 1. - blur*float(i)/6.;
+        vec3 Di = normalize(B * vec3(sp*s, 1.));
+        acc += samp(t, hit(O, Di), 1.).rgb; w += 1.;
+      }
+      c = acc/w;
+    }
+    return nadirCap(t, d, c);
+  }
+  float luma(vec3 c){ return dot(c, vec3(.2126,.7152,.0722)); }
+  float hash(vec2 p){ return fract(sin(dot(p, vec2(12.9898,78.233)))*43758.5453); }
+
+  void main(){
+    vec2 sp = ((vUv - shift)*2.-1.) * vec2(aspect,1.) * tanH;
+    vec3 c = layer(tA, bA, offA, kA, blurA, sp, flatA, flatRA);
+    if (alphaB > 0.001){
+      vec3 cb = layer(tB, bB, offB, kB, blurB, sp, flatB, flatRB);
+      c = mix(c, cb, alphaB);
+    }
+    // grade
+    c *= expo;
+    float L = luma(c);
+    c = mix(vec3(L), c, sat);
+    c *= vec3(1.+warm*.06, 1., 1.-warm*.08);
+    if (tintAmt > 0.) c = mix(c, tint * (L*1.15), tintAmt);
+    if (develop > 0.){
+      // albumen print: sepia, crushed blacks lifted, highlights warm, soft
+      vec3 sep = vec3(L*1.07+.04, L*.93+.03, L*.74+.02);
+      sep = mix(sep, vec3(.95,.90,.80), .12);
+      c = mix(c, sep, develop);
+    }
+    if (lineAmt > 0.){
+      // reuse the gradient trick on the composed image of layer A
+      float e = 1.25 / res.y * 2. * tanH;
+      vec3 O = offA - bA[2]*kA; float l[9]; int n=0;
+      for (int j=-1;j<=1;j++) for (int i=-1;i<=1;i++){
+        vec3 D = normalize(bA * vec3(sp + vec2(float(i),float(j))*e, 1.));
+        l[n++] = luma(samp(tA, hit(O,D), 0.4).rgb);
+      }
+      float gx = (l[2]+2.*l[5]+l[8]) - (l[0]+2.*l[3]+l[6]);
+      float gy = (l[6]+2.*l[7]+l[8]) - (l[0]+2.*l[1]+l[2]);
+      float g = smoothstep(.05, .28, sqrt(gx*gx+gy*gy));
+      vec3 paper = vec3(.955,.95,.93);
+      vec3 ink = vec3(.12,.16,.22);
+      vec3 drawn = mix(paper, ink, g*.9);
+      float m = lineAmt;
+      if (spot.z > 0.){
+        vec2 q = (vUv - spot.xy) * vec2(aspect, 1.);
+        float r = length(q);
+        m *= smoothstep(spot.z*(1.-spotSoft), spot.z, r);
+      }
+      c = mix(c, drawn, m);
+    }
+    float v = length((vUv-.5)*vec2(aspect,1.)*.9);
+    c *= mix(1., smoothstep(1.15, .25, v), vig);
+    c += (hash(vUv*res + time) - .5) * grain;
+    o = vec4(c, 1.);
+  }`;
+
+  function compile(gl, type, src) {
+    const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+    return s;
+  }
+
+  const D2R = Math.PI / 180;
+  const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+  const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const easeOut = t => 1 - Math.pow(1 - t, 3);
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const wrapPi = a => { a = (a + Math.PI) % (2 * Math.PI); if (a < 0) a += 2 * Math.PI; return a - Math.PI; };
+  const dirOf = (yaw, pitch) => [Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), -Math.cos(yaw) * Math.cos(pitch)];
+
+  function basis(yaw, pitch, roll) {
+    const f = dirOf(yaw, pitch);
+    let r = [-f[2], 0, f[0]]; const rl = Math.hypot(r[0], r[2]) || 1e-6; r = [r[0] / rl, 0, r[2] / rl];
+    let u = [r[1] * f[2] - r[2] * f[1], r[2] * f[0] - r[0] * f[2], r[0] * f[1] - r[1] * f[0]];
+    if (roll) {
+      const c = Math.cos(roll), s = Math.sin(roll);
+      const r2 = r.map((v, i) => v * c + u[i] * s), u2 = u.map((v, i) => -r[i] * s + v * c); r = r2; u = u2;
+    }
+    return { r, u, f, m: new Float32Array([...r, ...u, ...f]) };
+  }
+
+  class Pano {
+    constructor(canvas, opts = {}) {
+      this.canvas = canvas;
+      const gl = canvas.getContext('webgl2', { antialias: false, alpha: false, preserveDrawingBuffer: !!opts.preserve, powerPreference: 'high-performance' });
+      if (!gl) throw new Error('WebGL2 not available');
+      this.gl = gl;
+      this.aniso = gl.getExtension('EXT_texture_filter_anisotropic');
+      const pr = gl.createProgram();
+      gl.attachShader(pr, compile(gl, gl.VERTEX_SHADER, VS));
+      gl.attachShader(pr, compile(gl, gl.FRAGMENT_SHADER, FS));
+      gl.bindAttribLocation(pr, 0, 'p'); gl.linkProgram(pr);
+      if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(pr));
+      this.pr = pr; gl.useProgram(pr);
+      const vb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, vb);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+      gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+      this.U = {};
+      const n = gl.getProgramParameter(pr, gl.ACTIVE_UNIFORMS);
+      for (let i = 0; i < n; i++) { const a = gl.getActiveUniform(pr, i); this.U[a.name.replace(/\[0\]$/, '')] = gl.getUniformLocation(pr, a.name); }
+      gl.uniform1i(this.U.tA, 0); gl.uniform1i(this.U.tB, 1);
+      this.cache = new Map();
+      this.A = this.layer(); this.B = this.layer(); this.alphaB = 0;
+      this.shift = [0, 0];
+      this.fov = opts.fov || 80; this.dpr = Math.min(opts.dpr || window.devicePixelRatio || 1, opts.maxDpr || 2);
+      this.look = Object.assign({ expo: 1, sat: 1, warm: 0, vig: .25, grain: .018, develop: 0, lineAmt: 0, nadir: 1, tint: [1, 1, 1], tintAmt: 0, spot: [0.5, 0.5, 0], spotSoft: .5 }, opts.look || {});
+      this.t0 = performance.now();
+      this.onframe = null;
+      this.resize();
+      addEventListener('resize', () => this.resize());
+      this.loop = this.loop.bind(this); requestAnimationFrame(this.loop);
+    }
+    layer() { return { tex: null, yaw: 0, pitch: 0, roll: 0, k: 0, off: [0, 0, 0], blur: 0, flat: 0, flatR: [0, 0, 1, 1.5] }; }
+    resize() {
+      const c = this.canvas, w = c.clientWidth, h = c.clientHeight;
+      c.width = Math.max(2, Math.round(w * this.dpr)); c.height = Math.max(2, Math.round(h * this.dpr));
+      this.gl.viewport(0, 0, c.width, c.height);
+    }
+    /* load(url) -> texture handle {tex, w, h, flat}; smUrl paints first, full res swaps in */
+    load(url, smUrl) {
+      if (this.cache.has(url)) return this.cache.get(url);
+      const gl = this.gl;
+      const h = { tex: gl.createTexture(), ready: false, full: false, w: 0, h: 0, flat: false, url };
+      const put = (img, full) => {
+        gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, h.tex);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        if (this.aniso) gl.texParameterf(gl.TEXTURE_2D, this.aniso.TEXTURE_MAX_ANISOTROPY_EXT, 8);
+        h.w = img.naturalWidth || img.width; h.h = img.naturalHeight || img.height;
+        h.flat = h.w / h.h < 1.9; h.ready = true; if (full) h.full = true;
+      };
+      const get = u => new Promise((res, rej) => { const i = new Image(); i.decoding = 'async'; i.onload = () => res(i); i.onerror = rej; i.src = u; });
+      h.promise = (smUrl ? get(smUrl).then(i => { if (!h.full) put(i, false); }) : Promise.resolve())
+        .then(() => h);
+      h.fullPromise = get(url).then(i => (i.decode ? i.decode().catch(() => {}) : 0).then(() => { put(i, true); return h; }));
+      if (!smUrl) h.promise = h.fullPromise;
+      this.cache.set(url, h);
+      return h;
+    }
+    set(L, h) {
+      L.tex = h; L.flat = h && h.flat ? 1 : 0;
+      if (h && h.flat) L.flatR[3] = h.w / h.h;
+    }
+    viewDir() { return dirOf(this.A.yaw, this.A.pitch); }
+    /* screen position of a pano direction (yaw,pitch) for layer L in px; null if behind */
+    project(yaw, pitch, L = this.A) {
+      const b = basis(L.yaw, L.pitch, L.roll), d = dirOf(yaw, pitch);
+      const z = d[0] * b.f[0] + d[1] * b.f[1] + d[2] * b.f[2]; if (z <= 0.05) return null;
+      const x = (d[0] * b.r[0] + d[1] * b.r[1] + d[2] * b.r[2]) / z, y = (d[0] * b.u[0] + d[1] * b.u[1] + d[2] * b.u[2]) / z;
+      const th = Math.tan(this.fov * D2R / 2), w = this.canvas.clientWidth, hh = this.canvas.clientHeight, asp = w / hh;
+      return { x: (x / (asp * th) * .5 + .5) * w, y: (1 - (y / th * .5 + .5)) * hh, z };
+    }
+    /* yaw,pitch under a screen point (px) for layer A, rectilinear */
+    pick(px, py) {
+      const L = this.A, b = basis(L.yaw, L.pitch, L.roll), w = this.canvas.clientWidth, h = this.canvas.clientHeight;
+      const th = Math.tan(this.fov * D2R / 2), sx = (px / w * 2 - 1) * (w / h) * th, sy = (1 - py / h * 2) * th;
+      const d = [b.r[0] * sx + b.u[0] * sy + b.f[0], b.r[1] * sx + b.u[1] * sy + b.f[1], b.r[2] * sx + b.u[2] * sy + b.f[2]];
+      const l = Math.hypot(...d);
+      return { yaw: Math.atan2(d[0], -d[2]), pitch: Math.asin(d[1] / l) };
+    }
+    draw() {
+      const gl = this.gl, U = this.U, A = this.A, B = this.B, lk = this.look;
+      const w = this.canvas.width, h = this.canvas.height;
+      gl.uniform2f(U.res, w, h); gl.uniform1f(U.aspect, w / h);
+      gl.uniform2f(U.shift, this.shift[0], this.shift[1]);
+      gl.uniform1f(U.tanH, Math.tan(this.fov * D2R / 2));
+      const bind = (L, unit, U_b, U_off, U_k, U_blur, U_flat, U_fr) => {
+        gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, L.tex && L.tex.ready ? L.tex.tex : null);
+        gl.uniformMatrix3fv(U_b, false, basis(L.yaw, L.pitch, L.roll).m);
+        gl.uniform3fv(U_off, L.off); gl.uniform1f(U_k, L.k); gl.uniform1f(U_blur, L.blur);
+        gl.uniform1f(U_flat, L.flat); gl.uniform4fv(U_fr, L.flatR);
+      };
+      bind(A, 0, U.bA, U.offA, U.kA, U.blurA, U.flatA, U.flatRA);
+      bind(B, 1, U.bB, U.offB, U.kB, U.blurB, U.flatB, U.flatRB);
+      gl.uniform1f(U.alphaB, B.tex && B.tex.ready ? this.alphaB : 0);
+      gl.uniform1f(U.expo, lk.expo); gl.uniform1f(U.sat, lk.sat); gl.uniform1f(U.warm, lk.warm);
+      gl.uniform1f(U.vig, lk.vig); gl.uniform1f(U.grain, lk.grain); gl.uniform1f(U.develop, lk.develop);
+      gl.uniform1f(U.lineAmt, lk.lineAmt); gl.uniform1f(U.nadir, lk.nadir);
+      gl.uniform3fv(U.tint, lk.tint); gl.uniform1f(U.tintAmt, lk.tintAmt);
+      gl.uniform3fv(U.spot, lk.spot); gl.uniform1f(U.spotSoft, lk.spotSoft);
+      gl.uniform1f(U.time, (performance.now() - this.t0) / 1000 % 100);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+    loop(t) {
+      if (this.onframe) this.onframe(t);
+      if (this.A.tex && this.A.tex.ready) this.draw();
+      requestAnimationFrame(this.loop);
+    }
+  }
+
+  /* Tour: a graph of rooms with solved headings. walk() moves through a door like a dolly shot. */
+  class Tour {
+    constructor(pano, layout, base, opts = {}) {
+      this.p = pano; this.L = layout; this.base = base; this.opts = opts;
+      this.rooms = new Map(layout.rooms.map(r => [r.i, r]));
+      this.cur = null; this.busy = false;
+      this.dragging = false; this.vel = 0; this.vy = 0; this.auto = opts.auto ?? 0.02;
+    }
+    url(i, sm) { return `${this.base}/${String(i).padStart(2, '0')}${sm ? '-sm' : ''}.jpg`; }
+    tex(i) { return this.p.load(this.url(i), this.url(i, true)); }
+    async show(i, yaw = 0, pitch = 0) {
+      const h = this.tex(i); await h.promise; this.p.set(this.p.A, h);
+      Object.assign(this.p.A, { yaw, pitch, k: 0, off: [0, 0, 0], blur: 0 }); this.p.alphaB = 0;
+      this.cur = this.rooms.get(i); this.prefetch(i); return this.cur;
+    }
+    prefetch(i) { const r = this.rooms.get(i); if (!r) return; for (const l of r.links) this.tex(l.to); }
+    link(from, to) { const r = this.rooms.get(from); return r && r.links.find(l => l.to === to); }
+    /* heading-consistent yaw in room b for a world direction seen as yaw y in room a */
+    carry(a, b, y) {
+      const ra = this.rooms.get(a), rb = this.rooms.get(b);
+      if (!ra || !rb || ra.comp !== rb.comp) return null;
+      return wrapPi(ra.heading + y - rb.heading);
+    }
+    /* walk to room j. dur seconds. Returns a promise. */
+    async walk(j, opts = {}) {
+      if (this.busy || !this.cur || j === this.cur.i) return;
+      this.busy = true;
+      const p = this.p, A = p.A, B = p.B, i = this.cur.i;
+      const lk = this.link(i, j);
+      const hB = this.tex(j); await hB.promise;
+      const doorYaw = lk ? lk.yaw : A.yaw;
+      let doorPitch = lk ? clamp(lk.pitch, -0.35, 0.25) : 0;
+      // 1) turn toward the door
+      const y0 = A.yaw, p0 = A.pitch, dy = wrapPi(doorYaw - y0), turnPitch = clamp(doorPitch * .5, -.2, .15);
+      const pace = this.opts.pace || 1, rush = this.opts.blur ?? 1;
+      const turnT = (opts.turn ?? clamp(Math.abs(dy) / 2.4, .25, .9)) * pace;
+      await this.tween(turnT, t => { const e = ease(t); A.yaw = y0 + dy * e; A.pitch = lerp(p0, turnPitch, e); });
+      // 2) dolly through
+      const arrive = this.carry(i, j, doorYaw);
+      p.set(B, hB);
+      const by = arrive ?? 0;
+      Object.assign(B, { yaw: by, pitch: A.pitch, roll: 0, k: 0, blur: 0 });
+      const fwdA = dirOf(doorYaw, 0), fwdB = dirOf(by, 0), D = opts.dist ?? this.opts.dist ?? .82, fov0 = p.fov;
+      const dur = (opts.dur ?? 1.15) * pace, pulse = this.opts.pulse ?? 6;
+      await this.tween(dur, t => {
+        const e = ease(t);
+        A.off = fwdA.map(v => v * D * easeOut(Math.min(1, t * 1.15)));
+        B.off = fwdB.map(v => -v * D * (1 - e));
+        A.blur = Math.sin(Math.PI * t) * .10 * rush; B.blur = Math.sin(Math.PI * t) * .08 * rush;
+        p.alphaB = clamp((t - .28) / .5, 0, 1); p.alphaB = p.alphaB * p.alphaB * (3 - 2 * p.alphaB);
+        p.fov = fov0 + Math.sin(Math.PI * t) * pulse;
+        B.pitch = lerp(A.pitch, 0, e) ; B.yaw = by;
+      });
+      // swap
+      p.set(A, hB); Object.assign(A, { yaw: by, pitch: B.pitch, off: [0, 0, 0], blur: 0, k: 0 });
+      p.alphaB = 0; p.fov = fov0; Object.assign(B, { off: [0, 0, 0], blur: 0 });
+      this.cur = this.rooms.get(j); this.prefetch(j);
+      this.busy = false;
+      if (this.onroom) this.onroom(this.cur);
+    }
+    /* crossfade to a room that has no door link (or another component) */
+    async cut(j, yaw = 0, dur = .9) {
+      if (this.busy) return; this.busy = true;
+      const p = this.p, A = p.A, B = p.B, hB = this.tex(j); await hB.promise;
+      p.set(B, hB); Object.assign(B, { yaw, pitch: 0, k: 0, off: [0, 0, 0] });
+      const fov0 = p.fov;
+      await this.tween(dur, t => {
+        const e = ease(t); p.alphaB = e; A.off = dirOf(A.yaw, 0).map(v => v * .35 * e);
+        B.off = dirOf(yaw, 0).map(v => -v * .3 * (1 - e)); p.fov = fov0 + Math.sin(Math.PI * t) * 4;
+      });
+      p.set(A, hB); Object.assign(A, { yaw, pitch: 0, off: [0, 0, 0] }); p.alphaB = 0; p.fov = fov0;
+      this.cur = this.rooms.get(j); this.prefetch(j); this.busy = false;
+      if (this.onroom) this.onroom(this.cur);
+    }
+    tween(sec, f) {
+      return new Promise(res => {
+        const t0 = performance.now();
+        const step = now => { const t = Math.min(1, (now - t0) / (sec * 1000)); f(t); t < 1 ? requestAnimationFrame(step) : res(); };
+        requestAnimationFrame(step);
+      });
+    }
+    /* drag to look, wheel/pinch zoom */
+    attach(el) {
+      const p = this.p; let lx = 0, ly = 0, id = null, moved = 0;
+      el.addEventListener('pointerdown', e => { id = e.pointerId; lx = e.clientX; ly = e.clientY; moved = 0; this.dragging = true; el.setPointerCapture(id); this.vel = 0; this.vy = 0; });
+      el.addEventListener('pointermove', e => {
+        if (e.pointerId !== id) return;
+        const s = p.fov * D2R / el.clientHeight; const dx = e.clientX - lx, dy = e.clientY - ly;
+        moved += Math.abs(dx) + Math.abs(dy);
+        if (!this.busy) { p.A.yaw -= dx * s; p.A.pitch = clamp(p.A.pitch + dy * s, -1.3, 1.3); }
+        this.vel = -dx * s; this.vy = dy * s; lx = e.clientX; ly = e.clientY;
+      });
+      const up = e => { if (e.pointerId !== id) return; id = null; this.dragging = false; this.lastMoved = moved; };
+      el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+      el.addEventListener('wheel', e => { if (this.opts.wheelZoom === false) return; e.preventDefault(); p.fov = clamp(p.fov + e.deltaY * .04, 35, 100); }, { passive: false });
+    }
+    idle(dt) {
+      const A = this.p.A;
+      if (this.busy || this.dragging) return;
+      A.yaw += this.vel; A.pitch = clamp(A.pitch + this.vy, -1.3, 1.3);
+      this.vel *= .92; this.vy *= .9;
+      if (Math.abs(this.vel) < 1e-4) A.yaw += this.auto * dt;
+    }
+  }
+
+  G.PanoKit = { Pano, Tour, basis, dirOf, wrapPi, clamp, ease, easeOut, lerp, D2R };
+})(window);
+
+</script>
+<script>
+(async function(){
+'use strict';
+const MEDIA = window.MEDIA_BASE || '../../media/noe-valley-victorian';
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const K = window.PanoKit;
+const $ = s => document.querySelector(s);
+const clamp = (x,a,b) => Math.min(b, Math.max(a, x));
+const lerp = (a,b,t) => a + (b-a)*t;
+const sstep = t => t*t*(3-2*t);
+const easeIO = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2;
+const NOW = new Date().getFullYear();
+
+const PERIOD = {1:'The Dining Room',2:'The Front Steps',3:'The Front Hall',4:'The Parlour',5:'The Conservatory',6:'The Kitchen',
+  7:'The Breakfast Room',8:'The Hall',9:'The Deck',10:'The Principal Bedchamber',11:'The Bathing Room',12:'The Powder Room',
+  13:'The Landing',14:'The Grand Staircase',15:'The Lower Hall',16:'The Mud Room',17:'The Second Bedchamber',18:'The Third Bedchamber',
+  19:'The Sitting Room',20:'The Second Bath',21:'The First Bedchamber',22:'The Study',23:'The First Bath',24:'The Laundry',
+  25:'The Front Garden',26:'The Fire Pit',27:'The Garden',28:'The Garden Deck',29:'The Front'};
+/* still crops rendered from the panoramas: [yaw, pitch, vertical fov] */
+const ALBUM = [
+  {i:4,  no:2,  view:[0.12,-0.08,72], r:-.9, b:'',      note:'Expansive living room with gas fireplace.'},
+  {i:1,  no:3,  view:[-0.3,-0.2,76],  r:.7,  b:'choc',  note:'The gracious formal dining room.'},
+  {i:6,  no:4,  view:[0.42,-0.12,72], r:-.4, b:'ebony', note:'State-of-the-art chef’s kitchen, custom designed. Countertop: granite.', tag:'Tour note'},
+  {i:7,  no:5,  view:[1.22,-0.06,72], r:.5,  b:'choc',  note:'The main level is completed with a breakfast room.'},
+  {i:5,  no:6,  view:[-0.1,-0.12,76], r:-.7, b:'',      note:'Soaring ceilings and oversized rooms on the main level.'},
+  {i:14, no:7,  view:[0.55,-0.22,74], r:.8,  b:'ebony', note:'The grand staircase, down to the lower floor.'},
+  {i:10, no:8,  view:[2.72,-0.1,72],  r:-.5, b:'choc',  note:'A spectacular master bedroom suite.'},
+  {i:11, no:9,  view:[3.02,-0.1,70],  r:.6,  b:'',      note:'Off the principal bedchamber.'},
+  {i:27, no:10, view:[0.4,-0.08,74],  r:-.8, b:'ebony', note:'Lush, verdant landscaping.'}
+];
+/* plan hotspots in % of the drawing: only rooms the plan and the tour clearly share */
+const PLAN = [
+  {k:'A', i:19, label:'Family Room', x:41, y:3.5, w:28, h:19.6, ky:72},
+  {k:'B', i:16, label:'Mud Room', x:41, y:23.8, w:13.4, h:6.4, kx:14},
+  {k:'C', i:15, label:'Hallway Down', x:54.6, y:30.5, w:6.4, h:31.5, ky:20},
+  {k:'D', i:24, label:'Laundry Room', x:61.6, y:41.6, w:23.4, h:8.8, kx:88},
+  {k:'E', i:28, label:'Deck', mod:'Deck, toured as Patio 1', ky:70, x:9.8, y:14.6, w:30, h:25.4}
+];
+
+const L = await (await fetch(MEDIA + '/layout.json')).json();
+const ROOMS = new Map(L.rooms.map(r => [r.i, r]));
+const clean = n => n.replace(/([a-z])(\d)/gi, '$1 $2').replace(/\s+/g,' ').trim();
+const period = i => PERIOD[i] || clean(ROOMS.get(i)?.name || '');
+const plateOf = i => (ALBUM.find(a => a.i === i) || {}).no;
+
+/* ---------------- hero: the albumen print ---------------- */
+const heroImg = $('#heroImg'), heroCanvas = $('#heroCanvas'), heroPrint = $('#heroPrint');
+heroImg.src = MEDIA + '/29-sm.jpg';
+heroImg.style.filter = RM ? 'sepia(1)' : 'brightness(3) sepia(1)';
+let hp = null, heroTex = null;
+const tray = { expo: RM ? 1 : 7, on: !RM };
+let T = 0, dragged = false;
+try {
+  hp = new K.Pano(heroCanvas, { fov: 60, maxDpr: 1.5, look: { develop: 1, vig: .6, grain: .06, expo: tray.expo, nadir: 0, sat: .9 } });
+  heroTex = hp.load(MEDIA + '/29.jpg', MEDIA + '/29-sm.jpg');
+  heroTex.promise.then(h => {
+    hp.set(hp.A, h); hp.A.flatR = [0, 0, 1.08, h.w / h.h];
+    requestAnimationFrame(() => { heroCanvas.classList.add('on'); startTray(); });
+  });
+} catch (e) { hp = null; heroImg.style.transition = 'filter 5s'; requestAnimationFrame(() => applyT()); }
+
+function startTray(){
+  if (RM) { tray.expo = 1; if (hp) hp.A.flatR[2] = 1.005; applyT(); return; }
+  const t0 = performance.now(), dur = 5200;
+  const step = now => {
+    if (!tray.on) return;
+    const k = clamp((now - t0) / dur, 0, 1);
+    tray.expo = lerp(7, 1, 1 - Math.pow(1 - k, 2.2));
+    if (hp) hp.A.flatR[2] = lerp(1.08, 1.005, sstep(k));
+    applyT();
+    if (k < 1) requestAnimationFrame(step); else tray.on = false;
+  };
+  requestAnimationFrame(step);
+}
+const rule = $('#timeRule'), readout = $('#readout');
+function yearOf(t){ return t >= .995 ? 'today' : String(Math.round(1893 + t * (NOW - 1893))); }
+function applyT(){
+  const d = 1 - sstep(T);
+  heroPrint.style.setProperty('--paper', (d * .62).toFixed(3));
+  heroPrint.style.setProperty('--fox', (.2 + d * .8).toFixed(3));
+  if (hp) Object.assign(hp.look, { develop: d, sat: lerp(1.05, .85, d), grain: lerp(.012, .06, d), vig: lerp(.22, .62, d), warm: lerp(.1, 0, d), expo: tray.expo });
+  else heroImg.style.filter = `sepia(${d}) contrast(${1 - d * .1})`;
+  const y = yearOf(T);
+  readout.textContent = y === 'today' ? String(NOW) : y;
+  readout.parentElement.style.setProperty('--t', T.toFixed(4));
+  rule.value = Math.round(T * 1000);
+  rule.setAttribute('aria-valuetext', y);
+}
+rule.addEventListener('input', () => {
+  dragged = true; T = rule.value / 1000;
+  if (tray.on) { tray.on = false; tray.expo = 1; }
+  applyT();
+});
+applyT();
+/* pause the hero print when it is off screen */
+let heroVisible = true;
+new IntersectionObserver(es => { heroVisible = es[0].isIntersecting; syncHero(); }, { threshold: 0 }).observe(heroPrint);
+function syncHero(){
+  if (!hp || !heroTex) return;
+  const run = heroVisible && !viewerOpen;
+  hp.A.tex = run ? heroTex : null;
+}
+
+/* ---------------- list of plates + album ---------------- */
+const list = $('#plateList');
+const addPlate = (n, t, m, href) => {
+  const li = document.createElement('li');
+  li.innerHTML = `<a href="${href}"><span class="n">No. ${n}</span><span class="t">${t}</span><span class="dots"></span><span class="m">${m}</span></a>`;
+  list.appendChild(li);
+};
+addPlate(1, 'The Front', 'Facade', '#top');
+const cards = $('#cards');
+for (const a of ALBUM) {
+  const r = ROOMS.get(a.i), modern = clean(r.name), name = period(a.i);
+  addPlate(a.no, name, modern, '#plate-' + a.no);
+  const f = document.createElement('figure');
+  f.className = 'cc'; f.id = 'plate-' + a.no; f.style.setProperty('--r', a.r + 'deg');
+  f.innerHTML = `
+    <button class="open mount" type="button" aria-label="Open ${name} (${modern}) in 360">
+      <span class="board ${a.b}">
+        <span class="plate-no">No. ${a.no}</span>
+        <span class="print"><img loading="lazy" decoding="async" src="assets/still-${String(a.i).padStart(2,'0')}.jpg" alt="${name}: ${modern}"><span class="paper"></span><span class="fox"></span><span class="gloss"></span><span class="hint">Stand in the room</span></span>
+        <span class="imprint"><span class="who">Natalie Simmons</span><span class="where">San Francisco</span></span>
+      </span>
+    </button>
+    <figcaption>
+      <p class="cap"><span class="no">No. ${a.no}.</span> ${name}.</p>
+      <span class="mod">${modern}</span>
+      <p class="note">${a.tag ? `<span class="tag">${a.tag}</span>` : ''}${a.note}</p>
+    </figcaption>`;
+  cards.appendChild(f);
+  a.el = f; a.btn = f.querySelector('.open'); a.printEl = f.querySelector('.print');
+  a.btn.addEventListener('click', () => openRoom(a.i, { from: a.printEl, view: a.view, dev: +getComputedStyle(f).getPropertyValue('--dev') || 0, card: a, match: true }));
+}
+addPlate(11, 'Plan of the Lower Floor', 'Plan', '#plan');
+
+/* ---------------- plan plate ---------------- */
+const planImg = $('#planImg'), planWrap = $('#planWrap'), legend = $('#legend');
+planImg.src = 'assets/plan-ink.png'; /* the artist's plan (media/floorplan.jpg) re-inked in sepia */
+for (const p of PLAN) {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'hs';
+  Object.assign(b.style, { left: p.x + '%', top: p.y + '%', width: p.w + '%', height: p.h + '%' });
+  if (p.kx) b.style.setProperty('--kx', p.kx + '%'); if (p.ky) b.style.setProperty('--ky', p.ky + '%');
+  b.innerHTML = `<span class="key" aria-hidden="true">${p.k}</span>`;
+  b.setAttribute('aria-label', `Open ${p.label} in 360`);
+  b.addEventListener('click', () => openRoom(p.i, { from: b, dev: .4, view: [0, 0, 75] }));
+  planWrap.appendChild(b);
+  const li = document.createElement('li'), lb = document.createElement('button');
+  lb.type = 'button';
+  lb.innerHTML = `<span class="k">${p.k}.</span><span class="t">${period(p.i)}</span><span class="m">${p.mod || p.label}</span>`;
+  lb.addEventListener('click', () => openRoom(p.i, { from: b, dev: .4, view: [0, 0, 75] }));
+  lb.addEventListener('mouseenter', () => b.classList.add('lit')); lb.addEventListener('mouseleave', () => b.classList.remove('lit'));
+  lb.addEventListener('focus', () => b.classList.add('lit')); lb.addEventListener('blur', () => b.classList.remove('lit'));
+  li.appendChild(lb); legend.appendChild(li);
+}
+
+/* ---------------- scroll: develop the hero and the cards ---------------- */
+const hero = $('#top');
+let ticking = false;
+function onScroll(){
+  ticking = false;
+  const vh = innerHeight;
+  const range = Math.max(1, hero.offsetHeight - vh);
+  const p = clamp(scrollY / (range * .85), 0, 1);
+  if (scrollY < hero.offsetHeight && (!dragged || scrollY > 4)) {
+    dragged = false;
+    if (tray.on && p > .02) { tray.on = false; tray.expo = 1; }
+    T = p; applyT();
+  }
+  for (const a of ALBUM) {
+    const top = a.el.getBoundingClientRect().top;
+    const k = clamp((vh * .98 - top) / (vh * .6), 0, 1);
+    a.el.style.setProperty('--wash', clamp(1 - k * 2.4, 0, 1).toFixed(3));
+    a.el.style.setProperty('--dev', clamp(1 - (k - .25) / .75, 0, 1).toFixed(3));
+  }
+}
+addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+addEventListener('resize', onScroll);
+onScroll();
+
+/* gentle reveal of text blocks */
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+document.querySelectorAll('.rise').forEach(el => io.observe(el));
+
+/* ---------------- the opened print: a live 360 room ---------------- */
+const viewer = $('#viewer'), vc = $('#vc'), marks = $('#marks'), vTime = $('#vTime'), vHint = $('#vHint');
+let vp = null, tour = null, viewerOpen = false, opening = false, ctx = null, devTarget = 0, lastT = 0, hintTimer = 0;
+const PITCH = 1; /* layout.json pitch is + up, same as the engine */
+function initViewer(){
+  if (vp) return true;
+  try {
+    vp = new K.Pano(vc, { fov: 75, look: { vig: .28, grain: .02, nadir: 1, develop: 0 } });
+  } catch (e) { vp = null; return false; }
+  tour = new K.Tour(vp, L, MEDIA, { auto: RM ? 0 : .008, pace: 1.9, dist: .5, blur: 0, pulse: 1.5 });
+  tour.attach(vc);
+  tour.onroom = r => { setPlaque(r); buildMarks(r); };
+  vp.onframe = now => {
+    const dt = lastT ? Math.min(.05, (now - lastT) / 1000) : 0; lastT = now;
+    if (!viewerOpen) return;
+    tour.idle(dt);
+    if (!opening) vp.look.develop = lerp(vp.look.develop, devTarget, 1 - Math.pow(.02, dt));
+    placeMarks();
+  };
+  vTime.addEventListener('input', () => { devTarget = 1 - vTime.value / 1000; if (RM) vp.look.develop = devTarget; });
+  vc.addEventListener('keydown', e => {
+    const s = .12;
+    if (e.key === 'ArrowLeft') vp.A.yaw -= s; else if (e.key === 'ArrowRight') vp.A.yaw += s;
+    else if (e.key === 'ArrowUp') vp.A.pitch = clamp(vp.A.pitch + s, -1.2, 1.2); else if (e.key === 'ArrowDown') vp.A.pitch = clamp(vp.A.pitch - s, -1.2, 1.2);
+    else return;
+    e.preventDefault();
+  });
+  vc.addEventListener('pointerdown', () => { vHint.style.opacity = 0; });
+  return true;
+}
+function setPlaque(r){
+  const no = plateOf(r.i);
+  const pk = PLAN.find(p => p.i === r.i);
+  $('#vNo').textContent = r.i === 2 ? 'No. 1.' : no ? `No. ${no}.` : pk ? `No. 11, key ${pk.k}.` : 'The house';
+  $('#vTitle').textContent = period(r.i) + '.';
+  $('#vMod').textContent = clean(r.name);
+}
+let markEls = [];
+function buildMarks(r){
+  marks.innerHTML = ''; markEls = [];
+  for (const l of r.links) {
+    if (!ROOMS.has(l.to)) continue;
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'door';
+    b.innerHTML = `<span class="ring" aria-hidden="true"></span><span class="lbl">${period(l.to)}</span>`;
+    b.setAttribute('aria-label', `Walk to ${period(l.to)} (${clean(ROOMS.get(l.to).name)})`);
+    b.addEventListener('click', () => go(l.to));
+    marks.appendChild(b); markEls.push({ el: b, yaw: l.yaw, pitch: l.pitch * PITCH });
+  }
+  for (const n of (r.notes || [])) {
+    if (!n.text || /^https?:/i.test(n.text.trim())) continue;
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'door note';
+    const title = n.title.charAt(0).toUpperCase() + n.title.slice(1);
+    b.innerHTML = `<span class="ring" aria-hidden="true">†</span><span class="lbl"><b>${title}</b>${n.text}</span>`;
+    b.setAttribute('aria-label', `Note: ${title}. ${n.text}`);
+    b.setAttribute('aria-expanded', 'false');
+    const rec = { el: b, yaw: n.yaw, pitch: n.pitch * PITCH };
+    b.addEventListener('click', () => { const s = b.classList.toggle('show'); rec.lw = 0; b.setAttribute('aria-expanded', String(s)); });
+    marks.appendChild(b); markEls.push(rec);
+  }
+}
+function placeMarks(){
+  const busy = tour.busy;
+  marks.classList.toggle('hide', busy || opening);
+  if (busy || opening) return;
+  const w = vc.clientWidth, h = vc.clientHeight;
+  for (const m of markEls) {
+    const p = vp.project(m.yaw, m.pitch);
+    if (!p || p.x < 30 || p.x > w - 30 || p.y < 60 || p.y > h - 40) { m.el.style.visibility = 'hidden'; continue; }
+    m.el.style.visibility = 'visible';
+    m.el.style.transform = `translate(${p.x.toFixed(1)}px,${p.y.toFixed(1)}px) translate(-50%,-15px)`;
+    if (!m.lbl) { m.lbl = m.el.querySelector('.lbl'); }
+    const half = (m.lw ||= m.lbl.offsetWidth) / 2;
+    if (half) { const sh = clamp(p.x, half + 10, w - half - 10) - p.x; m.lbl.style.transform = sh ? `translateX(${sh.toFixed(1)}px)` : ''; }
+  }
+}
+async function go(j){
+  if (!tour || tour.busy) return;
+  const i = tour.cur.i;
+  if (RM || !tour.link(i, j)) {
+    const l = tour.link(i, j);
+    const y = l ? (tour.carry(i, j, l.yaw) ?? 0) : 0;
+    await tour.cut(j, y, RM ? .01 : 1.5);
+  } else await tour.walk(j);
+}
+function rectOf(el){ const r = el.getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height }; }
+function setGeom(g, rad){
+  Object.assign(viewer.style, { left: g.x + 'px', top: g.y + 'px', width: g.w + 'px', height: g.h + 'px', borderRadius: rad + 'px' });
+  vp.resize();
+}
+async function openRoom(i, o = {}){
+  if (viewerOpen || opening) return;
+  if (!initViewer()) return;
+  opening = true;
+  const btn = o.card && o.card.btn; if (btn) btn.classList.add('loading');
+  const hintEl = btn && btn.querySelector('.hint'); const hint0 = hintEl && hintEl.textContent;
+  if (hintEl) hintEl.textContent = 'Developing';
+  const [yaw, pitch, fov] = o.view || [0, 0, 70];
+  const from = o.from ? rectOf(o.from) : { x: innerWidth / 2 - 40, y: innerHeight / 2 - 30, w: 80, h: 60 };
+  viewer.hidden = false; viewer.classList.remove('full');
+  viewer.style.opacity = o.match ? '1' : '0';
+  setGeom(from, 2);
+  vp.look.develop = o.dev ?? 0; devTarget = 1 - vTime.value / 1000;
+  vp.fov = fov;
+  await tour.show(i, yaw, pitch);
+  setPlaque(tour.cur); buildMarks(tour.cur);
+  if (btn) { btn.classList.remove('loading'); if (hintEl) hintEl.textContent = hint0; }
+  viewerOpen = true; syncHero();
+  ctx = { card: o.card || null, from: o.from || null, startRoom: i, view: o.view, dev0: vp.look.develop };
+  document.body.classList.add('locked');
+  if (o.card) o.card.printEl.style.visibility = 'hidden';
+  const portrait = innerHeight > innerWidth;
+  const fovEnd = portrait ? 100 : 82;
+  const dur = RM ? 0 : 1100;
+  const to = { x: 0, y: 0, w: innerWidth, h: innerHeight };
+  await new Promise(res => {
+    const t0 = performance.now();
+    const step = now => {
+      const k = dur ? clamp((now - t0) / dur, 0, 1) : 1, e = easeIO(k);
+      setGeom({ x: lerp(from.x, 0, e), y: lerp(from.y, 0, e), w: lerp(from.w, to.w, e), h: lerp(from.h, to.h, e) }, lerp(2, 0, e));
+      vp.fov = lerp(fov, fovEnd, e);
+      vp.look.develop = lerp(ctx.dev0, devTarget, sstep(k));
+      if (!o.match) viewer.style.opacity = String(clamp(k * 2.5, 0, 1));
+      k < 1 ? requestAnimationFrame(step) : res();
+    };
+    requestAnimationFrame(step);
+  });
+  Object.assign(viewer.style, { left: '0', top: '0', width: '100%', height: '100%', borderRadius: '0', opacity: '1' });
+  vp.resize();
+  viewer.classList.add('full'); opening = false;
+  vHint.style.opacity = 1; clearTimeout(hintTimer); hintTimer = setTimeout(() => vHint.style.opacity = 0, 6000);
+  $('#vClose').focus({ preventScroll: true });
+}
+async function closeRoom(){
+  if (!viewerOpen || opening || (tour && tour.busy)) return;
+  opening = true; viewer.classList.remove('full');
+  const c = ctx, back = c.card && tour.cur.i === c.startRoom && !RM;
+  const dur = RM ? 0 : (back ? 900 : 450);
+  const from = { x: 0, y: 0, w: innerWidth, h: innerHeight };
+  let to = from;
+  if (back) {
+    to = rectOf(c.card.printEl);
+    // ease the view back to the card's crop so it settles into the print
+  }
+  const y0 = vp.A.yaw, p0 = vp.A.pitch, f0 = vp.fov, d0 = vp.look.develop;
+  const dy = back ? K.wrapPi(c.view[0] - y0) : 0;
+  const dev1 = back ? +getComputedStyle(c.card.el).getPropertyValue('--dev') || 0 : d0;
+  await new Promise(res => {
+    const t0 = performance.now();
+    const step = now => {
+      const k = dur ? clamp((now - t0) / dur, 0, 1) : 1, e = easeIO(k);
+      if (back) {
+        setGeom({ x: lerp(0, to.x, e), y: lerp(0, to.y, e), w: lerp(from.w, to.w, e), h: lerp(from.h, to.h, e) }, lerp(0, 2, e));
+        vp.A.yaw = y0 + dy * e; vp.A.pitch = lerp(p0, c.view[1], e); vp.fov = lerp(f0, c.view[2], e);
+        vp.look.develop = lerp(d0, dev1, e);
+      } else viewer.style.opacity = String(1 - e);
+      k < 1 ? requestAnimationFrame(step) : res();
+    };
+    requestAnimationFrame(step);
+  });
+  viewer.hidden = true; viewer.style.opacity = '1';
+  if (c.card) c.card.printEl.style.visibility = '';
+  viewerOpen = false; opening = false; syncHero();
+  document.body.classList.remove('locked');
+  if (vp) vp.A.tex = null; /* stop drawing while closed */
+  const focusEl = c.card ? c.card.btn : (c.from || $('#enter'));
+  focusEl.focus({ preventScroll: true });
+}
+$('#vClose').addEventListener('click', closeRoom);
+addEventListener('keydown', e => { if (e.key === 'Escape' && viewerOpen) closeRoom(); });
+addEventListener('resize', () => { if (viewerOpen && !opening && vp) vp.resize(); });
+$('#enter').addEventListener('click', () => openRoom(2, { from: heroPrint, dev: hp ? hp.look.develop : 0, view: [0.75, .12, 70] }));
+window.__openPlate = n => { const a = ALBUM.find(x => x.no === n); if (a) a.btn.click(); };
+
+/* ---------------- the calling card ---------------- */
+const calling = $('#calling');
+function deckle(fold){
+  const w = calling.offsetWidth, h = calling.offsetHeight; if (!w) return;
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const pts = [], step = 9, amp = 2.2, F = w < 480 ? 40 : 56;
+  const j = () => (rnd() - .5) * 2 * amp;
+  for (let x = 0; x <= w - F; x += step) pts.push([x, Math.max(0, 1.5 + j())]);
+  pts.push([w - F, 0]);
+  pts.push(fold ? [w - F, 0] : [w, 0]); pts.push(fold ? [w, F] : [w, 0]);
+  for (let y = F; y <= h; y += step) pts.push([w - Math.max(0, 1.5 + j()), y]);
+  for (let x = w; x >= 0; x -= step) pts.push([x, h - Math.max(0, 1.5 + j())]);
+  for (let y = h; y >= 0; y -= step) pts.push([Math.max(0, 1.5 + j()), y]);
+  calling.style.setProperty('--fold', F + 'px');
+  calling.style.clipPath = 'polygon(' + pts.map(p => p[0].toFixed(1) + 'px ' + p[1].toFixed(1) + 'px').join(',') + ')';
+}
+let folded = false;
+deckle(false);
+addEventListener('resize', () => deckle(folded));
+new ResizeObserver(() => deckle(folded)).observe(calling);
+$('#callForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target, name = f.name.value.trim(), email = f.email.value.trim();
+  const note = $('#formNote');
+  if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    note.textContent = !name ? 'Please add your name.' : 'Please add an email we can reply to.';
+    (!name ? f.name : f.email).focus(); return;
+  }
+  $('#doneName').textContent = ', ' + name.split(' ')[0];
+  calling.classList.add('sent');
+  requestAnimationFrame(() => { folded = true; deckle(true); calling.classList.add('folded'); });
+});
+})();
+</script>

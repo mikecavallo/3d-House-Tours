@@ -1,0 +1,790 @@
+{
+ "name": "Detached house Natalie Photo",
+ "address": "4250 Twenty-Third Street, San Francisco, CA",
+ "photographer": "Natalie Simmons",
+ "description": "Majestic Noe Valley Queen Anne Victorian Residence Artfully uniting classic style with contemporary luxury 4250 23rd Street is custom made for those who appreciate quality craftsmanship, modern conveniences and an idyllic location. Built in 1893 by architect Wm. Mooser, this home is one of a kind. The main level includes grand proportions from soaring ceilings to oversized rooms. The gracious formal dining room, expansive living room with gas fireplace and state-of-the-art chef\u2019s kitchen have been custom designed. The main level is completed with a breakfast room, powder room, and a spectacular master bedroom suite. Descend the grand staircase to discover 4 bedrooms, 2 baths, a family room, and laundry room. Adjoining the spacious family room is a second master suite which can be combined to create au-pair quarters. Each bedroom has a unique view of the home\u2019s lush, verdant landscaping. The home\u2019s large attic provides abundant storage and an opportunity to explore expansion potential. Distinctively located in the heart of Noe Valley. \n*Square Footage is approximate per artist's drawing\n\n",
+ "rooms": [
+  {
+   "i": 1,
+   "id": "2d191467-0a7f-4747-8d9b-57b4f949d5f1",
+   "name": "Dining Room",
+   "heading": -0.664419843050855,
+   "x": 0.0,
+   "y": 0.0,
+   "comp": 0,
+   "links": [
+    {
+     "to": 5,
+     "yaw": -0.6929,
+     "pitch": -0.1617
+    },
+    {
+     "to": 8,
+     "yaw": 1.8491,
+     "pitch": -0.2739
+    },
+    {
+     "to": 3,
+     "yaw": 3.1038,
+     "pitch": -0.7978
+    },
+    {
+     "to": 4,
+     "yaw": 3.1357,
+     "pitch": -0.1728
+    },
+    {
+     "to": 6,
+     "yaw": 0.9121,
+     "pitch": -0.0752
+    }
+   ],
+   "notes": [
+    {
+     "title": "Chef\u2019s kitchen",
+     "text": "Expansive living room with gas fireplace and state-of-the-art chef\u2019s kitchen have been custom designed.",
+     "yaw": 0.6467379265127438,
+     "pitch": -0.03911117300538436
+    },
+    {
+     "title": "table",
+     "text": "https://view.ricoh360.com/754e5cc3-d9f2-4c7e-ae9d-256ef4413aab/d756490b-0fe5-4b16-9c8a-24399a6645de?thumbnails=true",
+     "yaw": -0.38825643153778344,
+     "pitch": -0.2538235505349782
+    },
+    {
+     "title": "svszdv",
+     "text": "https://www.youtube.com/watch?v=9VbedFHHVIM",
+     "yaw": 1.214081605695224,
+     "pitch": -0.1650274265367493
+    }
+   ],
+   "flat": false
+  },
+  {
+   "i": 2,
+   "id": "556ea253-94be-4e19-9ae3-5bd274f9c5fd",
+   "name": "Entry Way",
+   "heading": -0.14166668420803585,
+   "x": -4.633,
+   "y": -4.113,
+   "comp": 0,
+   "links": [
+    {
+     "to": 26,
+     "yaw": 0.0034,
+     "pitch": -0.1339
+    },
+    {
+     "to": 25,
+     "yaw": 2.1197,
+     "pitch": -0.1917
+    },
+    {
+     "to": 3,
+     "yaw": 1.0888,
+     "pitch": 0.5868
+    },
+    {
+     "to": 1,
+     "yaw": 3.1416,
+     "pitch": 0
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 3,
+   "id": "dc492195-3ff6-49fb-974d-04fec527d9fe",
+   "name": "Foyer",
+   "heading": 2.444697341037747,
+   "x": -1.895,
+   "y": 2.756,
+   "comp": 0,
+   "links": [
+    {
+     "to": 2,
+     "yaw": 1.5912,
+     "pitch": -0.1589
+    },
+    {
+     "to": 4,
+     "yaw": 0.0834,
+     "pitch": -0.3654
+    },
+    {
+     "to": 8,
+     "yaw": -1.5918,
+     "pitch": -0.1207
+    },
+    {
+     "to": 15,
+     "yaw": -1.3228,
+     "pitch": -0.3157
+    },
+    {
+     "to": 1,
+     "yaw": 3.054,
+     "pitch": -0.2407
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 4,
+   "id": "89412cfc-f36d-4eff-95d6-e9ba5ad96dcf",
+   "name": "Living Room",
+   "heading": 2.4632418461462926,
+   "x": -4.654,
+   "y": 5.661,
+   "comp": 0,
+   "links": [
+    {
+     "to": 3,
+     "yaw": -3.0688,
+     "pitch": -0.3674
+    },
+    {
+     "to": 8,
+     "yaw": -2.4534,
+     "pitch": -0.3545
+    },
+    {
+     "to": 1,
+     "yaw": 3.1416,
+     "pitch": 0
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 5,
+   "id": "33dd5dcf-db37-40ff-acaa-89bd5ca3714b",
+   "name": "Sun Room",
+   "heading": -1.4563035996243847,
+   "x": 1.469,
+   "y": -8.83,
+   "comp": 0,
+   "links": [
+    {
+     "to": 6,
+     "yaw": 2.5695,
+     "pitch": -0.1067
+    },
+    {
+     "to": 1,
+     "yaw": -2.9867,
+     "pitch": -0.226
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 6,
+   "id": "554b27c3-9af7-49c8-b2e4-a1f27f52cc05",
+   "name": "Kitchen",
+   "heading": -0.711081910766993,
+   "x": 6.032,
+   "y": 1.135,
+   "comp": 0,
+   "links": [
+    {
+     "to": 5,
+     "yaw": -1.2614,
+     "pitch": -0.096
+    },
+    {
+     "to": 1,
+     "yaw": -1.8714,
+     "pitch": -0.3311
+    },
+    {
+     "to": 7,
+     "yaw": 1.624,
+     "pitch": -0.1158
+    }
+   ],
+   "notes": [
+    {
+     "title": "countertop",
+     "text": "granite",
+     "yaw": 2.986199143710177,
+     "pitch": -0.5229475056185748
+    }
+   ],
+   "flat": false
+  },
+  {
+   "i": 7,
+   "id": "3fd51d6b-8b72-418c-956e-c2dcb74ece19",
+   "name": "Breakfast Room",
+   "heading": 0.047239717836410566,
+   "x": 8.63,
+   "y": 7.004,
+   "comp": 0,
+   "links": [
+    {
+     "to": 8,
+     "yaw": 2.6666,
+     "pitch": -0.3301
+    },
+    {
+     "to": 6,
+     "yaw": -1.9052,
+     "pitch": -0.2041
+    },
+    {
+     "to": 9,
+     "yaw": -0.0951,
+     "pitch": -0.4065
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 8,
+   "id": "55ac8e05-6466-4d24-a7fc-f96282a2a13a",
+   "name": "Hallway Upstairs",
+   "heading": 0.6123963803305754,
+   "x": 2.911,
+   "y": 7.101,
+   "comp": 0,
+   "links": [
+    {
+     "to": 10,
+     "yaw": 0.073,
+     "pitch": -0.1869
+    },
+    {
+     "to": 7,
+     "yaw": -0.7407,
+     "pitch": -0.2963
+    },
+    {
+     "to": 13,
+     "yaw": 2.3164,
+     "pitch": -0.3589
+    },
+    {
+     "to": 14,
+     "yaw": 1.5074,
+     "pitch": -0.454
+    },
+    {
+     "to": 1,
+     "yaw": -2.8449,
+     "pitch": -0.2736
+    },
+    {
+     "to": 3,
+     "yaw": -3.0445,
+     "pitch": -0.0501
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 9,
+   "id": "d756490b-0fe5-4b16-9c8a-24399a6645de",
+   "name": "Deck",
+   "heading": -2.543751992762867,
+   "x": 13.134,
+   "y": 5.685,
+   "comp": 0,
+   "links": [
+    {
+     "to": 28,
+     "yaw": 1.2056,
+     "pitch": -0.9878
+    },
+    {
+     "to": 7,
+     "yaw": -0.5783,
+     "pitch": -0.2067
+    },
+    {
+     "to": 27,
+     "yaw": 2.944,
+     "pitch": -0.4586
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 10,
+   "id": "2c5aa8ac-fbdf-4c84-8071-fbc6c474f948",
+   "name": "Master Suite",
+   "heading": 3.05023695705982,
+   "x": 8.551,
+   "y": 11.712,
+   "comp": 0,
+   "links": [
+    {
+     "to": 8,
+     "yaw": 0.7768,
+     "pitch": -0.2385
+    },
+    {
+     "to": 11,
+     "yaw": -0.8211,
+     "pitch": -0.19
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 11,
+   "id": "b325afb1-a6c0-4477-83dc-1f448702c115",
+   "name": "Master Bathroom",
+   "heading": -1.920660397433856,
+   "x": 4.557,
+   "y": 16.877,
+   "comp": 0,
+   "links": [
+    {
+     "to": 10,
+     "yaw": 1.0082,
+     "pitch": -0.3008
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 12,
+   "id": "9f95f826-6ed2-4d4d-85e9-ff3674c83a90",
+   "name": "Powder Room",
+   "heading": 1.5844305917271502,
+   "x": -7.683,
+   "y": 7.471,
+   "comp": 0,
+   "links": [
+    {
+     "to": 13,
+     "yaw": -1.6293,
+     "pitch": -0.5556
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 13,
+   "id": "aba76cbe-a991-454c-9538-30e9aaa3438b",
+   "name": "Mezzanine",
+   "heading": 1.9999653714264216,
+   "x": -1.911,
+   "y": 7.211,
+   "comp": 0,
+   "links": [
+    {
+     "to": 8,
+     "yaw": -2.4989,
+     "pitch": -0.2932
+    },
+    {
+     "to": 12,
+     "yaw": 1.0967,
+     "pitch": -0.1695
+    },
+    {
+     "to": 14,
+     "yaw": -0.655,
+     "pitch": -0.5873
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 14,
+   "id": "4cc16438-8ca1-4243-ab2b-b9b4b1717a07",
+   "name": "Stairs",
+   "heading": -2.2699344195044837,
+   "x": 0.739,
+   "y": 12.023,
+   "comp": 0,
+   "links": [
+    {
+     "to": 13,
+     "yaw": 0.1872,
+     "pitch": -0.107
+    },
+    {
+     "to": 8,
+     "yaw": 1.411,
+     "pitch": 0.0224
+    },
+    {
+     "to": 15,
+     "yaw": 1.5828,
+     "pitch": -0.6981
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 15,
+   "id": "c81c1f0c-7732-4dec-ae4b-88ebaa734f0e",
+   "name": "Hallway Down",
+   "heading": 2.4264472544849855,
+   "x": 0.628,
+   "y": 9.979,
+   "comp": 0,
+   "links": [
+    {
+     "to": 14,
+     "yaw": -0.0923,
+     "pitch": 0.1242
+    },
+    {
+     "to": 16,
+     "yaw": -2.3829,
+     "pitch": -0.3497
+    },
+    {
+     "to": 19,
+     "yaw": -2.0542,
+     "pitch": -0.3661
+    },
+    {
+     "to": 22,
+     "yaw": 1.7385,
+     "pitch": 0.0078
+    },
+    {
+     "to": 21,
+     "yaw": 1.8601,
+     "pitch": -0.2775
+    },
+    {
+     "to": 17,
+     "yaw": 2.1996,
+     "pitch": -0.3524
+    },
+    {
+     "to": 24,
+     "yaw": 1.7646,
+     "pitch": -0.6133
+    },
+    {
+     "to": 23,
+     "yaw": 1.4183,
+     "pitch": -0.2699
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 16,
+   "id": "5794eac1-1dc6-49a0-9fed-4705426adbb4",
+   "name": "Mud Room",
+   "heading": -1.0975241346588414,
+   "x": 4.948,
+   "y": 9.119,
+   "comp": 0,
+   "links": [
+    {
+     "to": 15,
+     "yaw": -2.4467,
+     "pitch": -0.3893
+    },
+    {
+     "to": 19,
+     "yaw": 2.4977,
+     "pitch": -0.3918
+    },
+    {
+     "to": 28,
+     "yaw": 0.1402,
+     "pitch": -0.2005
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 17,
+   "id": "3f9644af-afd1-4e57-ba23-a49b034009d1",
+   "name": "Bedroom2",
+   "heading": -1.7982119848112796,
+   "x": 0.272,
+   "y": 5.858,
+   "comp": 0,
+   "links": [
+    {
+     "to": 15,
+     "yaw": -3.0005,
+     "pitch": -0.3649
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 18,
+   "id": "5b815142-eba0-4876-ae53-3b77b689ab32",
+   "name": "Bedroom 3",
+   "heading": 0.0,
+   "x": -0.0,
+   "y": 0.0,
+   "comp": 1,
+   "links": [
+    {
+     "to": 15,
+     "yaw": -1.4717,
+     "pitch": -0.1919
+    },
+    {
+     "to": 20,
+     "yaw": -2.1048,
+     "pitch": -0.3224
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 19,
+   "id": "1af40e74-35b9-41f8-8ff2-4e1b86c1be52",
+   "name": "Family Room",
+   "heading": -1.310600740987241,
+   "x": 6.07,
+   "y": 13.377,
+   "comp": 0,
+   "links": [
+    {
+     "to": 15,
+     "yaw": -1.0996,
+     "pitch": -0.1942
+    },
+    {
+     "to": 16,
+     "yaw": -0.7899,
+     "pitch": -0.2675
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 20,
+   "id": "6ab16cb5-45ec-4e2d-8021-183fbafa2768",
+   "name": "Bathroom 2",
+   "heading": -0.979695373655181,
+   "x": -2.201,
+   "y": -3.722,
+   "comp": 1,
+   "links": [
+    {
+     "to": 18,
+     "yaw": 2.0165,
+     "pitch": -0.369
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 21,
+   "id": "2a104aff-0335-43ad-a972-b2bbc9b34166",
+   "name": "Bedroom 1",
+   "heading": -3.0769074722670235,
+   "x": -1.819,
+   "y": 4.584,
+   "comp": 0,
+   "links": [
+    {
+     "to": 15,
+     "yaw": -2.0613,
+     "pitch": -0.2374
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 22,
+   "id": "1ae89723-7860-40b6-b645-78091c0ad785",
+   "name": "Office",
+   "heading": -2.672920625589448,
+   "x": -6.076,
+   "y": 7.17,
+   "comp": 0,
+   "links": [
+    {
+     "to": 25,
+     "yaw": 1.3503,
+     "pitch": -0.2647
+    },
+    {
+     "to": 15,
+     "yaw": -2.6269,
+     "pitch": -0.2408
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 23,
+   "id": "8d8ad26b-4288-4204-9f6d-66200ae4e3a7",
+   "name": "Bathroom 1",
+   "heading": 2.225531869636794,
+   "x": -3.62,
+   "y": 6.378,
+   "comp": 0,
+   "links": [
+    {
+     "to": 15,
+     "yaw": -1.5224,
+     "pitch": -0.273
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 24,
+   "id": "51830b48-94a1-4d2c-a487-5f81021a16f7",
+   "name": "Laundry",
+   "heading": -2.0352885323842584,
+   "x": -0.809,
+   "y": 7.476,
+   "comp": 0,
+   "links": [
+    {
+     "to": 15,
+     "yaw": 3.0848,
+     "pitch": -0.4097
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 25,
+   "id": "d1a52265-d028-4d4b-8ad4-c5002de2e36d",
+   "name": "Front Yard",
+   "heading": -0.5679235615636635,
+   "x": -6.214,
+   "y": 1.774,
+   "comp": 0,
+   "links": [
+    {
+     "to": 2,
+     "yaw": -0.5556,
+     "pitch": -0.1999
+    },
+    {
+     "to": 22,
+     "yaw": 2.3469,
+     "pitch": -0.1943
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 26,
+   "id": "786123b5-3ce3-455d-ad27-4e65951c6d86",
+   "name": "Fire Pit",
+   "heading": -2.5947987025066754,
+   "x": 3.874,
+   "y": -3.787,
+   "comp": 0,
+   "links": [
+    {
+     "to": 28,
+     "yaw": -3.1095,
+     "pitch": -0.1776
+    },
+    {
+     "to": 2,
+     "yaw": -0.6724,
+     "pitch": -0.2588
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 27,
+   "id": "2923d0fc-5727-4f5d-ae09-c81822f6ec4d",
+   "name": "Garden 2",
+   "heading": -0.02305399822952303,
+   "x": 17.089,
+   "y": 6.887,
+   "comp": 0,
+   "links": [
+    {
+     "to": 28,
+     "yaw": -2.4587,
+     "pitch": -0.2027
+    },
+    {
+     "to": 9,
+     "yaw": -2.8488,
+     "pitch": 0.3531
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 28,
+   "id": "795785cd-1b7a-4206-8926-25db6870d7fb",
+   "name": "Patio 1",
+   "heading": -1.039944247077151,
+   "x": 10.426,
+   "y": 2.099,
+   "comp": 0,
+   "links": [
+    {
+     "to": 16,
+     "yaw": -3.1391,
+     "pitch": -0.1775
+    },
+    {
+     "to": 27,
+     "yaw": 1.5692,
+     "pitch": -0.1573
+    },
+    {
+     "to": 9,
+     "yaw": 3.0422,
+     "pitch": 1.0334
+    },
+    {
+     "to": 26,
+     "yaw": -1.5101,
+     "pitch": -0.2089
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 29,
+   "id": "ece9094c-e5c8-443f-88ab-a542f2b91fd0",
+   "name": "Facade",
+   "heading": 0.0,
+   "x": -0.0,
+   "y": -0.0,
+   "comp": 2,
+   "links": [],
+   "notes": [],
+   "flat": true
+  }
+ ]
+}

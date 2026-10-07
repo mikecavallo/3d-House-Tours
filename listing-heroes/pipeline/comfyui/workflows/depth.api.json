@@ -1,0 +1,94 @@
+{
+  "85": {
+    "inputs": {
+      "image": "retro_futuristic_home.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "IN image"
+    }
+  },
+  "14:7": {
+    "inputs": {
+      "da3_geometry": [
+        "14:5",
+        0
+      ],
+      "output": "depth",
+      "output.normalization": "raw",
+      "output.apply_sky_clip": false
+    },
+    "class_type": "DA3Render",
+    "_meta": {
+      "title": "Render Depth Anything 3"
+    }
+  },
+  "14:5": {
+    "inputs": {
+      "resolution": 1008,
+      "resize_method": "upper_bound_resize",
+      "mode": "mono",
+      "da3_model": [
+        "14:82",
+        0
+      ],
+      "image": [
+        "85",
+        0
+      ]
+    },
+    "class_type": "DA3Inference",
+    "_meta": {
+      "title": "IN resolution"
+    }
+  },
+  "14:82": {
+    "inputs": {
+      "model_name": "depth_anything_3_mono_large.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "LoadDA3Model",
+    "_meta": {
+      "title": "Load Depth Anything 3"
+    }
+  },
+  "20": {
+    "class_type": "DA3Render",
+    "inputs": {
+      "da3_geometry": [
+        "14:5",
+        0
+      ],
+      "output": "sky_mask"
+    }
+  },
+  "90": {
+    "class_type": "SaveImageAdvanced",
+    "inputs": {
+      "images": [
+        "14:7",
+        0
+      ],
+      "filename_prefix": "listing-heroes/depth",
+      "format": "exr",
+      "format.bit_depth": "32-bit float",
+      "format.input_color_space": "linear"
+    },
+    "_meta": {
+      "title": "OUT"
+    }
+  },
+  "95": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "20",
+        0
+      ],
+      "filename_prefix": "listing-heroes/sky"
+    },
+    "_meta": {
+      "title": "OUT sky"
+    }
+  }
+}

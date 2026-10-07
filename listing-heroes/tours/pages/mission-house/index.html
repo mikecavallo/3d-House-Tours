@@ -1,0 +1,558 @@
+<title>The Mission House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Azeret+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one sticky stage (WebGL) under a long scroll; the house starts as a planet, unrolls, and is walked
+   room to room on the real door graph; a live plan tracks you. Then a free walk, the facts, a showing form. */
+:root {
+  color-scheme: dark;
+  --space: #0e1420;      /* night over the Mission */
+  --navy: #1a2537;       /* the kitchen cabinets */
+  --line: #2b3a52;
+  --oak: #caa275;        /* white oak floors */
+  --fog: #dde3e8;        /* Karl */
+  --paper: #f2f0eb;
+  --muted: #8f9bad;
+  --persimmon: #e0703a;  /* the orange painting in the great room */
+  --display: "Syne", "Arial Black", "Helvetica Neue", sans-serif;
+  --text: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --mono: "Azeret Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --gutter: clamp(16px, 4vw, 56px);
+}
+* { box-sizing: border-box; }
+html { background: var(--space); }
+body { background: var(--space); color: var(--fog); font-family: var(--text); font-size: 18px; line-height: 1.55; margin: 0; -webkit-font-smoothing: antialiased; }
+a { color: var(--oak); }
+:focus-visible { outline: 2px solid var(--persimmon); outline-offset: 3px; }
+
+/* ---------- stage ---------- */
+#story { position: relative; height: 1400vh; }
+#stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+#stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#stage .scrim { position: absolute; inset: auto 0 0 0; height: 46%; background: linear-gradient(to top, rgba(10, 15, 25, .62), rgba(10, 15, 25, 0)); opacity: 0; transition: opacity .6s; pointer-events: none; }
+#stage .scrim.on { opacity: 1; }
+#stage .poster { position: absolute; inset: 0; background: radial-gradient(60% 60% at 50% 55%, #1d2b44 0%, var(--space) 70%); transition: opacity 1.2s; }
+#stage.ready .poster { opacity: 0; }
+#ring { position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; overflow: visible; pointer-events: none; }
+#ring svg { position: absolute; overflow: visible; }
+#ring text { font-family: var(--display); font-weight: 700; letter-spacing: .32em; fill: var(--paper); text-transform: uppercase; }
+#ring .spin { animation: spin 90s linear infinite; transform-origin: 0 0; }
+@keyframes spin { to { transform: rotate(-360deg); } }
+
+.hero-type { position: absolute; left: var(--gutter); right: var(--gutter); bottom: clamp(24px, 7vh, 72px); display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; pointer-events: none; }
+.hero-type h1 { font-family: var(--display); font-weight: 800; font-size: clamp(40px, 7.4vw, 124px); line-height: .86; letter-spacing: -.02em; margin: 0; color: var(--paper); text-wrap: balance; text-shadow: 0 2px 30px rgba(8, 12, 20, .45); }
+.hero-type h1 span { display: block; font-size: .3em; letter-spacing: .02em; font-weight: 700; color: var(--oak); margin-bottom: .35em; }
+.hero-type h1 { max-width: 7.2em; }
+.hero-type .meta { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--fog); text-align: right; line-height: 1.9; text-shadow: 0 1px 12px rgba(8, 12, 20, .7); }
+.scrollcue { position: absolute; left: 50%; transform: translateX(-50%); bottom: 14px; font-family: var(--mono); font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
+
+/* captions during the walk */
+.cap { position: absolute; left: var(--gutter); bottom: clamp(20px, 6vh, 64px); max-width: min(560px, calc(100% - 2 * var(--gutter))); pointer-events: none; opacity: 0; transform: translateY(14px); transition: opacity .6s, transform .6s; }
+.cap.on { opacity: 1; transform: none; }
+.cap .lvl { font-family: var(--mono); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--oak); display: flex; gap: 12px; align-items: center; }
+.cap .lvl::before { content: ""; width: 28px; height: 1px; background: var(--oak); }
+.cap h2 { font-family: var(--display); font-weight: 800; font-size: clamp(30px, 5.2vw, 72px); line-height: .95; letter-spacing: -.015em; margin: .25em 0 .2em; color: var(--paper); text-shadow: 0 2px 28px rgba(6, 10, 18, .55); text-wrap: balance; }
+.cap p { margin: 0; font-size: clamp(16px, 1.5vw, 20px); color: var(--paper); text-shadow: 0 1px 14px rgba(6, 10, 18, .8); max-width: 34em; }
+
+/* live plan */
+.mini { position: absolute; right: var(--gutter); top: clamp(16px, 4vh, 40px); width: clamp(150px, 17vw, 230px); padding: 12px 12px 10px; background: rgba(14, 20, 32, .74); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(221, 227, 232, .14); opacity: 0; transition: opacity .6s; }
+.mini.on { opacity: 1; }
+.mini header { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.mini header b { color: var(--paper); font-weight: 500; }
+.plate { position: relative; width: 100%; aspect-ratio: var(--ar, .6); overflow: hidden; }
+.plate .img { position: absolute; background-image: var(--plan); background-repeat: no-repeat; background-size: 100% 100%; filter: invert(1) hue-rotate(180deg) brightness(.92); mix-blend-mode: screen; opacity: .8; }
+.plate svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.dot { fill: var(--persimmon); }
+.cone { fill: var(--persimmon); opacity: .32; }
+.pin { fill: var(--fog); opacity: .5; }
+.progress { position: absolute; left: 0; bottom: 0; height: 2px; background: var(--persimmon); width: 0; }
+
+/* ---------- sections ---------- */
+section { padding-inline: var(--gutter); }
+.wrap { max-width: 1240px; margin: 0 auto; }
+.kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--oak); }
+h3.big { font-family: var(--display); font-weight: 800; font-size: clamp(36px, 6vw, 88px); line-height: .92; letter-spacing: -.02em; margin: .2em 0 .35em; color: var(--paper); text-wrap: balance; }
+
+#walk { padding-block: clamp(64px, 10vh, 120px) 40px; }
+.walkhead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 40px; }
+.walkhead p { max-width: 30em; margin: 0; color: var(--fog); }
+.viewer { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px; margin-top: 28px; }
+.vbox { position: relative; aspect-ratio: 16 / 9; min-height: 340px; background: var(--navy); overflow: hidden; touch-action: none; cursor: grab; }
+.vbox:active { cursor: grabbing; }
+.vbox canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.vbox .room { position: absolute; left: 16px; top: 14px; font-family: var(--display); font-weight: 700; font-size: 20px; color: var(--paper); text-shadow: 0 1px 12px rgba(0, 0, 0, .6); pointer-events: none; }
+.vbox .room small { display: block; font-family: var(--mono); font-weight: 400; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--fog); margin-top: 2px; }
+.door { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 6px; background: none; border: 0; padding: 0; color: var(--paper); cursor: pointer; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; text-shadow: 0 1px 8px rgba(0, 0, 0, .9); }
+.door i { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid rgba(242, 240, 235, .9); background: rgba(14, 20, 32, .35); backdrop-filter: blur(3px); display: grid; place-items: center; transition: transform .2s, background .2s; }
+.door i::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--paper); }
+.door span { opacity: 0; transform: translateY(-4px); transition: opacity .2s, transform .2s; white-space: nowrap; }
+.door:hover i, .door:focus-visible i { transform: scale(1.12); background: var(--persimmon); border-color: var(--persimmon); }
+.door:hover span, .door:focus-visible span { opacity: 1; transform: none; }
+.side { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.planbig { position: relative; background: var(--navy); border: 1px solid var(--line); padding: 10px; }
+.planbig .plate { aspect-ratio: var(--ar, .5); max-height: 62vh; margin: 0 auto; }
+.planbig .plate .img { opacity: .9; }
+.planbig circle.pin { cursor: pointer; pointer-events: all; opacity: .55; transition: opacity .2s; }
+.planbig circle.pin:hover { opacity: 1; }
+.levels { display: flex; gap: 6px; flex-wrap: wrap; }
+.levels button, .rooms button { font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--fog); background: transparent; border: 1px solid var(--line); padding: 9px 10px; cursor: pointer; }
+.levels button[aria-pressed="true"] { background: var(--fog); color: var(--space); border-color: var(--fog); }
+.rooms { display: flex; flex-wrap: wrap; gap: 6px; }
+.rooms button[aria-current="true"] { border-color: var(--persimmon); color: var(--paper); }
+.rooms button:hover, .levels button:hover { border-color: var(--fog); }
+
+#home { padding-block: clamp(64px, 10vh, 120px); }
+.facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); margin-top: 32px; }
+.facts div { padding: 18px 16px 18px 0; border-bottom: 1px solid var(--line); }
+.facts b { display: block; font-family: var(--display); font-weight: 800; font-size: clamp(28px, 4vw, 52px); color: var(--paper); line-height: 1; font-variant-numeric: tabular-nums; }
+.facts span { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 80px); margin-top: 48px; }
+.cols p { margin: 0 0 1em; max-width: 34em; color: var(--fog); }
+.cols p:first-child::first-letter { font-family: var(--display); font-weight: 800; float: left; font-size: 3.4em; line-height: .8; margin: .06em .1em 0 0; color: var(--oak); }
+
+#show { padding-block: clamp(56px, 9vh, 110px) 40px; border-top: 1px solid var(--line); }
+form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 28px; max-width: 900px; }
+label { display: flex; flex-direction: column; gap: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+label.full { grid-column: 1 / -1; }
+input, textarea { font: 18px/1.4 var(--text); color: var(--paper); background: transparent; border: 0; border-bottom: 1px solid var(--line); padding: 10px 0; border-radius: 0; }
+input:focus, textarea:focus { outline: none; border-bottom-color: var(--oak); }
+textarea { min-height: 96px; resize: vertical; }
+.send { grid-column: 1 / -1; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.send button { font: 800 15px/1 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--space); background: var(--oak); border: 0; padding: 18px 26px; cursor: pointer; }
+.send button:hover { background: var(--paper); }
+.send output { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; color: var(--oak); }
+footer { padding: 28px var(--gutter) 40px; font-family: var(--mono); font-size: 11px; letter-spacing: .08em; color: var(--muted); border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+@media (max-width: 900px) {
+  .viewer { grid-template-columns: minmax(0, 1fr); }
+  .vbox { aspect-ratio: 4 / 5; min-height: 0; }
+  .side { flex-direction: column; }
+  .planbig { max-width: 420px; }
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cols { grid-template-columns: minmax(0, 1fr); }
+  form { grid-template-columns: minmax(0, 1fr); }
+  .hero-type { flex-direction: column; align-items: flex-start; }
+  .hero-type .meta { text-align: left; }
+  .mini { width: 128px; padding: 8px; }
+  .mini header { font-size: 9px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #ring .spin { animation: none; }
+  .cap, .mini { transition: none; }
+}
+</style>
+
+<div id="story">
+  <div id="stage" aria-label="Scroll to walk through 1146 Florida Street">
+    <div class="poster"></div>
+    <canvas id="sc" aria-hidden="true"></canvas>
+    <div class="scrim" id="scrim"></div>
+    <div id="ring" aria-hidden="true"><svg width="10" height="10"><g class="spin"><defs><path id="orbit" d=""></path></defs><text><textPath href="#orbit" id="ringtext"></textPath></text></g></svg></div>
+    <div class="scrollcue" id="cue">Scroll to unroll the house</div>
+    <div class="hero-type" id="hero">
+      <h1><span>1146 Florida Street</span>The Mission House</h1>
+      <div class="meta">Mission District<br>San Francisco<br>Three levels · 30 views</div>
+    </div>
+    <div class="cap" id="cap"><div class="lvl" id="caplvl"></div><h2 id="caph"></h2><p id="capp"></p></div>
+    <div class="mini" id="mini">
+      <header><span>Plan</span><b id="minilvl">Level 3</b></header>
+      <div class="plate" id="miniplate"><div class="img" id="miniimg"></div>
+        <svg id="minisvg" aria-hidden="true"><path class="cone" id="minicone"></path><circle class="dot" id="minidot" r="4"></circle></svg>
+      </div>
+    </div>
+    <div class="progress" id="prog"></div>
+  </div>
+</div>
+
+<section id="walk">
+  <div class="wrap">
+    <div class="walkhead">
+      <div><div class="kicker">Walk it yourself</div><h3 class="big">Every door is real.</h3></div>
+      <p>Drag to look around. Tap a door to step through it, or pick a room on the plan. The dot and its cone show where you stand and which way you face.</p>
+    </div>
+    <div class="viewer">
+      <div class="vbox" id="vbox" aria-label="360 view. Drag to look around.">
+        <canvas id="vc"></canvas>
+        <div class="room" id="vroom"></div>
+        <div id="doors"></div>
+      </div>
+      <div class="side">
+        <div class="levels" role="group" aria-label="Level">
+          <button type="button" data-lvl="3" aria-pressed="false">Level 3</button>
+          <button type="button" data-lvl="2" aria-pressed="true">Level 2</button>
+          <button type="button" data-lvl="1" aria-pressed="false">Level 1</button>
+        </div>
+        <div class="planbig"><div class="plate" id="bigplate"><div class="img"></div><svg id="bigsvg" viewBox="0 0 1621 2048" preserveAspectRatio="none"></svg></div></div>
+        <div class="rooms" id="roomlist"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="home">
+  <div class="wrap">
+    <div class="kicker">The house</div>
+    <h3 class="big">Victorian outside. Rebuilt inside.</h3>
+    <div class="facts">
+      <div><b>3</b><span>Bedrooms</span></div>
+      <div><b>3.5</b><span>Baths</span></div>
+      <div><b>~3,000</b><span>Square feet</span></div>
+      <div><b>3</b><span>Levels</span></div>
+    </div>
+    <div class="cols">
+      <div>
+        <p>Hidden behind an eye-catching Victorian facade lies 1146 Florida, a three-bedroom, three-and-a-half bath home with nearly 3,000 square feet of living space in the Mission District. Tom McElroy Architecture designed the renovation.</p>
+        <p>Three levels, an open plan from the bay window to the kitchen, and a landscaped garden with a built-in barbecue, fountain, pergola and fire pit.</p>
+      </div>
+      <div>
+        <p>A block from the 24th Street corridor: eateries, coffee shops, and the rest of what makes the Mission the Mission.</p>
+        <p style="font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--muted)">Square footage is approximate, per public records. Plan sizes and dimensions are approximate.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="show">
+  <div class="wrap">
+    <div class="kicker">Private showings</div>
+    <h3 class="big">See it in person.</h3>
+    <form id="f" novalidate>
+      <label>Name<input id="fn" name="name" autocomplete="name" required></label>
+      <label>Email<input id="fe" name="email" type="email" autocomplete="email" required></label>
+      <label class="full">When suits you<textarea id="fm" name="message" placeholder="A weekday evening, or this Saturday morning"></textarea></label>
+      <div class="send"><button type="submit">Request a showing</button><output id="fo" aria-live="polite"></output></div>
+    </form>
+  </div>
+</section>
+
+<footer><span>Concept demo built from the property's 360 tour. 360 photography: Olga Soboleva.</span><span>1146 Florida Street, San Francisco</span></footer>
+
+<script src="../../engine/pano.js"></script>
+<script>
+(async () => {
+const MEDIA = window.MEDIA_BASE || '../../media/mission-house';
+const { Pano, Tour, dirOf, wrapPi, clamp, ease, easeOut, lerp } = PanoKit;
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = s => document.querySelector(s);
+const [L, PLAN] = await Promise.all([fetch(MEDIA + '/layout.json').then(r => r.json()), fetch(MEDIA + '/plan.json').then(r => r.json())]);
+const R = new Map(L.rooms.map(r => [r.i, r]));
+const planURL = `url("${MEDIA}/floorplan.jpg")`;
+document.querySelectorAll('.plate .img').forEach(e => e.style.setProperty('--plan', planURL));
+document.querySelectorAll('.plate .img').forEach(e => e.style.backgroundImage = planURL);
+const NAME = { 1: 'Facade', 2: 'Foyer', 3: 'Living Room', 4: 'Living Room, Fireplace', 5: 'Dining Area', 6: 'Powder Room', 7: 'Great Room', 8: 'Kitchen', 9: 'Kitchen, Garden Side', 10: 'Great Room, Stair Side', 11: 'Family Room', 12: 'Main Stair', 13: 'Upper Landing', 14: 'Home Office', 15: 'View Terrace', 16: 'Main Bedroom', 17: 'Main Bath', 18: 'Main Suite Lounge', 19: 'Upper Stair', 20: 'Lower Stair', 21: 'Lower Landing', 22: 'Media Room', 23: 'Wet Bar', 24: 'Bedroom 2', 25: 'Bath 2', 26: 'Bedroom 3', 27: 'Bath 3', 28: 'Patio', 29: 'Garden', 30: 'Garden, Pergola' };
+const LVL = i => PLAN.rooms[i] ? PLAN.rooms[i][2] : 2;
+const LVLNAME = { 1: 'Level 1 · Garden level', 2: 'Level 2 · Main level', 3: 'Level 3 · Top floor' };
+
+/* ---------------- the scroll story ---------------- */
+const stage = $('#stage'), sc = $('#sc');
+let pano;
+try { pano = new Pano(sc, { fov: 120, maxDpr: 1.75, look: { vig: .32, grain: .012, sat: 1.04 } }); }
+catch (e) { stage.classList.add('nogl'); $('#cue').textContent = 'This view needs WebGL2'; return; }
+const tour = new Tour(pano, L, MEDIA);
+const ROUTE = [15, 14, 19, 12, 3, 5, 8, 21, 22, 30];
+const CAPS = {
+  15: ['Level 3', 'The view terrace', 'The top of the house opens to the rooftops of the Mission.'],
+  14: ['Level 3', 'Home office', 'A desk with its own door to the terrace.'],
+  19: ['Between levels', 'Skylit stair', 'Light from the roof falls all the way down the stairwell.'],
+  12: ['Level 2', 'The main level', 'One open run from the bay window to the kitchen.'],
+  3: ['Level 2', 'Living room', 'Behind the Victorian bay, around a fireplace.'],
+  5: ['Level 2', 'Dining', 'The table sits at the center of the open plan.'],
+  8: ['Level 2', 'Kitchen', 'A long island, and the stair to the garden level beside it.'],
+  21: ['Level 1', 'Garden level', 'Two bedrooms, two baths, and the media room.'],
+  22: ['Level 1', 'Media room', 'Glass doors straight onto the garden.'],
+  30: ['Level 1', 'The garden', 'Barbecue, fountain, pergola and fire pit.'],
+};
+// segments: units of scroll. hold = look around one room, walk = go through a door
+const SEG = [];
+SEG.push({ t: 'planet', room: 15, len: 1.1 });
+SEG.push({ t: 'unroll', room: 15, len: 1.6 });
+for (let n = 0; n < ROUTE.length; n++) {
+  const i = ROUTE[n], j = ROUTE[n + 1];
+  SEG.push({ t: 'hold', room: i, to: j, len: n === 0 ? .9 : 1.0 });
+  if (j) SEG.push({ t: 'walk', room: i, to: j, len: 1.0 });
+}
+SEG.push({ t: 'curl', room: 30, len: 1.6 });
+SEG.push({ t: 'end', room: 30, len: .5 });
+let TOTAL = 0;
+
+// yaw bookkeeping: arrival yaw of each room = carried from the previous door
+const linkYaw = (i, j) => (R.get(i).links.find(l => l.to === j) || { yaw: 0 }).yaw;
+const linkPitch = (i, j) => (R.get(i).links.find(l => l.to === j) || { pitch: 0 }).pitch;
+const carry = (i, j, y) => tour.carry(i, j, y) ?? 0;
+const arrive = {}; arrive[ROUTE[0]] = linkYaw(ROUTE[0], ROUTE[1]) - 2.2;
+for (let n = 0; n < ROUTE.length - 1; n++) arrive[ROUTE[n + 1]] = carry(ROUTE[n], ROUTE[n + 1], linkYaw(ROUTE[n], ROUTE[n + 1]));
+const holdEnd = (i, j) => {
+  if (!j) return arrive[i] + 1.4;
+  let d = wrapPi(linkYaw(i, j) - arrive[i]);
+  if (Math.abs(d) < .5) d += d < 0 ? -.6 : .6; // always some sweep, and land facing the door
+  return arrive[i] + d;
+};
+
+// turning is the part that unsettles people: give each look-around enough scroll that the view turns at most
+// about 30 degrees per step-second
+for (const sg of SEG) if (sg.t === 'hold') sg.len = Math.max(sg.len, Math.abs(holdEnd(sg.room, sg.to) - arrive[sg.room]) / 1.3);
+TOTAL = SEG.reduce((a, s) => a + s.len, 0);
+$('#story').style.height = (TOTAL * 85 + 100) + 'vh';
+
+// textures: previews for the whole route now, full res for the next two rooms as we go
+const tex = {}; ROUTE.forEach(i => tex[i] = tour.tex(i));
+await tex[15].promise;
+stage.classList.add('ready');
+
+const D = RM ? 0 : .5;
+const HOLDFOV = { 19: 98, 12: 90, 21: 92 };
+function setRoom(L_, i) { pano.set(L_, tex[i] || tour.tex(i)); }
+function apply(seg, t) {
+  const A = pano.A, B = pano.B;
+  pano.alphaB = 0; A.off = [0, 0, 0]; B.off = [0, 0, 0]; A.blur = 0; B.blur = 0; A.k = 0; B.k = 0;
+  const vh = sc.clientHeight, vw = sc.clientWidth, narrow = vw < 760;
+  const planetR = narrow ? Math.min(vw * .40, vh * .27) : Math.min(vw * .27, vh * .36);
+  // the planet sits right of the title on wide screens, above it on phones; it glides to center as it unrolls
+  const sx = narrow ? 0 : .17, sy = narrow ? .13 : .02;
+  const planetFov = 2 * Math.atan((vh / 2) / planetR) * 180 / Math.PI;
+  if (seg.t === 'planet' || seg.t === 'unroll') {
+    setRoom(A, 15);
+    const u = seg.t === 'planet' ? 0 : ease(t);
+    A.k = 1 - u; A.pitch = lerp(-Math.PI / 2, 0, u); A.roll = 0;
+    const y0 = (sc.clientWidth < 760 ? 4.71 : 4.15) + (seg.t === 'planet' ? t * .35 : .35);
+    A.yaw = y0 + wrapPi(arrive[15] - y0) * u;
+    pano.fov = lerp(planetFov, 80, u);
+    pano.shift = [sx * (1 - u), sy * (1 - u)];
+    ringState(seg.t === 'planet' ? 1 : 1 - clamp(u * 2.2, 0, 1), planetR * (1 + u * 1.6), false, sx * (1 - u), sy * (1 - u));
+    return;
+  }
+  ringState(0, planetR);
+  pano.shift = [0, 0];
+  if (seg.t === 'hold') {
+    setRoom(A, seg.room);
+    A.yaw = lerp(arrive[seg.room], holdEnd(seg.room, seg.to), RM ? t : ease(t));
+    A.pitch = lerp(0, seg.to ? clamp(linkPitch(seg.room, seg.to) * .5, -.2, .15) : 0, ease(t));
+    const hf = HOLDFOV[seg.room] || 80;
+    pano.fov = lerp(hf, 80, clamp((t - .6) / .4, 0, 1));
+    return;
+  }
+  if (seg.t === 'walk') {
+    const i = seg.room, j = seg.to, dy = linkYaw(i, j), by = arrive[j];
+    setRoom(A, i); setRoom(B, j);
+    const p0 = clamp(linkPitch(i, j) * .5, -.2, .15);
+    A.yaw = dy; A.pitch = p0;
+    const fa = dirOf(dy, 0), fb = dirOf(by, 0), e = ease(t);
+    A.off = fa.map(v => v * D * easeOut(Math.min(1, t * 1.15)));
+    B.off = fb.map(v => -v * D * (1 - e));
+    A.blur = 0; B.blur = 0;
+    let a = clamp((t - .4) / .2, 0, 1); pano.alphaB = a * a * (3 - 2 * a);
+    B.yaw = by; B.pitch = lerp(p0, 0, e); B.k = 0;
+    pano.fov = 80 + (RM ? 0 : Math.sin(Math.PI * t) * 1.5);
+    return;
+  }
+  if (seg.t === 'curl' || seg.t === 'end') {
+    setRoom(A, 30);
+    const u = seg.t === 'end' ? 1 : ease(t), y0 = holdEnd(30);
+    A.k = u; A.pitch = lerp(0, -Math.PI / 2, u); A.yaw = y0 + u * .8;
+    pano.fov = lerp(80, planetFov, u);
+    pano.shift = [sx * u, sy * u];
+    ringState(clamp((u - .55) / .45, 0, 1), planetR * (1 + (1 - u) * 1.6), true, sx * u, sy * u);
+  }
+}
+
+// orbiting type ring
+const ring = $('#ring'), ringtext = $('#ringtext'), orbit = $('#orbit');
+let ringMode = null, ringR = 0;
+function ringState(alpha, r, end, sx = 0, sy = 0) {
+  ring.style.opacity = alpha;
+  ring.style.left = (50 + sx * 100) + '%'; ring.style.top = (50 - sy * 100) + '%';
+  if (alpha <= .001) return;
+  const mode = end ? 'end' : 'start', rr = r * 1.1 + 12;
+  if (mode === ringMode && Math.abs(rr - ringR) < 1) return;
+  orbit.setAttribute('d', `M ${-rr},0 a ${rr},${rr} 0 1,1 ${2 * rr},0 a ${rr},${rr} 0 1,1 ${-2 * rr},0`);
+  ringtext.parentNode.style.fontSize = clamp(rr * .075, 10, 21) + 'px';
+  ringtext.textContent = (end ? 'Walk it yourself · every door is real · ' : '1146 Florida Street · Mission District · San Francisco · ').repeat(2);
+  ringtext.setAttribute('textLength', Math.floor(2 * Math.PI * rr - 4));
+  ringtext.setAttribute('lengthAdjust', 'spacing');
+  ringMode = mode; ringR = rr;
+}
+
+// map scroll -> (segment, t), smoothed
+const story = $('#story');
+let target = 0, shown = 0;
+function readScroll() {
+  const r = story.getBoundingClientRect(), h = story.offsetHeight - innerHeight;
+  target = clamp(-r.top / Math.max(1, h), 0, 1);
+}
+addEventListener('scroll', readScroll, { passive: true }); readScroll(); shown = target;
+function locate(p) {
+  let x = p * TOTAL;
+  for (let n = 0; n < SEG.length; n++) { if (x <= SEG[n].len || n === SEG.length - 1) return { n, seg: SEG[n], t: clamp(x / SEG[n].len, 0, 1) }; x -= SEG[n].len; }
+}
+const cap = $('#cap'), hero = $('#hero'), cue = $('#cue'), mini = $('#mini'), prog = $('#prog');
+let lastCap = null, lastN = -1;
+function ui(loc) {
+  const { seg, t, n } = loc;
+  hero.style.opacity = seg.t === 'planet' ? 1 : seg.t === 'unroll' ? clamp(1 - t * 3, 0, 1) : 0;
+  cue.style.opacity = seg.t === 'planet' ? clamp(1 - t * 2, 0, 1) : 0;
+  const showCap = seg.t === 'hold' ? seg.room : (seg.t === 'walk' && t < .2) ? seg.room : null;
+  if (showCap !== lastCap) {
+    if (showCap && CAPS[showCap]) { const [a, b, c] = CAPS[showCap]; $('#caplvl').textContent = a; $('#caph').textContent = b; $('#capp').textContent = c; cap.classList.add('on'); }
+    else cap.classList.remove('on');
+    lastCap = showCap;
+  }
+  mini.classList.toggle('on', seg.t === 'hold' || seg.t === 'walk');
+  $('#scrim').classList.toggle('on', !!showCap || seg.t === 'planet');
+  prog.style.width = (shown * 100) + '%';
+  // prefetch full res for the next rooms
+  if (n !== lastN) {
+    lastN = n;
+    for (let k = n; k < Math.min(SEG.length, n + 4); k++) { const s = SEG[k]; [s.room, s.to].forEach(i => i && tex[i] && tex[i].fullPromise); }
+  }
+}
+
+/* live mini plan: crop to the current level */
+const BOX = { 1: [80, 60, 560, 1680], 2: [600, 560, 1080, 1870], 3: [1130, 670, 1510, 1720] };
+const miniimg = $('#miniimg'), miniplate = $('#miniplate'), minidot = $('#minidot'), minicone = $('#minicone');
+let miniLvl = 0;
+function planAngle(i, viewYaw) { return R.get(i).heading + viewYaw + PLAN.phi; }
+function cone(cx, cy, ang, r, spread) {
+  const a0 = ang - spread, a1 = ang + spread;
+  return `M${cx},${cy} L${cx + r * Math.cos(a0)},${cy + r * Math.sin(a0)} A${r},${r} 0 0 1 ${cx + r * Math.cos(a1)},${cy + r * Math.sin(a1)} Z`;
+}
+function miniUpdate(loc) {
+  const { seg, t } = loc;
+  let i = seg.room, x, y, ang, lvl;
+  const P = k => PLAN.rooms[k];
+  if (seg.t === 'walk') {
+    const a = P(seg.room), b = P(seg.to), e = ease(t);
+    if (a[2] === b[2]) { x = lerp(a[0], b[0], e); y = lerp(a[1], b[1], e); lvl = a[2]; }
+    else { const s = t < .5 ? a : b; x = s[0]; y = s[1]; lvl = s[2]; }
+    ang = planAngle(seg.room, pano.A.yaw);
+  } else { const a = P(i); x = a[0]; y = a[1]; lvl = a[2]; ang = planAngle(i, pano.A.yaw); }
+  if (lvl !== miniLvl) {
+    const [x0, y0, x1, y1] = BOX[lvl];
+    miniplate.style.setProperty('--ar', ((x1 - x0) / (y1 - y0)).toFixed(3));
+    miniLvl = lvl; $('#minilvl').textContent = 'Level ' + lvl;
+  }
+  const [x0, y0, x1, y1] = BOX[lvl], w = miniplate.clientWidth, h = miniplate.clientHeight, s = w / (x1 - x0);
+  miniimg.style.width = (1621 * s) + 'px'; miniimg.style.height = (2048 * s) + 'px';
+  miniimg.style.left = (-x0 * s) + 'px'; miniimg.style.top = (-y0 * s) + 'px';
+  const cx = (x - x0) * s, cy = (y - y0) * s;
+  minidot.setAttribute('cx', cx); minidot.setAttribute('cy', cy);
+  const half = Math.atan(Math.tan(pano.fov * Math.PI / 360) * (sc.clientWidth / sc.clientHeight));
+  minicone.setAttribute('d', cone(cx, cy, ang, 36, Math.min(half, 1.2)));
+}
+
+let last = performance.now();
+pano.onframe = now => {
+  const dt = Math.min(.05, (now - last) / 1000); last = now;
+  if (RM) shown = target;
+  else {
+    const want = (target - shown) * (1 - Math.pow(.12, dt));       // soft follow, about half a second
+    const gap = Math.abs(target - shown) * TOTAL;
+    const cap = (gap > 3 ? 2.6 : 1.0) / TOTAL * dt;               // about a step per second; faster only after a big jump
+    shown += clamp(want, -cap, cap);
+  }
+  const loc = locate(shown);
+  apply(loc.seg, loc.t);
+  ui(loc);
+  if (loc.seg.t === 'hold' || loc.seg.t === 'walk') miniUpdate(loc);
+};
+
+/* ---------------- free walk ---------------- */
+const vc = $('#vc'), vbox = $('#vbox');
+let vp;
+try { vp = new Pano(vc, { fov: 78, maxDpr: 1.5, look: { vig: .18, grain: .01 } }); } catch (e) { return; }
+const vt = new Tour(vp, L, MEDIA, { auto: RM ? 0 : .008, pace: 1.9, dist: .5, blur: 0, pulse: 1.5 });
+vt.attach(vc);
+const doorsEl = $('#doors'), vroom = $('#vroom');
+let doorBtns = [];
+function buildDoors(r) {
+  doorsEl.innerHTML = ''; doorBtns = [];
+  const seen = new Set();
+  for (const l of r.links) {
+    if (seen.has(l.to)) continue; seen.add(l.to);
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'door';
+    b.innerHTML = `<i></i><span>${NAME[l.to]}</span>`; b.setAttribute('aria-label', 'Walk to ' + NAME[l.to]);
+    b.addEventListener('click', e => { e.stopPropagation(); go(l.to); });
+    doorsEl.appendChild(b); doorBtns.push({ b, l });
+  }
+}
+const bigsvg = $('#bigsvg');
+const NS = 'http://www.w3.org/2000/svg';
+const bigCone = document.createElementNS(NS, 'path'); bigCone.setAttribute('class', 'cone');
+const bigDot = document.createElementNS(NS, 'circle'); bigDot.setAttribute('class', 'dot'); bigDot.setAttribute('r', 16);
+for (const [k, v] of Object.entries(PLAN.rooms)) {
+  const i = +k; if (R.get(i).flat) continue;
+  const c = document.createElementNS(NS, 'circle'); c.setAttribute('class', 'pin'); c.setAttribute('cx', v[0]); c.setAttribute('cy', v[1]); c.setAttribute('r', 15); c.dataset.l = v[2];
+  c.setAttribute('tabindex', '0'); c.setAttribute('role', 'button'); c.setAttribute('aria-label', NAME[i]);
+  const tt = document.createElementNS(NS, 'title'); tt.textContent = NAME[i]; c.appendChild(tt);
+  c.addEventListener('click', () => go(i)); c.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(i); } });
+  bigsvg.appendChild(c);
+}
+bigsvg.appendChild(bigCone); bigsvg.appendChild(bigDot);
+const roomlist = $('#roomlist');
+const bigplate = $('#bigplate'), bigimg = bigplate.querySelector('.img');
+function bigLevel(lvl) {
+  const [x0, y0, x1, y1] = BOX[lvl];
+  bigplate.style.setProperty('--ar', ((x1 - x0) / (y1 - y0)).toFixed(3));
+  bigsvg.setAttribute('viewBox', `${x0} ${y0} ${x1 - x0} ${y1 - y0}`);
+  requestAnimationFrame(() => {
+    const s = bigplate.clientWidth / (x1 - x0);
+    Object.assign(bigimg.style, { width: 1621 * s + 'px', height: 2048 * s + 'px', left: -x0 * s + 'px', top: -y0 * s + 'px' });
+  });
+  bigsvg.querySelectorAll('circle.pin').forEach(c => c.style.display = +c.dataset.l === lvl ? '' : 'none');
+  bigLvl = lvl;
+}
+let bigLvl = 2;
+addEventListener('resize', () => bigLevel(bigLvl));
+function listRooms(lvl) {
+  bigLevel(lvl);
+  roomlist.innerHTML = '';
+  document.querySelectorAll('.levels button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.lvl === lvl)));
+  Object.entries(PLAN.rooms).filter(([k, v]) => v[2] === lvl && !R.get(+k).flat).sort((a, b) => a[1][1] - b[1][1]).forEach(([k]) => {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = NAME[k]; b.dataset.i = k;
+    b.addEventListener('click', () => go(+k)); roomlist.appendChild(b);
+  });
+  markRoom();
+}
+function markRoom() { roomlist.querySelectorAll('button').forEach(b => b.setAttribute('aria-current', String(vt.cur && +b.dataset.i === vt.cur.i))); }
+document.querySelectorAll('.levels button').forEach(b => b.addEventListener('click', () => listRooms(+b.dataset.lvl)));
+async function go(j) {
+  if (vt.busy || !vt.cur || j === vt.cur.i) return;
+  if (vt.link(vt.cur.i, j) && !RM) await vt.walk(j); else await vt.cut(j, vt.carry(vt.cur.i, j, vp.A.yaw) ?? 0, RM ? .01 : 1.6);
+}
+vt.onroom = r => { vroom.innerHTML = `${NAME[r.i]}<small>${LVLNAME[LVL(r.i)]}</small>`; buildDoors(r); if (+document.querySelector('.levels [aria-pressed="true"]').dataset.lvl !== LVL(r.i)) listRooms(LVL(r.i)); markRoom(); };
+let started = false;
+const io = new IntersectionObserver(es => { if (es[0].isIntersecting && !started) { started = true; vt.show(7, 1.25, 0).then(r => vt.onroom(r)); } }, { rootMargin: '400px' });
+io.observe(vbox);
+listRooms(2);
+let vlast = performance.now();
+vp.onframe = now => {
+  const dt = Math.min(.05, (now - vlast) / 1000); vlast = now;
+  vt.idle(dt);
+  if (!vt.cur) return;
+  for (const { b, l } of doorBtns) {
+    const pr = vt.busy ? null : vp.project(l.yaw, clamp(l.pitch, -.6, .5));
+    if (!pr || pr.x < 20 || pr.y < 20 || pr.x > vc.clientWidth - 20 || pr.y > vc.clientHeight - 20) { b.style.display = 'none'; continue; }
+    b.style.display = ''; b.style.left = pr.x + 'px'; b.style.top = pr.y + 'px';
+  }
+  const p = PLAN.rooms[vt.cur.i];
+  bigDot.style.display = bigCone.style.display = p && p[2] === bigLvl ? '' : 'none';
+  if (p) {
+    bigDot.setAttribute('cx', p[0]); bigDot.setAttribute('cy', p[1]);
+    const half = Math.atan(Math.tan(vp.fov * Math.PI / 360) * (vc.clientWidth / vc.clientHeight));
+    bigCone.setAttribute('d', cone(p[0], p[1], planAngle(vt.cur.i, vp.A.yaw), 110, Math.min(half, 1.2)));
+  }
+};
+// clicks on the view (not drags) do nothing special; keep the drag feel
+vbox.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') vp.A.yaw -= .2; if (e.key === 'ArrowRight') vp.A.yaw += .2; });
+vbox.tabIndex = 0;
+
+/* ---------------- form ---------------- */
+$('#f').addEventListener('submit', e => {
+  e.preventDefault();
+  const n = $('#fn').value.trim(), m = $('#fe').value.trim();
+  if (!n || !/^\S+@\S+\.\S+$/.test(m)) { $('#fo').textContent = 'Add your name and a valid email.'; return; }
+  $('#fo').textContent = `Thanks, ${n.split(' ')[0]}. Your request is noted for 1146 Florida.`;
+  e.target.reset();
+});
+})();
+</script>

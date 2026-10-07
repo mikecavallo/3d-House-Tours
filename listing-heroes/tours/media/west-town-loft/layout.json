@@ -1,0 +1,669 @@
+{
+ "name": "Sun-Drenched Production Space",
+ "address": "West Town, Chicago, IL",
+ "photographer": "Natalie Simmons",
+ "description": "Spacious, open, and modern, this loft space is ideal for productions of all types. It multiple dividers on site that can be used to partition the space as needed. It includes a full kitchen, 75\" TV, and has an optional projector with a 120\" screen.",
+ "rooms": [
+  {
+   "i": 1,
+   "id": "f80c049a-6c58-41c3-8322-73a913f2b9b9",
+   "name": "Scenery Above the Property",
+   "heading": 0.0,
+   "x": -0.0,
+   "y": -0.0,
+   "comp": 0,
+   "links": [
+    {
+     "to": 2,
+     "yaw": 0.0413,
+     "pitch": -0.9152
+    },
+    {
+     "to": 3,
+     "yaw": 0.0361,
+     "pitch": -0.7806
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 2,
+   "id": "fb9dcf09-b10a-4b12-bbff-7262563d3aed",
+   "name": "Front Side",
+   "heading": 0.0,
+   "x": -0.0,
+   "y": -0.0,
+   "comp": 1,
+   "links": [],
+   "notes": [],
+   "flat": true
+  },
+  {
+   "i": 3,
+   "id": "c87c1f0a-9acc-4c25-8313-15360736c48e",
+   "name": "Entrance, Hallway",
+   "heading": -0.15578123248952647,
+   "x": -0.0,
+   "y": -0.0,
+   "comp": 2,
+   "links": [
+    {
+     "to": 4,
+     "yaw": 2.1453,
+     "pitch": -0.4944
+    },
+    {
+     "to": 5,
+     "yaw": 1.5748,
+     "pitch": -0.501
+    },
+    {
+     "to": 6,
+     "yaw": 2.5647,
+     "pitch": -0.2665
+    },
+    {
+     "to": 8,
+     "yaw": 1.8166,
+     "pitch": -0.088
+    },
+    {
+     "to": 10,
+     "yaw": -2.7347,
+     "pitch": -0.3798
+    },
+    {
+     "to": 11,
+     "yaw": 0.3806,
+     "pitch": 0.2464
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 4,
+   "id": "a74a101a-3df0-448d-8a30-7dfb9b2a97e7",
+   "name": "1st Floor",
+   "heading": -0.13058142154962837,
+   "x": -1.543,
+   "y": 2.52,
+   "comp": 2,
+   "links": [
+    {
+     "to": 3,
+     "yaw": -1.1939,
+     "pitch": -0.4432
+    },
+    {
+     "to": 5,
+     "yaw": 0.7691,
+     "pitch": -0.5638
+    },
+    {
+     "to": 7,
+     "yaw": 2.3624,
+     "pitch": -0.1709
+    },
+    {
+     "to": 6,
+     "yaw": 2.8907,
+     "pitch": -0.4217
+    },
+    {
+     "to": 8,
+     "yaw": 1.8605,
+     "pitch": -0.0792
+    },
+    {
+     "to": 9,
+     "yaw": -2.7919,
+     "pitch": -0.2945
+    },
+    {
+     "to": 11,
+     "yaw": -0.2522,
+     "pitch": 0.1627
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 5,
+   "id": "8fe22859-2fd0-42e3-a264-02448f0a3f17",
+   "name": "Billiard Room (19'5\" X26'2\")",
+   "heading": -0.10683888785396833,
+   "x": 1.467,
+   "y": 4.206,
+   "comp": 2,
+   "links": [
+    {
+     "to": 4,
+     "yaw": -2.2418,
+     "pitch": -0.4679
+    },
+    {
+     "to": 3,
+     "yaw": -1.7354,
+     "pitch": -0.3774
+    },
+    {
+     "to": 6,
+     "yaw": -2.7706,
+     "pitch": -0.3297
+    },
+    {
+     "to": 7,
+     "yaw": 2.6849,
+     "pitch": -0.1356
+    },
+    {
+     "to": 8,
+     "yaw": 2.3655,
+     "pitch": -0.1645
+    },
+    {
+     "to": 9,
+     "yaw": -2.5925,
+     "pitch": -0.2039
+    },
+    {
+     "to": 11,
+     "yaw": -0.897,
+     "pitch": 0.0763
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 6,
+   "id": "f407caf4-44bc-4414-8038-54654131287d",
+   "name": "Living Room (13'11\" X 9'5\")",
+   "heading": 0.19389427509812895,
+   "x": -5.086,
+   "y": 4.26,
+   "comp": 2,
+   "links": [
+    {
+     "to": 5,
+     "yaw": -0.0792,
+     "pitch": -0.2326
+    },
+    {
+     "to": 4,
+     "yaw": -0.5074,
+     "pitch": -0.4494
+    },
+    {
+     "to": 7,
+     "yaw": 1.6681,
+     "pitch": -0.3882
+    },
+    {
+     "to": 8,
+     "yaw": 0.8772,
+     "pitch": -0.177
+    },
+    {
+     "to": 9,
+     "yaw": -2.0284,
+     "pitch": -0.3023
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 7,
+   "id": "baa2f97f-e1a8-42b9-adbe-676a15f6ed68",
+   "name": "Living Room (13'11\" X 9'5\")",
+   "heading": 0.09762597132975692,
+   "x": -6.267,
+   "y": 9.179,
+   "comp": 2,
+   "links": [
+    {
+     "to": 4,
+     "yaw": -1.0353,
+     "pitch": -0.227
+    },
+    {
+     "to": 5,
+     "yaw": -0.3741,
+     "pitch": -0.0786
+    },
+    {
+     "to": 6,
+     "yaw": -1.5557,
+     "pitch": -0.432
+    },
+    {
+     "to": 9,
+     "yaw": -1.939,
+     "pitch": -0.1038
+    },
+    {
+     "to": 8,
+     "yaw": 0.1093,
+     "pitch": -0.3845
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 8,
+   "id": "46c06101-5ae7-421b-b869-769e34dca56b",
+   "name": "Dining Space",
+   "heading": 0.147599087277972,
+   "x": -2.385,
+   "y": 10.36,
+   "comp": 2,
+   "links": [
+    {
+     "to": 3,
+     "yaw": -1.3331,
+     "pitch": -0.1372
+    },
+    {
+     "to": 6,
+     "yaw": -2.2262,
+     "pitch": -0.2839
+    },
+    {
+     "to": 4,
+     "yaw": -1.65,
+     "pitch": -0.2877
+    },
+    {
+     "to": 5,
+     "yaw": -0.7188,
+     "pitch": -0.2151
+    },
+    {
+     "to": 7,
+     "yaw": -3.0347,
+     "pitch": -0.4222
+    },
+    {
+     "to": 9,
+     "yaw": 3.1416,
+     "pitch": 0
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 9,
+   "id": "eceb3aa5-b94e-443e-a8d6-9ede073b1fd5",
+   "name": "Kitchen (13'11 X 10'5)",
+   "heading": -0.39911742540748163,
+   "x": -6.713,
+   "y": 1.468,
+   "comp": 2,
+   "links": [
+    {
+     "to": 6,
+     "yaw": 1.811,
+     "pitch": -0.7412
+    },
+    {
+     "to": 5,
+     "yaw": 0.4227,
+     "pitch": -0.2785
+    },
+    {
+     "to": 4,
+     "yaw": 0.3399,
+     "pitch": -0.546
+    },
+    {
+     "to": 7,
+     "yaw": 1.7295,
+     "pitch": -0.1996
+    },
+    {
+     "to": 11,
+     "yaw": -0.0466,
+     "pitch": 0.1046
+    },
+    {
+     "to": 8,
+     "yaw": 1.125,
+     "pitch": -0.0821
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 10,
+   "id": "dde5c407-4fb9-4484-951a-01af33712d1d",
+   "name": "Bath (8\u20193 X 6'10\")",
+   "heading": 1.1699749264857982,
+   "x": -3.025,
+   "y": -0.76,
+   "comp": 2,
+   "links": [
+    {
+     "to": 3,
+     "yaw": -0.9189,
+     "pitch": -0.5736
+    },
+    {
+     "to": 11,
+     "yaw": -0.736,
+     "pitch": 0.0205
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 11,
+   "id": "3b6c5ad6-1b55-4077-8b02-c5daa48b21ad",
+   "name": "Stair",
+   "heading": -0.9395281165298797,
+   "x": 2.168,
+   "y": 2.744,
+   "comp": 2,
+   "links": [
+    {
+     "to": 5,
+     "yaw": 3.0773,
+     "pitch": -0.816
+    },
+    {
+     "to": 12,
+     "yaw": -2.6975,
+     "pitch": -0.1166
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 12,
+   "id": "3ecd882b-e6bf-458c-85e8-80f4cecd346b",
+   "name": "Hall (17'8\" X 6'5\")",
+   "heading": 0.5960565308405497,
+   "x": -3.483,
+   "y": 5.798,
+   "comp": 2,
+   "links": [
+    {
+     "to": 11,
+     "yaw": -1.0914,
+     "pitch": -1.0714
+    },
+    {
+     "to": 13,
+     "yaw": -3.0126,
+     "pitch": -1.039
+    },
+    {
+     "to": 14,
+     "yaw": -3.0588,
+     "pitch": -0.2554
+    },
+    {
+     "to": 15,
+     "yaw": -2.4439,
+     "pitch": -0.7146
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 13,
+   "id": "042c67a4-7959-4684-8d9f-b3204e82ab14",
+   "name": "Hall (17'8\" X 6'5\")",
+   "heading": 0.6430994173030551,
+   "x": -4.329,
+   "y": 4.984,
+   "comp": 2,
+   "links": [
+    {
+     "to": 12,
+     "yaw": -0.0075,
+     "pitch": -0.9156
+    },
+    {
+     "to": 14,
+     "yaw": -3.1382,
+     "pitch": -0.3711
+    },
+    {
+     "to": 17,
+     "yaw": -1.7329,
+     "pitch": -0.9203
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 14,
+   "id": "4c559082-d751-426d-85c4-a15ac9dafcab",
+   "name": "Bedroom (10'7\" X 7'0\")",
+   "heading": 0.6281628621755013,
+   "x": -7.77,
+   "y": 2.367,
+   "comp": 2,
+   "links": [
+    {
+     "to": 12,
+     "yaw": 0.0334,
+     "pitch": -0.2438
+    },
+    {
+     "to": 13,
+     "yaw": 0.0355,
+     "pitch": -0.4193
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 15,
+   "id": "cf4c2f27-01f2-4d53-b70b-8ca4b13e7150",
+   "name": "Bedroom (12'3\" X 10'8\")",
+   "heading": -0.13428307936012418,
+   "x": -4.258,
+   "y": 4.312,
+   "comp": 2,
+   "links": [
+    {
+     "to": 12,
+     "yaw": 1.5349,
+     "pitch": -1.0503
+    },
+    {
+     "to": 17,
+     "yaw": -1.0606,
+     "pitch": -0.8524
+    },
+    {
+     "to": 16,
+     "yaw": -2.6067,
+     "pitch": -0.2019
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 16,
+   "id": "5c51aaca-a9fb-40b4-abbb-1183a8e7ad38",
+   "name": "Bath (5'0\" X 6'10\")",
+   "heading": 0.13016049570396904,
+   "x": -11.194,
+   "y": 1.259,
+   "comp": 2,
+   "links": [
+    {
+     "to": 18,
+     "yaw": 0.1558,
+     "pitch": -0.1301
+    },
+    {
+     "to": 15,
+     "yaw": 0.284,
+     "pitch": -0.2884
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 17,
+   "id": "690b83f3-059b-46b6-b206-0a3253fd319e",
+   "name": "Bedroom (12'3\" X 10'8\")",
+   "heading": 0.07494305962655456,
+   "x": -3.16,
+   "y": 3.53,
+   "comp": 2,
+   "links": [
+    {
+     "to": 15,
+     "yaw": 1.965,
+     "pitch": -0.9563
+    },
+    {
+     "to": 18,
+     "yaw": 0.1488,
+     "pitch": -0.7854
+    },
+    {
+     "to": 19,
+     "yaw": 0.1118,
+     "pitch": -0.46
+    },
+    {
+     "to": 13,
+     "yaw": 1.87,
+     "pitch": -0.5718
+    },
+    {
+     "to": 16,
+     "yaw": 3.1416,
+     "pitch": 0
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 18,
+   "id": "0c9087c1-0c50-4bec-a0e1-4b9bee894041",
+   "name": "Storage (5'1\" X 4'6\")",
+   "heading": 2.7698384045379205,
+   "x": -0.884,
+   "y": 4.151,
+   "comp": 2,
+   "links": [
+    {
+     "to": 17,
+     "yaw": 0.5634,
+     "pitch": -0.7566
+    },
+    {
+     "to": 19,
+     "yaw": -2.4437,
+     "pitch": -0.8036
+    },
+    {
+     "to": 16,
+     "yaw": 0.6712,
+     "pitch": -0.1253
+    }
+   ],
+   "notes": [],
+   "flat": false
+  },
+  {
+   "i": 19,
+   "id": "3a622e8c-3213-43ce-9fa1-17431e090ca9",
+   "name": "Laundry (9'9\" X 14'2\")",
+   "heading": 0.0072436966926696655,
+   "x": 0.135,
+   "y": 4.359,
+   "comp": 2,
+   "links": [
+    {
+     "to": 18,
+     "yaw": -2.8413,
+     "pitch": -0.8131
+    },
+    {
+     "to": 17,
+     "yaw": -2.9435,
+     "pitch": -0.5059
+    }
+   ],
+   "notes": [
+    {
+     "title": "Hobby desk",
+     "text": "Enable to do a little hobby here while doing laundry etc.",
+     "yaw": 1.717671107005419,
+     "pitch": -0.22721943817486334
+    }
+   ],
+   "flat": false
+  },
+  {
+   "i": 20,
+   "id": "92454cd2-6f91-4c6a-84af-2b783878b2d2",
+   "name": "Upper Right with Scenery",
+   "heading": 0.0,
+   "x": -0.0,
+   "y": -0.0,
+   "comp": 3,
+   "links": [],
+   "notes": [],
+   "flat": true
+  },
+  {
+   "i": 21,
+   "id": "13ea76c0-830f-4e43-a824-529cbfc2aef2",
+   "name": "Upper Left with Scenery",
+   "heading": 0.0,
+   "x": -0.0,
+   "y": -0.0,
+   "comp": 4,
+   "links": [],
+   "notes": [],
+   "flat": true
+  },
+  {
+   "i": 22,
+   "id": "358d33bb-d0ee-4fc1-abe6-b918e4b10bb2",
+   "name": "Upper Right",
+   "heading": 0.0,
+   "x": -0.0,
+   "y": -0.0,
+   "comp": 5,
+   "links": [],
+   "notes": [],
+   "flat": true
+  },
+  {
+   "i": 23,
+   "id": "5427c5dd-d1c1-4929-8924-34e47dda894f",
+   "name": "Above of the Property",
+   "heading": 0.0,
+   "x": -0.0,
+   "y": -0.0,
+   "comp": 6,
+   "links": [],
+   "notes": [],
+   "flat": true
+  }
+ ]
+}

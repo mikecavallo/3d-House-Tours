@@ -1,0 +1,951 @@
+<!doctype html>
+<title>The Mission House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Azeret+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one sticky stage (WebGL) under a long scroll; the house starts as a planet, unrolls, and is walked
+   room to room on the real door graph; a live plan tracks you. Then a free walk, the facts, a showing form. */
+:root {
+  color-scheme: dark;
+  --space: #0e1420;      /* night over the Mission */
+  --navy: #1a2537;       /* the kitchen cabinets */
+  --line: #2b3a52;
+  --oak: #caa275;        /* white oak floors */
+  --fog: #dde3e8;        /* Karl */
+  --paper: #f2f0eb;
+  --muted: #8f9bad;
+  --persimmon: #e0703a;  /* the orange painting in the great room */
+  --display: "Syne", "Arial Black", "Helvetica Neue", sans-serif;
+  --text: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --mono: "Azeret Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --gutter: clamp(16px, 4vw, 56px);
+}
+* { box-sizing: border-box; }
+html { background: var(--space); }
+body { background: var(--space); color: var(--fog); font-family: var(--text); font-size: 18px; line-height: 1.55; margin: 0; -webkit-font-smoothing: antialiased; }
+a { color: var(--oak); }
+:focus-visible { outline: 2px solid var(--persimmon); outline-offset: 3px; }
+
+/* ---------- stage ---------- */
+#story { position: relative; height: 1400vh; }
+#stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+#stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#stage .scrim { position: absolute; inset: auto 0 0 0; height: 46%; background: linear-gradient(to top, rgba(10, 15, 25, .62), rgba(10, 15, 25, 0)); opacity: 0; transition: opacity .6s; pointer-events: none; }
+#stage .scrim.on { opacity: 1; }
+#stage .poster { position: absolute; inset: 0; background: radial-gradient(60% 60% at 50% 55%, #1d2b44 0%, var(--space) 70%); transition: opacity 1.2s; }
+#stage.ready .poster { opacity: 0; }
+#ring { position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; overflow: visible; pointer-events: none; }
+#ring svg { position: absolute; overflow: visible; }
+#ring text { font-family: var(--display); font-weight: 700; letter-spacing: .32em; fill: var(--paper); text-transform: uppercase; }
+#ring .spin { animation: spin 90s linear infinite; transform-origin: 0 0; }
+@keyframes spin { to { transform: rotate(-360deg); } }
+
+.hero-type { position: absolute; left: var(--gutter); right: var(--gutter); bottom: clamp(24px, 7vh, 72px); display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; pointer-events: none; }
+.hero-type h1 { font-family: var(--display); font-weight: 800; font-size: clamp(40px, 7.4vw, 124px); line-height: .86; letter-spacing: -.02em; margin: 0; color: var(--paper); text-wrap: balance; text-shadow: 0 2px 30px rgba(8, 12, 20, .45); }
+.hero-type h1 span { display: block; font-size: .3em; letter-spacing: .02em; font-weight: 700; color: var(--oak); margin-bottom: .35em; }
+.hero-type h1 { max-width: 7.2em; }
+.hero-type .meta { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--fog); text-align: right; line-height: 1.9; text-shadow: 0 1px 12px rgba(8, 12, 20, .7); }
+.scrollcue { position: absolute; left: 50%; transform: translateX(-50%); bottom: 14px; font-family: var(--mono); font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
+
+/* captions during the walk */
+.cap { position: absolute; left: var(--gutter); bottom: clamp(20px, 6vh, 64px); max-width: min(560px, calc(100% - 2 * var(--gutter))); pointer-events: none; opacity: 0; transform: translateY(14px); transition: opacity .6s, transform .6s; }
+.cap.on { opacity: 1; transform: none; }
+.cap .lvl { font-family: var(--mono); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--oak); display: flex; gap: 12px; align-items: center; }
+.cap .lvl::before { content: ""; width: 28px; height: 1px; background: var(--oak); }
+.cap h2 { font-family: var(--display); font-weight: 800; font-size: clamp(30px, 5.2vw, 72px); line-height: .95; letter-spacing: -.015em; margin: .25em 0 .2em; color: var(--paper); text-shadow: 0 2px 28px rgba(6, 10, 18, .55); text-wrap: balance; }
+.cap p { margin: 0; font-size: clamp(16px, 1.5vw, 20px); color: var(--paper); text-shadow: 0 1px 14px rgba(6, 10, 18, .8); max-width: 34em; }
+
+/* live plan */
+.mini { position: absolute; right: var(--gutter); top: clamp(16px, 4vh, 40px); width: clamp(150px, 17vw, 230px); padding: 12px 12px 10px; background: rgba(14, 20, 32, .74); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(221, 227, 232, .14); opacity: 0; transition: opacity .6s; }
+.mini.on { opacity: 1; }
+.mini header { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.mini header b { color: var(--paper); font-weight: 500; }
+.plate { position: relative; width: 100%; aspect-ratio: var(--ar, .6); overflow: hidden; }
+.plate .img { position: absolute; background-image: var(--plan); background-repeat: no-repeat; background-size: 100% 100%; filter: invert(1) hue-rotate(180deg) brightness(.92); mix-blend-mode: screen; opacity: .8; }
+.plate svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.dot { fill: var(--persimmon); }
+.cone { fill: var(--persimmon); opacity: .32; }
+.pin { fill: var(--fog); opacity: .5; }
+.progress { position: absolute; left: 0; bottom: 0; height: 2px; background: var(--persimmon); width: 0; }
+
+/* ---------- sections ---------- */
+section { padding-inline: var(--gutter); }
+.wrap { max-width: 1240px; margin: 0 auto; }
+.kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--oak); }
+h3.big { font-family: var(--display); font-weight: 800; font-size: clamp(36px, 6vw, 88px); line-height: .92; letter-spacing: -.02em; margin: .2em 0 .35em; color: var(--paper); text-wrap: balance; }
+
+#walk { padding-block: clamp(64px, 10vh, 120px) 40px; }
+.walkhead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 40px; }
+.walkhead p { max-width: 30em; margin: 0; color: var(--fog); }
+.viewer { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px; margin-top: 28px; }
+.vbox { position: relative; aspect-ratio: 16 / 9; min-height: 340px; background: var(--navy); overflow: hidden; touch-action: none; cursor: grab; }
+.vbox:active { cursor: grabbing; }
+.vbox canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.vbox .room { position: absolute; left: 16px; top: 14px; font-family: var(--display); font-weight: 700; font-size: 20px; color: var(--paper); text-shadow: 0 1px 12px rgba(0, 0, 0, .6); pointer-events: none; }
+.vbox .room small { display: block; font-family: var(--mono); font-weight: 400; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--fog); margin-top: 2px; }
+.door { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 6px; background: none; border: 0; padding: 0; color: var(--paper); cursor: pointer; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; text-shadow: 0 1px 8px rgba(0, 0, 0, .9); }
+.door i { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid rgba(242, 240, 235, .9); background: rgba(14, 20, 32, .35); backdrop-filter: blur(3px); display: grid; place-items: center; transition: transform .2s, background .2s; }
+.door i::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--paper); }
+.door span { opacity: 0; transform: translateY(-4px); transition: opacity .2s, transform .2s; white-space: nowrap; }
+.door:hover i, .door:focus-visible i { transform: scale(1.12); background: var(--persimmon); border-color: var(--persimmon); }
+.door:hover span, .door:focus-visible span { opacity: 1; transform: none; }
+.side { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.planbig { position: relative; background: var(--navy); border: 1px solid var(--line); padding: 10px; }
+.planbig .plate { aspect-ratio: var(--ar, .5); max-height: 62vh; margin: 0 auto; }
+.planbig .plate .img { opacity: .9; }
+.planbig circle.pin { cursor: pointer; pointer-events: all; opacity: .55; transition: opacity .2s; }
+.planbig circle.pin:hover { opacity: 1; }
+.levels { display: flex; gap: 6px; flex-wrap: wrap; }
+.levels button, .rooms button { font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--fog); background: transparent; border: 1px solid var(--line); padding: 9px 10px; cursor: pointer; }
+.levels button[aria-pressed="true"] { background: var(--fog); color: var(--space); border-color: var(--fog); }
+.rooms { display: flex; flex-wrap: wrap; gap: 6px; }
+.rooms button[aria-current="true"] { border-color: var(--persimmon); color: var(--paper); }
+.rooms button:hover, .levels button:hover { border-color: var(--fog); }
+
+#home { padding-block: clamp(64px, 10vh, 120px); }
+.facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); margin-top: 32px; }
+.facts div { padding: 18px 16px 18px 0; border-bottom: 1px solid var(--line); }
+.facts b { display: block; font-family: var(--display); font-weight: 800; font-size: clamp(28px, 4vw, 52px); color: var(--paper); line-height: 1; font-variant-numeric: tabular-nums; }
+.facts span { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 80px); margin-top: 48px; }
+.cols p { margin: 0 0 1em; max-width: 34em; color: var(--fog); }
+.cols p:first-child::first-letter { font-family: var(--display); font-weight: 800; float: left; font-size: 3.4em; line-height: .8; margin: .06em .1em 0 0; color: var(--oak); }
+
+#show { padding-block: clamp(56px, 9vh, 110px) 40px; border-top: 1px solid var(--line); }
+form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 28px; max-width: 900px; }
+label { display: flex; flex-direction: column; gap: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+label.full { grid-column: 1 / -1; }
+input, textarea { font: 18px/1.4 var(--text); color: var(--paper); background: transparent; border: 0; border-bottom: 1px solid var(--line); padding: 10px 0; border-radius: 0; }
+input:focus, textarea:focus { outline: none; border-bottom-color: var(--oak); }
+textarea { min-height: 96px; resize: vertical; }
+.send { grid-column: 1 / -1; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.send button { font: 800 15px/1 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--space); background: var(--oak); border: 0; padding: 18px 26px; cursor: pointer; }
+.send button:hover { background: var(--paper); }
+.send output { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; color: var(--oak); }
+footer { padding: 28px var(--gutter) 40px; font-family: var(--mono); font-size: 11px; letter-spacing: .08em; color: var(--muted); border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+@media (max-width: 900px) {
+  .viewer { grid-template-columns: minmax(0, 1fr); }
+  .vbox { aspect-ratio: 4 / 5; min-height: 0; }
+  .side { flex-direction: column; }
+  .planbig { max-width: 420px; }
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cols { grid-template-columns: minmax(0, 1fr); }
+  form { grid-template-columns: minmax(0, 1fr); }
+  .hero-type { flex-direction: column; align-items: flex-start; }
+  .hero-type .meta { text-align: left; }
+  .mini { width: 128px; padding: 8px; }
+  .mini header { font-size: 9px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #ring .spin { animation: none; }
+  .cap, .mini { transition: none; }
+}
+</style>
+
+<div id="story">
+  <div id="stage" aria-label="Scroll to walk through 1146 Florida Street">
+    <div class="poster"></div>
+    <canvas id="sc" aria-hidden="true"></canvas>
+    <div class="scrim" id="scrim"></div>
+    <div id="ring" aria-hidden="true"><svg width="10" height="10"><g class="spin"><defs><path id="orbit" d=""></path></defs><text><textPath href="#orbit" id="ringtext"></textPath></text></g></svg></div>
+    <div class="scrollcue" id="cue">Scroll to unroll the house</div>
+    <div class="hero-type" id="hero">
+      <h1><span>1146 Florida Street</span>The Mission House</h1>
+      <div class="meta">Mission District<br>San Francisco<br>Three levels · 30 views</div>
+    </div>
+    <div class="cap" id="cap"><div class="lvl" id="caplvl"></div><h2 id="caph"></h2><p id="capp"></p></div>
+    <div class="mini" id="mini">
+      <header><span>Plan</span><b id="minilvl">Level 3</b></header>
+      <div class="plate" id="miniplate"><div class="img" id="miniimg"></div>
+        <svg id="minisvg" aria-hidden="true"><path class="cone" id="minicone"></path><circle class="dot" id="minidot" r="4"></circle></svg>
+      </div>
+    </div>
+    <div class="progress" id="prog"></div>
+  </div>
+</div>
+
+<section id="walk">
+  <div class="wrap">
+    <div class="walkhead">
+      <div><div class="kicker">Walk it yourself</div><h3 class="big">Every door is real.</h3></div>
+      <p>Drag to look around. Tap a door to step through it, or pick a room on the plan. The dot and its cone show where you stand and which way you face.</p>
+    </div>
+    <div class="viewer">
+      <div class="vbox" id="vbox" aria-label="360 view. Drag to look around.">
+        <canvas id="vc"></canvas>
+        <div class="room" id="vroom"></div>
+        <div id="doors"></div>
+      </div>
+      <div class="side">
+        <div class="levels" role="group" aria-label="Level">
+          <button type="button" data-lvl="3" aria-pressed="false">Level 3</button>
+          <button type="button" data-lvl="2" aria-pressed="true">Level 2</button>
+          <button type="button" data-lvl="1" aria-pressed="false">Level 1</button>
+        </div>
+        <div class="planbig"><div class="plate" id="bigplate"><div class="img"></div><svg id="bigsvg" viewBox="0 0 1621 2048" preserveAspectRatio="none"></svg></div></div>
+        <div class="rooms" id="roomlist"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="home">
+  <div class="wrap">
+    <div class="kicker">The house</div>
+    <h3 class="big">Victorian outside. Rebuilt inside.</h3>
+    <div class="facts">
+      <div><b>3</b><span>Bedrooms</span></div>
+      <div><b>3.5</b><span>Baths</span></div>
+      <div><b>~3,000</b><span>Square feet</span></div>
+      <div><b>3</b><span>Levels</span></div>
+    </div>
+    <div class="cols">
+      <div>
+        <p>Hidden behind an eye-catching Victorian facade lies 1146 Florida, a three-bedroom, three-and-a-half bath home with nearly 3,000 square feet of living space in the Mission District. Tom McElroy Architecture designed the renovation.</p>
+        <p>Three levels, an open plan from the bay window to the kitchen, and a landscaped garden with a built-in barbecue, fountain, pergola and fire pit.</p>
+      </div>
+      <div>
+        <p>A block from the 24th Street corridor: eateries, coffee shops, and the rest of what makes the Mission the Mission.</p>
+        <p style="font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--muted)">Square footage is approximate, per public records. Plan sizes and dimensions are approximate.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="show">
+  <div class="wrap">
+    <div class="kicker">Private showings</div>
+    <h3 class="big">See it in person.</h3>
+    <form id="f" novalidate>
+      <label>Name<input id="fn" name="name" autocomplete="name" required></label>
+      <label>Email<input id="fe" name="email" type="email" autocomplete="email" required></label>
+      <label class="full">When suits you<textarea id="fm" name="message" placeholder="A weekday evening, or this Saturday morning"></textarea></label>
+      <div class="send"><button type="submit">Request a showing</button><output id="fo" aria-live="polite"></output></div>
+    </form>
+  </div>
+</section>
+
+<footer><span>Concept demo built from the property's 360 tour. 360 photography: Olga Soboleva.</span><span>1146 Florida Street, San Francisco</span></footer>
+
+<script>window.MEDIA_BASE="media";
+/* pano.js: a small WebGL2 360 engine for listing pages.
+ *
+ * One full-screen shader renders up to two equirect panoramas (layers A and B) so rooms can blend.
+ * Every pixel is a ray: origin = camera offset inside the unit sphere (+ a projection pull-back k),
+ * direction = view basis * screen point. k = 0 is a normal lens, k = 1 is stereographic (little planet),
+ * a camera offset toward a door makes the room stretch past you like you walked forward.
+ *
+ * Looks (uniform "look"): exposure, saturation, warmth, vignette, grain, sepia "develop" amount,
+ * line-drawing amount and a light-reveal spot, plus a soft nadir cap over the tripod.
+ */
+(function (G) {
+  'use strict';
+  const VS = `#version 300 es
+  in vec2 p; out vec2 vUv;
+  void main(){ vUv = p*0.5+0.5; gl_Position = vec4(p,0.,1.); }`;
+
+  const FS = `#version 300 es
+  precision highp float;
+  in vec2 vUv; out vec4 o;
+  uniform sampler2D tA, tB;
+  uniform vec2 res;
+  uniform vec2 shift; // move the projection center (uv units), e.g. to sit a little planet beside a title
+  uniform float aspect, tanH;
+  // per layer: basis (right, up, fwd), camera offset, k, alpha, blur
+  uniform mat3 bA, bB;
+  uniform vec3 offA, offB;
+  uniform float kA, kB, alphaB, blurA, blurB, rollA;
+  uniform float flatA, flatB;    // 1 = flat photo (not equirect), drawn as a cover-fit plate
+  uniform vec4 flatRA, flatRB;   // x,y,scale,aspect of the flat photo
+  // look
+  uniform float expo, sat, warm, vig, grain, time, develop, lineAmt, nadir;
+  uniform vec3 tint; uniform float tintAmt;
+  uniform vec3 spot; // x,y in screen uv, z radius (0 = off): inside the spot the photo shows, outside the line drawing
+  uniform float spotSoft;
+
+  const float PI = 3.14159265359;
+
+  vec2 eq(vec3 d){
+    d = normalize(d);
+    float lon = atan(d.x, -d.z);
+    float lat = asin(clamp(d.y,-1.,1.));
+    return vec2(0.5 + lon/(2.*PI), 0.5 - lat/PI);
+  }
+  vec3 hit(vec3 O, vec3 D){
+    float b = dot(O,D); float c = dot(O,O)-1.;
+    float t = -b + sqrt(max(b*b - c, 0.));
+    return O + t*D;
+  }
+  vec4 samp(sampler2D t, vec3 d, float lod){
+    vec2 uv = eq(d);
+    vec2 uv2 = vec2(fract(uv.x+0.5), uv.y);
+    vec2 dx = dFdx(uv), dy = dFdy(uv), dx2 = dFdx(uv2), dy2 = dFdy(uv2);
+    if (abs(dx2.x) < abs(dx.x)) dx.x = dx2.x;
+    if (abs(dy2.x) < abs(dy.x)) dy.x = dy2.x;
+    if (lod > 0.) return textureLod(t, uv, lod);
+    return textureGrad(t, uv, dx, dy);
+  }
+  vec3 nadirCap(sampler2D t, vec3 d, vec3 col){
+    if (nadir <= 0.) return col;
+    float lat = asin(clamp(normalize(d).y,-1.,1.));
+    float a = smoothstep(-1.12, -1.28, lat) * nadir; // ~ -64 to -73 deg
+    if (a <= 0.) return col;
+    vec3 ring = normalize(vec3(d.x, 0., d.z));
+    vec3 r = ring*cos(-1.05) + vec3(0.,sin(-1.05),0.);
+    vec3 floorc = samp(t, r, 5.5).rgb;
+    vec3 center = textureLod(t, vec2(0.5, 0.97), 9.).rgb;
+    float m = smoothstep(-1.25, -1.5, lat);
+    return mix(col, mix(floorc, mix(floorc, center, .5), m), a);
+  }
+  vec3 layer(sampler2D t, mat3 B, vec3 off, float k, float blur, vec2 sp, float isFlat, vec4 fr){
+    if (isFlat > .5){
+      // cover-fit plate with a little zoom (fr.z) and pan (fr.xy)
+      vec2 q = (vUv - .5);
+      float sa = aspect / fr.w;
+      vec2 uv = vec2(q.x * (sa > 1. ? 1. : sa), q.y * (sa > 1. ? 1./sa : 1.)) / fr.z + .5 + fr.xy;
+      uv.y = 1. - uv.y;
+      return texture(t, clamp(uv, 0., 1.)).rgb;
+    }
+    vec3 D = normalize(B * vec3(sp, 1.));
+    vec3 O = off - B[2]*k;
+    vec3 d = hit(O, D);
+    vec3 c = samp(t, d, 0.).rgb;
+    if (blur > 0.001){
+      // radial rush: samples pulled toward the screen center
+      vec3 acc = c; float w = 1.;
+      for (int i=1;i<6;i++){
+        float s = 1. - blur*float(i)/6.;
+        vec3 Di = normalize(B * vec3(sp*s, 1.));
+        acc += samp(t, hit(O, Di), 1.).rgb; w += 1.;
+      }
+      c = acc/w;
+    }
+    return nadirCap(t, d, c);
+  }
+  float luma(vec3 c){ return dot(c, vec3(.2126,.7152,.0722)); }
+  float hash(vec2 p){ return fract(sin(dot(p, vec2(12.9898,78.233)))*43758.5453); }
+
+  void main(){
+    vec2 sp = ((vUv - shift)*2.-1.) * vec2(aspect,1.) * tanH;
+    vec3 c = layer(tA, bA, offA, kA, blurA, sp, flatA, flatRA);
+    if (alphaB > 0.001){
+      vec3 cb = layer(tB, bB, offB, kB, blurB, sp, flatB, flatRB);
+      c = mix(c, cb, alphaB);
+    }
+    // grade
+    c *= expo;
+    float L = luma(c);
+    c = mix(vec3(L), c, sat);
+    c *= vec3(1.+warm*.06, 1., 1.-warm*.08);
+    if (tintAmt > 0.) c = mix(c, tint * (L*1.15), tintAmt);
+    if (develop > 0.){
+      // albumen print: sepia, crushed blacks lifted, highlights warm, soft
+      vec3 sep = vec3(L*1.07+.04, L*.93+.03, L*.74+.02);
+      sep = mix(sep, vec3(.95,.90,.80), .12);
+      c = mix(c, sep, develop);
+    }
+    if (lineAmt > 0.){
+      // reuse the gradient trick on the composed image of layer A
+      float e = 1.25 / res.y * 2. * tanH;
+      vec3 O = offA - bA[2]*kA; float l[9]; int n=0;
+      for (int j=-1;j<=1;j++) for (int i=-1;i<=1;i++){
+        vec3 D = normalize(bA * vec3(sp + vec2(float(i),float(j))*e, 1.));
+        l[n++] = luma(samp(tA, hit(O,D), 0.4).rgb);
+      }
+      float gx = (l[2]+2.*l[5]+l[8]) - (l[0]+2.*l[3]+l[6]);
+      float gy = (l[6]+2.*l[7]+l[8]) - (l[0]+2.*l[1]+l[2]);
+      float g = smoothstep(.05, .28, sqrt(gx*gx+gy*gy));
+      vec3 paper = vec3(.955,.95,.93);
+      vec3 ink = vec3(.12,.16,.22);
+      vec3 drawn = mix(paper, ink, g*.9);
+      float m = lineAmt;
+      if (spot.z > 0.){
+        vec2 q = (vUv - spot.xy) * vec2(aspect, 1.);
+        float r = length(q);
+        m *= smoothstep(spot.z*(1.-spotSoft), spot.z, r);
+      }
+      c = mix(c, drawn, m);
+    }
+    float v = length((vUv-.5)*vec2(aspect,1.)*.9);
+    c *= mix(1., smoothstep(1.15, .25, v), vig);
+    c += (hash(vUv*res + time) - .5) * grain;
+    o = vec4(c, 1.);
+  }`;
+
+  function compile(gl, type, src) {
+    const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+    return s;
+  }
+
+  const D2R = Math.PI / 180;
+  const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+  const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const easeOut = t => 1 - Math.pow(1 - t, 3);
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const wrapPi = a => { a = (a + Math.PI) % (2 * Math.PI); if (a < 0) a += 2 * Math.PI; return a - Math.PI; };
+  const dirOf = (yaw, pitch) => [Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), -Math.cos(yaw) * Math.cos(pitch)];
+
+  function basis(yaw, pitch, roll) {
+    const f = dirOf(yaw, pitch);
+    let r = [-f[2], 0, f[0]]; const rl = Math.hypot(r[0], r[2]) || 1e-6; r = [r[0] / rl, 0, r[2] / rl];
+    let u = [r[1] * f[2] - r[2] * f[1], r[2] * f[0] - r[0] * f[2], r[0] * f[1] - r[1] * f[0]];
+    if (roll) {
+      const c = Math.cos(roll), s = Math.sin(roll);
+      const r2 = r.map((v, i) => v * c + u[i] * s), u2 = u.map((v, i) => -r[i] * s + v * c); r = r2; u = u2;
+    }
+    return { r, u, f, m: new Float32Array([...r, ...u, ...f]) };
+  }
+
+  class Pano {
+    constructor(canvas, opts = {}) {
+      this.canvas = canvas;
+      const gl = canvas.getContext('webgl2', { antialias: false, alpha: false, preserveDrawingBuffer: !!opts.preserve, powerPreference: 'high-performance' });
+      if (!gl) throw new Error('WebGL2 not available');
+      this.gl = gl;
+      this.aniso = gl.getExtension('EXT_texture_filter_anisotropic');
+      const pr = gl.createProgram();
+      gl.attachShader(pr, compile(gl, gl.VERTEX_SHADER, VS));
+      gl.attachShader(pr, compile(gl, gl.FRAGMENT_SHADER, FS));
+      gl.bindAttribLocation(pr, 0, 'p'); gl.linkProgram(pr);
+      if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(pr));
+      this.pr = pr; gl.useProgram(pr);
+      const vb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, vb);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+      gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+      this.U = {};
+      const n = gl.getProgramParameter(pr, gl.ACTIVE_UNIFORMS);
+      for (let i = 0; i < n; i++) { const a = gl.getActiveUniform(pr, i); this.U[a.name.replace(/\[0\]$/, '')] = gl.getUniformLocation(pr, a.name); }
+      gl.uniform1i(this.U.tA, 0); gl.uniform1i(this.U.tB, 1);
+      this.cache = new Map();
+      this.A = this.layer(); this.B = this.layer(); this.alphaB = 0;
+      this.shift = [0, 0];
+      this.fov = opts.fov || 80; this.dpr = Math.min(opts.dpr || window.devicePixelRatio || 1, opts.maxDpr || 2);
+      this.look = Object.assign({ expo: 1, sat: 1, warm: 0, vig: .25, grain: .018, develop: 0, lineAmt: 0, nadir: 1, tint: [1, 1, 1], tintAmt: 0, spot: [0.5, 0.5, 0], spotSoft: .5 }, opts.look || {});
+      this.t0 = performance.now();
+      this.onframe = null;
+      this.resize();
+      addEventListener('resize', () => this.resize());
+      this.loop = this.loop.bind(this); requestAnimationFrame(this.loop);
+    }
+    layer() { return { tex: null, yaw: 0, pitch: 0, roll: 0, k: 0, off: [0, 0, 0], blur: 0, flat: 0, flatR: [0, 0, 1, 1.5] }; }
+    resize() {
+      const c = this.canvas, w = c.clientWidth, h = c.clientHeight;
+      c.width = Math.max(2, Math.round(w * this.dpr)); c.height = Math.max(2, Math.round(h * this.dpr));
+      this.gl.viewport(0, 0, c.width, c.height);
+    }
+    /* load(url) -> texture handle {tex, w, h, flat}; smUrl paints first, full res swaps in */
+    load(url, smUrl) {
+      if (this.cache.has(url)) return this.cache.get(url);
+      const gl = this.gl;
+      const h = { tex: gl.createTexture(), ready: false, full: false, w: 0, h: 0, flat: false, url };
+      const put = (img, full) => {
+        gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, h.tex);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        if (this.aniso) gl.texParameterf(gl.TEXTURE_2D, this.aniso.TEXTURE_MAX_ANISOTROPY_EXT, 8);
+        h.w = img.naturalWidth || img.width; h.h = img.naturalHeight || img.height;
+        h.flat = h.w / h.h < 1.9; h.ready = true; if (full) h.full = true;
+      };
+      const get = u => new Promise((res, rej) => { const i = new Image(); i.decoding = 'async'; i.onload = () => res(i); i.onerror = rej; i.src = u; });
+      h.promise = (smUrl ? get(smUrl).then(i => { if (!h.full) put(i, false); }) : Promise.resolve())
+        .then(() => h);
+      h.fullPromise = get(url).then(i => (i.decode ? i.decode().catch(() => {}) : 0).then(() => { put(i, true); return h; }));
+      if (!smUrl) h.promise = h.fullPromise;
+      this.cache.set(url, h);
+      return h;
+    }
+    set(L, h) {
+      L.tex = h; L.flat = h && h.flat ? 1 : 0;
+      if (h && h.flat) L.flatR[3] = h.w / h.h;
+    }
+    viewDir() { return dirOf(this.A.yaw, this.A.pitch); }
+    /* screen position of a pano direction (yaw,pitch) for layer L in px; null if behind */
+    project(yaw, pitch, L = this.A) {
+      const b = basis(L.yaw, L.pitch, L.roll), d = dirOf(yaw, pitch);
+      const z = d[0] * b.f[0] + d[1] * b.f[1] + d[2] * b.f[2]; if (z <= 0.05) return null;
+      const x = (d[0] * b.r[0] + d[1] * b.r[1] + d[2] * b.r[2]) / z, y = (d[0] * b.u[0] + d[1] * b.u[1] + d[2] * b.u[2]) / z;
+      const th = Math.tan(this.fov * D2R / 2), w = this.canvas.clientWidth, hh = this.canvas.clientHeight, asp = w / hh;
+      return { x: (x / (asp * th) * .5 + .5) * w, y: (1 - (y / th * .5 + .5)) * hh, z };
+    }
+    /* yaw,pitch under a screen point (px) for layer A, rectilinear */
+    pick(px, py) {
+      const L = this.A, b = basis(L.yaw, L.pitch, L.roll), w = this.canvas.clientWidth, h = this.canvas.clientHeight;
+      const th = Math.tan(this.fov * D2R / 2), sx = (px / w * 2 - 1) * (w / h) * th, sy = (1 - py / h * 2) * th;
+      const d = [b.r[0] * sx + b.u[0] * sy + b.f[0], b.r[1] * sx + b.u[1] * sy + b.f[1], b.r[2] * sx + b.u[2] * sy + b.f[2]];
+      const l = Math.hypot(...d);
+      return { yaw: Math.atan2(d[0], -d[2]), pitch: Math.asin(d[1] / l) };
+    }
+    draw() {
+      const gl = this.gl, U = this.U, A = this.A, B = this.B, lk = this.look;
+      const w = this.canvas.width, h = this.canvas.height;
+      gl.uniform2f(U.res, w, h); gl.uniform1f(U.aspect, w / h);
+      gl.uniform2f(U.shift, this.shift[0], this.shift[1]);
+      gl.uniform1f(U.tanH, Math.tan(this.fov * D2R / 2));
+      const bind = (L, unit, U_b, U_off, U_k, U_blur, U_flat, U_fr) => {
+        gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, L.tex && L.tex.ready ? L.tex.tex : null);
+        gl.uniformMatrix3fv(U_b, false, basis(L.yaw, L.pitch, L.roll).m);
+        gl.uniform3fv(U_off, L.off); gl.uniform1f(U_k, L.k); gl.uniform1f(U_blur, L.blur);
+        gl.uniform1f(U_flat, L.flat); gl.uniform4fv(U_fr, L.flatR);
+      };
+      bind(A, 0, U.bA, U.offA, U.kA, U.blurA, U.flatA, U.flatRA);
+      bind(B, 1, U.bB, U.offB, U.kB, U.blurB, U.flatB, U.flatRB);
+      gl.uniform1f(U.alphaB, B.tex && B.tex.ready ? this.alphaB : 0);
+      gl.uniform1f(U.expo, lk.expo); gl.uniform1f(U.sat, lk.sat); gl.uniform1f(U.warm, lk.warm);
+      gl.uniform1f(U.vig, lk.vig); gl.uniform1f(U.grain, lk.grain); gl.uniform1f(U.develop, lk.develop);
+      gl.uniform1f(U.lineAmt, lk.lineAmt); gl.uniform1f(U.nadir, lk.nadir);
+      gl.uniform3fv(U.tint, lk.tint); gl.uniform1f(U.tintAmt, lk.tintAmt);
+      gl.uniform3fv(U.spot, lk.spot); gl.uniform1f(U.spotSoft, lk.spotSoft);
+      gl.uniform1f(U.time, (performance.now() - this.t0) / 1000 % 100);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+    loop(t) {
+      if (this.onframe) this.onframe(t);
+      if (this.A.tex && this.A.tex.ready) this.draw();
+      requestAnimationFrame(this.loop);
+    }
+  }
+
+  /* Tour: a graph of rooms with solved headings. walk() moves through a door like a dolly shot. */
+  class Tour {
+    constructor(pano, layout, base, opts = {}) {
+      this.p = pano; this.L = layout; this.base = base; this.opts = opts;
+      this.rooms = new Map(layout.rooms.map(r => [r.i, r]));
+      this.cur = null; this.busy = false;
+      this.dragging = false; this.vel = 0; this.vy = 0; this.auto = opts.auto ?? 0.02;
+    }
+    url(i, sm) { return `${this.base}/${String(i).padStart(2, '0')}${sm ? '-sm' : ''}.jpg`; }
+    tex(i) { return this.p.load(this.url(i), this.url(i, true)); }
+    async show(i, yaw = 0, pitch = 0) {
+      const h = this.tex(i); await h.promise; this.p.set(this.p.A, h);
+      Object.assign(this.p.A, { yaw, pitch, k: 0, off: [0, 0, 0], blur: 0 }); this.p.alphaB = 0;
+      this.cur = this.rooms.get(i); this.prefetch(i); return this.cur;
+    }
+    prefetch(i) { const r = this.rooms.get(i); if (!r) return; for (const l of r.links) this.tex(l.to); }
+    link(from, to) { const r = this.rooms.get(from); return r && r.links.find(l => l.to === to); }
+    /* heading-consistent yaw in room b for a world direction seen as yaw y in room a */
+    carry(a, b, y) {
+      const ra = this.rooms.get(a), rb = this.rooms.get(b);
+      if (!ra || !rb || ra.comp !== rb.comp) return null;
+      return wrapPi(ra.heading + y - rb.heading);
+    }
+    /* walk to room j. dur seconds. Returns a promise. */
+    async walk(j, opts = {}) {
+      if (this.busy || !this.cur || j === this.cur.i) return;
+      this.busy = true;
+      const p = this.p, A = p.A, B = p.B, i = this.cur.i;
+      const lk = this.link(i, j);
+      const hB = this.tex(j); await hB.promise;
+      const doorYaw = lk ? lk.yaw : A.yaw;
+      let doorPitch = lk ? clamp(lk.pitch, -0.35, 0.25) : 0;
+      // 1) turn toward the door
+      const y0 = A.yaw, p0 = A.pitch, dy = wrapPi(doorYaw - y0), turnPitch = clamp(doorPitch * .5, -.2, .15);
+      const pace = this.opts.pace || 1, rush = this.opts.blur ?? 1;
+      const turnT = (opts.turn ?? clamp(Math.abs(dy) / 2.4, .25, .9)) * pace;
+      await this.tween(turnT, t => { const e = ease(t); A.yaw = y0 + dy * e; A.pitch = lerp(p0, turnPitch, e); });
+      // 2) dolly through
+      const arrive = this.carry(i, j, doorYaw);
+      p.set(B, hB);
+      const by = arrive ?? 0;
+      Object.assign(B, { yaw: by, pitch: A.pitch, roll: 0, k: 0, blur: 0 });
+      const fwdA = dirOf(doorYaw, 0), fwdB = dirOf(by, 0), D = opts.dist ?? this.opts.dist ?? .82, fov0 = p.fov;
+      const dur = (opts.dur ?? 1.15) * pace, pulse = this.opts.pulse ?? 6;
+      await this.tween(dur, t => {
+        const e = ease(t);
+        A.off = fwdA.map(v => v * D * easeOut(Math.min(1, t * 1.15)));
+        B.off = fwdB.map(v => -v * D * (1 - e));
+        A.blur = Math.sin(Math.PI * t) * .10 * rush; B.blur = Math.sin(Math.PI * t) * .08 * rush;
+        p.alphaB = clamp((t - .28) / .5, 0, 1); p.alphaB = p.alphaB * p.alphaB * (3 - 2 * p.alphaB);
+        p.fov = fov0 + Math.sin(Math.PI * t) * pulse;
+        B.pitch = lerp(A.pitch, 0, e) ; B.yaw = by;
+      });
+      // swap
+      p.set(A, hB); Object.assign(A, { yaw: by, pitch: B.pitch, off: [0, 0, 0], blur: 0, k: 0 });
+      p.alphaB = 0; p.fov = fov0; Object.assign(B, { off: [0, 0, 0], blur: 0 });
+      this.cur = this.rooms.get(j); this.prefetch(j);
+      this.busy = false;
+      if (this.onroom) this.onroom(this.cur);
+    }
+    /* crossfade to a room that has no door link (or another component) */
+    async cut(j, yaw = 0, dur = .9) {
+      if (this.busy) return; this.busy = true;
+      const p = this.p, A = p.A, B = p.B, hB = this.tex(j); await hB.promise;
+      p.set(B, hB); Object.assign(B, { yaw, pitch: 0, k: 0, off: [0, 0, 0] });
+      const fov0 = p.fov;
+      await this.tween(dur, t => {
+        const e = ease(t); p.alphaB = e; A.off = dirOf(A.yaw, 0).map(v => v * .35 * e);
+        B.off = dirOf(yaw, 0).map(v => -v * .3 * (1 - e)); p.fov = fov0 + Math.sin(Math.PI * t) * 4;
+      });
+      p.set(A, hB); Object.assign(A, { yaw, pitch: 0, off: [0, 0, 0] }); p.alphaB = 0; p.fov = fov0;
+      this.cur = this.rooms.get(j); this.prefetch(j); this.busy = false;
+      if (this.onroom) this.onroom(this.cur);
+    }
+    tween(sec, f) {
+      return new Promise(res => {
+        const t0 = performance.now();
+        const step = now => { const t = Math.min(1, (now - t0) / (sec * 1000)); f(t); t < 1 ? requestAnimationFrame(step) : res(); };
+        requestAnimationFrame(step);
+      });
+    }
+    /* drag to look, wheel/pinch zoom */
+    attach(el) {
+      const p = this.p; let lx = 0, ly = 0, id = null, moved = 0;
+      el.addEventListener('pointerdown', e => { id = e.pointerId; lx = e.clientX; ly = e.clientY; moved = 0; this.dragging = true; el.setPointerCapture(id); this.vel = 0; this.vy = 0; });
+      el.addEventListener('pointermove', e => {
+        if (e.pointerId !== id) return;
+        const s = p.fov * D2R / el.clientHeight; const dx = e.clientX - lx, dy = e.clientY - ly;
+        moved += Math.abs(dx) + Math.abs(dy);
+        if (!this.busy) { p.A.yaw -= dx * s; p.A.pitch = clamp(p.A.pitch + dy * s, -1.3, 1.3); }
+        this.vel = -dx * s; this.vy = dy * s; lx = e.clientX; ly = e.clientY;
+      });
+      const up = e => { if (e.pointerId !== id) return; id = null; this.dragging = false; this.lastMoved = moved; };
+      el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+      el.addEventListener('wheel', e => { if (this.opts.wheelZoom === false) return; e.preventDefault(); p.fov = clamp(p.fov + e.deltaY * .04, 35, 100); }, { passive: false });
+    }
+    idle(dt) {
+      const A = this.p.A;
+      if (this.busy || this.dragging) return;
+      A.yaw += this.vel; A.pitch = clamp(A.pitch + this.vy, -1.3, 1.3);
+      this.vel *= .92; this.vy *= .9;
+      if (Math.abs(this.vel) < 1e-4) A.yaw += this.auto * dt;
+    }
+  }
+
+  G.PanoKit = { Pano, Tour, basis, dirOf, wrapPi, clamp, ease, easeOut, lerp, D2R };
+})(window);
+
+</script>
+<script>
+(async () => {
+const MEDIA = window.MEDIA_BASE || '../../media/mission-house';
+const { Pano, Tour, dirOf, wrapPi, clamp, ease, easeOut, lerp } = PanoKit;
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = s => document.querySelector(s);
+const [L, PLAN] = await Promise.all([fetch(MEDIA + '/layout.json').then(r => r.json()), fetch(MEDIA + '/plan.json').then(r => r.json())]);
+const R = new Map(L.rooms.map(r => [r.i, r]));
+const planURL = `url("${MEDIA}/floorplan.jpg")`;
+document.querySelectorAll('.plate .img').forEach(e => e.style.setProperty('--plan', planURL));
+document.querySelectorAll('.plate .img').forEach(e => e.style.backgroundImage = planURL);
+const NAME = { 1: 'Facade', 2: 'Foyer', 3: 'Living Room', 4: 'Living Room, Fireplace', 5: 'Dining Area', 6: 'Powder Room', 7: 'Great Room', 8: 'Kitchen', 9: 'Kitchen, Garden Side', 10: 'Great Room, Stair Side', 11: 'Family Room', 12: 'Main Stair', 13: 'Upper Landing', 14: 'Home Office', 15: 'View Terrace', 16: 'Main Bedroom', 17: 'Main Bath', 18: 'Main Suite Lounge', 19: 'Upper Stair', 20: 'Lower Stair', 21: 'Lower Landing', 22: 'Media Room', 23: 'Wet Bar', 24: 'Bedroom 2', 25: 'Bath 2', 26: 'Bedroom 3', 27: 'Bath 3', 28: 'Patio', 29: 'Garden', 30: 'Garden, Pergola' };
+const LVL = i => PLAN.rooms[i] ? PLAN.rooms[i][2] : 2;
+const LVLNAME = { 1: 'Level 1 · Garden level', 2: 'Level 2 · Main level', 3: 'Level 3 · Top floor' };
+
+/* ---------------- the scroll story ---------------- */
+const stage = $('#stage'), sc = $('#sc');
+let pano;
+try { pano = new Pano(sc, { fov: 120, maxDpr: 1.75, look: { vig: .32, grain: .012, sat: 1.04 } }); }
+catch (e) { stage.classList.add('nogl'); $('#cue').textContent = 'This view needs WebGL2'; return; }
+const tour = new Tour(pano, L, MEDIA);
+const ROUTE = [15, 14, 19, 12, 3, 5, 8, 21, 22, 30];
+const CAPS = {
+  15: ['Level 3', 'The view terrace', 'The top of the house opens to the rooftops of the Mission.'],
+  14: ['Level 3', 'Home office', 'A desk with its own door to the terrace.'],
+  19: ['Between levels', 'Skylit stair', 'Light from the roof falls all the way down the stairwell.'],
+  12: ['Level 2', 'The main level', 'One open run from the bay window to the kitchen.'],
+  3: ['Level 2', 'Living room', 'Behind the Victorian bay, around a fireplace.'],
+  5: ['Level 2', 'Dining', 'The table sits at the center of the open plan.'],
+  8: ['Level 2', 'Kitchen', 'A long island, and the stair to the garden level beside it.'],
+  21: ['Level 1', 'Garden level', 'Two bedrooms, two baths, and the media room.'],
+  22: ['Level 1', 'Media room', 'Glass doors straight onto the garden.'],
+  30: ['Level 1', 'The garden', 'Barbecue, fountain, pergola and fire pit.'],
+};
+// segments: units of scroll. hold = look around one room, walk = go through a door
+const SEG = [];
+SEG.push({ t: 'planet', room: 15, len: 1.1 });
+SEG.push({ t: 'unroll', room: 15, len: 1.6 });
+for (let n = 0; n < ROUTE.length; n++) {
+  const i = ROUTE[n], j = ROUTE[n + 1];
+  SEG.push({ t: 'hold', room: i, to: j, len: n === 0 ? .9 : 1.0 });
+  if (j) SEG.push({ t: 'walk', room: i, to: j, len: 1.0 });
+}
+SEG.push({ t: 'curl', room: 30, len: 1.6 });
+SEG.push({ t: 'end', room: 30, len: .5 });
+let TOTAL = 0;
+
+// yaw bookkeeping: arrival yaw of each room = carried from the previous door
+const linkYaw = (i, j) => (R.get(i).links.find(l => l.to === j) || { yaw: 0 }).yaw;
+const linkPitch = (i, j) => (R.get(i).links.find(l => l.to === j) || { pitch: 0 }).pitch;
+const carry = (i, j, y) => tour.carry(i, j, y) ?? 0;
+const arrive = {}; arrive[ROUTE[0]] = linkYaw(ROUTE[0], ROUTE[1]) - 2.2;
+for (let n = 0; n < ROUTE.length - 1; n++) arrive[ROUTE[n + 1]] = carry(ROUTE[n], ROUTE[n + 1], linkYaw(ROUTE[n], ROUTE[n + 1]));
+const holdEnd = (i, j) => {
+  if (!j) return arrive[i] + 1.4;
+  let d = wrapPi(linkYaw(i, j) - arrive[i]);
+  if (Math.abs(d) < .5) d += d < 0 ? -.6 : .6; // always some sweep, and land facing the door
+  return arrive[i] + d;
+};
+
+// turning is the part that unsettles people: give each look-around enough scroll that the view turns at most
+// about 30 degrees per step-second
+for (const sg of SEG) if (sg.t === 'hold') sg.len = Math.max(sg.len, Math.abs(holdEnd(sg.room, sg.to) - arrive[sg.room]) / 1.3);
+TOTAL = SEG.reduce((a, s) => a + s.len, 0);
+$('#story').style.height = (TOTAL * 85 + 100) + 'vh';
+
+// textures: previews for the whole route now, full res for the next two rooms as we go
+const tex = {}; ROUTE.forEach(i => tex[i] = tour.tex(i));
+await tex[15].promise;
+stage.classList.add('ready');
+
+const D = RM ? 0 : .5;
+const HOLDFOV = { 19: 98, 12: 90, 21: 92 };
+function setRoom(L_, i) { pano.set(L_, tex[i] || tour.tex(i)); }
+function apply(seg, t) {
+  const A = pano.A, B = pano.B;
+  pano.alphaB = 0; A.off = [0, 0, 0]; B.off = [0, 0, 0]; A.blur = 0; B.blur = 0; A.k = 0; B.k = 0;
+  const vh = sc.clientHeight, vw = sc.clientWidth, narrow = vw < 760;
+  const planetR = narrow ? Math.min(vw * .40, vh * .27) : Math.min(vw * .27, vh * .36);
+  // the planet sits right of the title on wide screens, above it on phones; it glides to center as it unrolls
+  const sx = narrow ? 0 : .17, sy = narrow ? .13 : .02;
+  const planetFov = 2 * Math.atan((vh / 2) / planetR) * 180 / Math.PI;
+  if (seg.t === 'planet' || seg.t === 'unroll') {
+    setRoom(A, 15);
+    const u = seg.t === 'planet' ? 0 : ease(t);
+    A.k = 1 - u; A.pitch = lerp(-Math.PI / 2, 0, u); A.roll = 0;
+    const y0 = (sc.clientWidth < 760 ? 4.71 : 4.15) + (seg.t === 'planet' ? t * .35 : .35);
+    A.yaw = y0 + wrapPi(arrive[15] - y0) * u;
+    pano.fov = lerp(planetFov, 80, u);
+    pano.shift = [sx * (1 - u), sy * (1 - u)];
+    ringState(seg.t === 'planet' ? 1 : 1 - clamp(u * 2.2, 0, 1), planetR * (1 + u * 1.6), false, sx * (1 - u), sy * (1 - u));
+    return;
+  }
+  ringState(0, planetR);
+  pano.shift = [0, 0];
+  if (seg.t === 'hold') {
+    setRoom(A, seg.room);
+    A.yaw = lerp(arrive[seg.room], holdEnd(seg.room, seg.to), RM ? t : ease(t));
+    A.pitch = lerp(0, seg.to ? clamp(linkPitch(seg.room, seg.to) * .5, -.2, .15) : 0, ease(t));
+    const hf = HOLDFOV[seg.room] || 80;
+    pano.fov = lerp(hf, 80, clamp((t - .6) / .4, 0, 1));
+    return;
+  }
+  if (seg.t === 'walk') {
+    const i = seg.room, j = seg.to, dy = linkYaw(i, j), by = arrive[j];
+    setRoom(A, i); setRoom(B, j);
+    const p0 = clamp(linkPitch(i, j) * .5, -.2, .15);
+    A.yaw = dy; A.pitch = p0;
+    const fa = dirOf(dy, 0), fb = dirOf(by, 0), e = ease(t);
+    A.off = fa.map(v => v * D * easeOut(Math.min(1, t * 1.15)));
+    B.off = fb.map(v => -v * D * (1 - e));
+    A.blur = 0; B.blur = 0;
+    let a = clamp((t - .4) / .2, 0, 1); pano.alphaB = a * a * (3 - 2 * a);
+    B.yaw = by; B.pitch = lerp(p0, 0, e); B.k = 0;
+    pano.fov = 80 + (RM ? 0 : Math.sin(Math.PI * t) * 1.5);
+    return;
+  }
+  if (seg.t === 'curl' || seg.t === 'end') {
+    setRoom(A, 30);
+    const u = seg.t === 'end' ? 1 : ease(t), y0 = holdEnd(30);
+    A.k = u; A.pitch = lerp(0, -Math.PI / 2, u); A.yaw = y0 + u * .8;
+    pano.fov = lerp(80, planetFov, u);
+    pano.shift = [sx * u, sy * u];
+    ringState(clamp((u - .55) / .45, 0, 1), planetR * (1 + (1 - u) * 1.6), true, sx * u, sy * u);
+  }
+}
+
+// orbiting type ring
+const ring = $('#ring'), ringtext = $('#ringtext'), orbit = $('#orbit');
+let ringMode = null, ringR = 0;
+function ringState(alpha, r, end, sx = 0, sy = 0) {
+  ring.style.opacity = alpha;
+  ring.style.left = (50 + sx * 100) + '%'; ring.style.top = (50 - sy * 100) + '%';
+  if (alpha <= .001) return;
+  const mode = end ? 'end' : 'start', rr = r * 1.1 + 12;
+  if (mode === ringMode && Math.abs(rr - ringR) < 1) return;
+  orbit.setAttribute('d', `M ${-rr},0 a ${rr},${rr} 0 1,1 ${2 * rr},0 a ${rr},${rr} 0 1,1 ${-2 * rr},0`);
+  ringtext.parentNode.style.fontSize = clamp(rr * .075, 10, 21) + 'px';
+  ringtext.textContent = (end ? 'Walk it yourself · every door is real · ' : '1146 Florida Street · Mission District · San Francisco · ').repeat(2);
+  ringtext.setAttribute('textLength', Math.floor(2 * Math.PI * rr - 4));
+  ringtext.setAttribute('lengthAdjust', 'spacing');
+  ringMode = mode; ringR = rr;
+}
+
+// map scroll -> (segment, t), smoothed
+const story = $('#story');
+let target = 0, shown = 0;
+function readScroll() {
+  const r = story.getBoundingClientRect(), h = story.offsetHeight - innerHeight;
+  target = clamp(-r.top / Math.max(1, h), 0, 1);
+}
+addEventListener('scroll', readScroll, { passive: true }); readScroll(); shown = target;
+function locate(p) {
+  let x = p * TOTAL;
+  for (let n = 0; n < SEG.length; n++) { if (x <= SEG[n].len || n === SEG.length - 1) return { n, seg: SEG[n], t: clamp(x / SEG[n].len, 0, 1) }; x -= SEG[n].len; }
+}
+const cap = $('#cap'), hero = $('#hero'), cue = $('#cue'), mini = $('#mini'), prog = $('#prog');
+let lastCap = null, lastN = -1;
+function ui(loc) {
+  const { seg, t, n } = loc;
+  hero.style.opacity = seg.t === 'planet' ? 1 : seg.t === 'unroll' ? clamp(1 - t * 3, 0, 1) : 0;
+  cue.style.opacity = seg.t === 'planet' ? clamp(1 - t * 2, 0, 1) : 0;
+  const showCap = seg.t === 'hold' ? seg.room : (seg.t === 'walk' && t < .2) ? seg.room : null;
+  if (showCap !== lastCap) {
+    if (showCap && CAPS[showCap]) { const [a, b, c] = CAPS[showCap]; $('#caplvl').textContent = a; $('#caph').textContent = b; $('#capp').textContent = c; cap.classList.add('on'); }
+    else cap.classList.remove('on');
+    lastCap = showCap;
+  }
+  mini.classList.toggle('on', seg.t === 'hold' || seg.t === 'walk');
+  $('#scrim').classList.toggle('on', !!showCap || seg.t === 'planet');
+  prog.style.width = (shown * 100) + '%';
+  // prefetch full res for the next rooms
+  if (n !== lastN) {
+    lastN = n;
+    for (let k = n; k < Math.min(SEG.length, n + 4); k++) { const s = SEG[k]; [s.room, s.to].forEach(i => i && tex[i] && tex[i].fullPromise); }
+  }
+}
+
+/* live mini plan: crop to the current level */
+const BOX = { 1: [80, 60, 560, 1680], 2: [600, 560, 1080, 1870], 3: [1130, 670, 1510, 1720] };
+const miniimg = $('#miniimg'), miniplate = $('#miniplate'), minidot = $('#minidot'), minicone = $('#minicone');
+let miniLvl = 0;
+function planAngle(i, viewYaw) { return R.get(i).heading + viewYaw + PLAN.phi; }
+function cone(cx, cy, ang, r, spread) {
+  const a0 = ang - spread, a1 = ang + spread;
+  return `M${cx},${cy} L${cx + r * Math.cos(a0)},${cy + r * Math.sin(a0)} A${r},${r} 0 0 1 ${cx + r * Math.cos(a1)},${cy + r * Math.sin(a1)} Z`;
+}
+function miniUpdate(loc) {
+  const { seg, t } = loc;
+  let i = seg.room, x, y, ang, lvl;
+  const P = k => PLAN.rooms[k];
+  if (seg.t === 'walk') {
+    const a = P(seg.room), b = P(seg.to), e = ease(t);
+    if (a[2] === b[2]) { x = lerp(a[0], b[0], e); y = lerp(a[1], b[1], e); lvl = a[2]; }
+    else { const s = t < .5 ? a : b; x = s[0]; y = s[1]; lvl = s[2]; }
+    ang = planAngle(seg.room, pano.A.yaw);
+  } else { const a = P(i); x = a[0]; y = a[1]; lvl = a[2]; ang = planAngle(i, pano.A.yaw); }
+  if (lvl !== miniLvl) {
+    const [x0, y0, x1, y1] = BOX[lvl];
+    miniplate.style.setProperty('--ar', ((x1 - x0) / (y1 - y0)).toFixed(3));
+    miniLvl = lvl; $('#minilvl').textContent = 'Level ' + lvl;
+  }
+  const [x0, y0, x1, y1] = BOX[lvl], w = miniplate.clientWidth, h = miniplate.clientHeight, s = w / (x1 - x0);
+  miniimg.style.width = (1621 * s) + 'px'; miniimg.style.height = (2048 * s) + 'px';
+  miniimg.style.left = (-x0 * s) + 'px'; miniimg.style.top = (-y0 * s) + 'px';
+  const cx = (x - x0) * s, cy = (y - y0) * s;
+  minidot.setAttribute('cx', cx); minidot.setAttribute('cy', cy);
+  const half = Math.atan(Math.tan(pano.fov * Math.PI / 360) * (sc.clientWidth / sc.clientHeight));
+  minicone.setAttribute('d', cone(cx, cy, ang, 36, Math.min(half, 1.2)));
+}
+
+let last = performance.now();
+pano.onframe = now => {
+  const dt = Math.min(.05, (now - last) / 1000); last = now;
+  if (RM) shown = target;
+  else {
+    const want = (target - shown) * (1 - Math.pow(.12, dt));       // soft follow, about half a second
+    const gap = Math.abs(target - shown) * TOTAL;
+    const cap = (gap > 3 ? 2.6 : 1.0) / TOTAL * dt;               // about a step per second; faster only after a big jump
+    shown += clamp(want, -cap, cap);
+  }
+  const loc = locate(shown);
+  apply(loc.seg, loc.t);
+  ui(loc);
+  if (loc.seg.t === 'hold' || loc.seg.t === 'walk') miniUpdate(loc);
+};
+
+/* ---------------- free walk ---------------- */
+const vc = $('#vc'), vbox = $('#vbox');
+let vp;
+try { vp = new Pano(vc, { fov: 78, maxDpr: 1.5, look: { vig: .18, grain: .01 } }); } catch (e) { return; }
+const vt = new Tour(vp, L, MEDIA, { auto: RM ? 0 : .008, pace: 1.9, dist: .5, blur: 0, pulse: 1.5 });
+vt.attach(vc);
+const doorsEl = $('#doors'), vroom = $('#vroom');
+let doorBtns = [];
+function buildDoors(r) {
+  doorsEl.innerHTML = ''; doorBtns = [];
+  const seen = new Set();
+  for (const l of r.links) {
+    if (seen.has(l.to)) continue; seen.add(l.to);
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'door';
+    b.innerHTML = `<i></i><span>${NAME[l.to]}</span>`; b.setAttribute('aria-label', 'Walk to ' + NAME[l.to]);
+    b.addEventListener('click', e => { e.stopPropagation(); go(l.to); });
+    doorsEl.appendChild(b); doorBtns.push({ b, l });
+  }
+}
+const bigsvg = $('#bigsvg');
+const NS = 'http://www.w3.org/2000/svg';
+const bigCone = document.createElementNS(NS, 'path'); bigCone.setAttribute('class', 'cone');
+const bigDot = document.createElementNS(NS, 'circle'); bigDot.setAttribute('class', 'dot'); bigDot.setAttribute('r', 16);
+for (const [k, v] of Object.entries(PLAN.rooms)) {
+  const i = +k; if (R.get(i).flat) continue;
+  const c = document.createElementNS(NS, 'circle'); c.setAttribute('class', 'pin'); c.setAttribute('cx', v[0]); c.setAttribute('cy', v[1]); c.setAttribute('r', 15); c.dataset.l = v[2];
+  c.setAttribute('tabindex', '0'); c.setAttribute('role', 'button'); c.setAttribute('aria-label', NAME[i]);
+  const tt = document.createElementNS(NS, 'title'); tt.textContent = NAME[i]; c.appendChild(tt);
+  c.addEventListener('click', () => go(i)); c.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(i); } });
+  bigsvg.appendChild(c);
+}
+bigsvg.appendChild(bigCone); bigsvg.appendChild(bigDot);
+const roomlist = $('#roomlist');
+const bigplate = $('#bigplate'), bigimg = bigplate.querySelector('.img');
+function bigLevel(lvl) {
+  const [x0, y0, x1, y1] = BOX[lvl];
+  bigplate.style.setProperty('--ar', ((x1 - x0) / (y1 - y0)).toFixed(3));
+  bigsvg.setAttribute('viewBox', `${x0} ${y0} ${x1 - x0} ${y1 - y0}`);
+  requestAnimationFrame(() => {
+    const s = bigplate.clientWidth / (x1 - x0);
+    Object.assign(bigimg.style, { width: 1621 * s + 'px', height: 2048 * s + 'px', left: -x0 * s + 'px', top: -y0 * s + 'px' });
+  });
+  bigsvg.querySelectorAll('circle.pin').forEach(c => c.style.display = +c.dataset.l === lvl ? '' : 'none');
+  bigLvl = lvl;
+}
+let bigLvl = 2;
+addEventListener('resize', () => bigLevel(bigLvl));
+function listRooms(lvl) {
+  bigLevel(lvl);
+  roomlist.innerHTML = '';
+  document.querySelectorAll('.levels button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.lvl === lvl)));
+  Object.entries(PLAN.rooms).filter(([k, v]) => v[2] === lvl && !R.get(+k).flat).sort((a, b) => a[1][1] - b[1][1]).forEach(([k]) => {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = NAME[k]; b.dataset.i = k;
+    b.addEventListener('click', () => go(+k)); roomlist.appendChild(b);
+  });
+  markRoom();
+}
+function markRoom() { roomlist.querySelectorAll('button').forEach(b => b.setAttribute('aria-current', String(vt.cur && +b.dataset.i === vt.cur.i))); }
+document.querySelectorAll('.levels button').forEach(b => b.addEventListener('click', () => listRooms(+b.dataset.lvl)));
+async function go(j) {
+  if (vt.busy || !vt.cur || j === vt.cur.i) return;
+  if (vt.link(vt.cur.i, j) && !RM) await vt.walk(j); else await vt.cut(j, vt.carry(vt.cur.i, j, vp.A.yaw) ?? 0, RM ? .01 : 1.6);
+}
+vt.onroom = r => { vroom.innerHTML = `${NAME[r.i]}<small>${LVLNAME[LVL(r.i)]}</small>`; buildDoors(r); if (+document.querySelector('.levels [aria-pressed="true"]').dataset.lvl !== LVL(r.i)) listRooms(LVL(r.i)); markRoom(); };
+let started = false;
+const io = new IntersectionObserver(es => { if (es[0].isIntersecting && !started) { started = true; vt.show(7, 1.25, 0).then(r => vt.onroom(r)); } }, { rootMargin: '400px' });
+io.observe(vbox);
+listRooms(2);
+let vlast = performance.now();
+vp.onframe = now => {
+  const dt = Math.min(.05, (now - vlast) / 1000); vlast = now;
+  vt.idle(dt);
+  if (!vt.cur) return;
+  for (const { b, l } of doorBtns) {
+    const pr = vt.busy ? null : vp.project(l.yaw, clamp(l.pitch, -.6, .5));
+    if (!pr || pr.x < 20 || pr.y < 20 || pr.x > vc.clientWidth - 20 || pr.y > vc.clientHeight - 20) { b.style.display = 'none'; continue; }
+    b.style.display = ''; b.style.left = pr.x + 'px'; b.style.top = pr.y + 'px';
+  }
+  const p = PLAN.rooms[vt.cur.i];
+  bigDot.style.display = bigCone.style.display = p && p[2] === bigLvl ? '' : 'none';
+  if (p) {
+    bigDot.setAttribute('cx', p[0]); bigDot.setAttribute('cy', p[1]);
+    const half = Math.atan(Math.tan(vp.fov * Math.PI / 360) * (vc.clientWidth / vc.clientHeight));
+    bigCone.setAttribute('d', cone(p[0], p[1], planAngle(vt.cur.i, vp.A.yaw), 110, Math.min(half, 1.2)));
+  }
+};
+// clicks on the view (not drags) do nothing special; keep the drag feel
+vbox.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') vp.A.yaw -= .2; if (e.key === 'ArrowRight') vp.A.yaw += .2; });
+vbox.tabIndex = 0;
+
+/* ---------------- form ---------------- */
+$('#f').addEventListener('submit', e => {
+  e.preventDefault();
+  const n = $('#fn').value.trim(), m = $('#fe').value.trim();
+  if (!n || !/^\S+@\S+\.\S+$/.test(m)) { $('#fo').textContent = 'Add your name and a valid email.'; return; }
+  $('#fo').textContent = `Thanks, ${n.split(' ')[0]}. Your request is noted for 1146 Florida.`;
+  e.target.reset();
+});
+})();
+</script>
