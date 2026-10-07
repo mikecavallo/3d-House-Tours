@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Steinmann Photo Story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+<style>
+/* Layout: a pinned photo stage scrubbed by scroll, one chapter per listing photo. Listing card at left (bottom on phones), chapter rail along the bottom, listing details below. */
+:root{
+  --bg:#E7ECEE; --sky-top:#C6D6E1; --sky-low:#EDF0EE; --ink:#15202A; --muted:#55636E;
+  --line:#C2CBD1; --panel:#F5F7F7; --accent:#087174; --accent-ink:#FFFFFF;
+  --ground:#A6B788; --scrim:rgba(231,236,238,.94); --scene-dark:0;
+  --paper:#F3F6F7; --pen:#174B4D; --grid:rgba(8,113,116,.08); --ink-tint:.17;
+  --sign-main:#1D3557; --sign-rider:#A8322D;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --prose:"Newsreader",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gutter:clamp(16px,4vw,56px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F161D; --sky-top:#0C141E; --sky-low:#262C36; --ink:#E5EBEF; --muted:#98A6B1;
+    --line:#2B3742; --panel:#151F29; --accent:#4FC4C6; --accent-ink:#0C141E;
+    --ground:#22301F; --scrim:rgba(15,22,29,.92); --scene-dark:1; color-scheme:dark;
+    --paper:#11201F; --pen:#8FD6D7; --grid:rgba(79,196,198,.08); --ink-tint:.06;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F161D; --sky-top:#0C141E; --sky-low:#262C36; --ink:#E5EBEF; --muted:#98A6B1;
+  --line:#2B3742; --panel:#151F29; --accent:#4FC4C6; --accent-ink:#0C141E;
+  --ground:#22301F; --scrim:rgba(15,22,29,.92); --scene-dark:1; color-scheme:dark;
+    --paper:#11201F; --pen:#8FD6D7; --grid:rgba(79,196,198,.08); --ink-tint:.06;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--display);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* ---------- Build stage ---------- */
+.build{position:relative;height:850vh}   /* ~1.1 screens per photo, then a 70vh hold on the final photo */
+.stage{position:sticky;top:env(safe-area-inset-top,0px);height:100vh;height:100svh;overflow:hidden;
+  background-color:var(--bg)}
+#scene{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* photo story: full-bleed frames; each new photo wipes in over the last while the current one drifts (Ken Burns, scroll-driven) */
+.frames{position:absolute;inset:0;overflow:hidden;background:#1d2326;z-index:0;isolation:isolate}
+.frame{position:absolute;inset:0;overflow:hidden;--w:1;
+  -webkit-mask-image:linear-gradient(100deg,#000 calc(var(--w)*130% - 30%),transparent calc(var(--w)*130%));
+          mask-image:linear-gradient(100deg,#000 calc(var(--w)*130% - 30%),transparent calc(var(--w)*130%))}
+.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:50% 50%;will-change:transform}
+
+/* the real photo wipes in over the finished drawing */
+.photo{position:absolute;top:0;bottom:0;left:14vw;right:0;--rv:0;pointer-events:none;
+  -webkit-mask-image:linear-gradient(100deg,#000 calc(var(--rv)*130% - 30%),transparent calc(var(--rv)*130%));
+          mask-image:linear-gradient(100deg,#000 calc(var(--rv)*130% - 30%),transparent calc(var(--rv)*130%))}
+.scrim-b{position:absolute;left:0;right:0;bottom:0;height:150px;pointer-events:none;opacity:0;background:linear-gradient(0deg,var(--scrim),transparent)}
+.photo img{width:100%;height:100%;object-fit:cover;object-position:70% 50%;display:block}
+.photo::before{content:"";position:absolute;inset:0 auto 0 0;width:160px;background:linear-gradient(90deg,var(--bg),transparent);z-index:1}
+
+/* yard sign: a New England post sign that drops in and stakes into the lawn */
+.sign{position:absolute;aspect-ratio:220/320;transform:translate(-9%,-100%);pointer-events:none;
+  clip-path:inset(-300% -60% 0 -60%)}
+.sign svg{width:100%;height:100%;display:block;overflow:visible;filter:drop-shadow(0 6px 10px rgba(0,0,0,.28))}
+.sign .swing{transform-box:view-box;transform-origin:134px 50px}
+.sign-shadow{position:absolute;left:-12%;bottom:-3%;width:70%;height:7%;border-radius:50%;background:radial-gradient(rgba(0,0,0,.35),transparent 70%);transform:scaleX(0)}
+.dust{position:absolute;left:9%;bottom:0;width:7%;aspect-ratio:1;border-radius:50%;background:#7a5d3f;opacity:0}
+.sign.in svg{animation:plant .75s cubic-bezier(.5,0,.75,.25) both}
+.sign.in .swing{animation:swing 1.8s .62s ease-out both}
+.sign.in .sign-shadow{animation:shadow .75s ease-in both}
+.sign.in .dust{animation:dust .7s .6s ease-out both}
+.sign.in .dust:nth-of-type(2){--dx:-180%;--dy:-160%}
+.sign.in .dust:nth-of-type(3){--dx:160%;--dy:-210%;animation-delay:.62s}
+.sign.in .dust:nth-of-type(4){--dx:-90%;--dy:-260%;animation-delay:.64s}
+.sign.in .dust:nth-of-type(5){--dx:240%;--dy:-110%;animation-delay:.61s}
+@keyframes plant{0%{transform:translateY(-150%)}72%{transform:translateY(5%)}84%{transform:translateY(1.5%)}100%{transform:translateY(2.5%)}}
+@keyframes swing{0%{transform:rotate(0)}12%{transform:rotate(7deg)}32%{transform:rotate(-5deg)}52%{transform:rotate(3deg)}72%{transform:rotate(-1.4deg)}100%{transform:rotate(0)}}
+@keyframes shadow{0%{transform:scaleX(.2);opacity:0}100%{transform:scaleX(1);opacity:1}}
+@keyframes dust{0%{transform:translate(0,0) scale(.4);opacity:.85}100%{transform:translate(var(--dx,120%),var(--dy,-200%)) scale(1.3);opacity:0}}
+.scrim{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,var(--scrim) 0%,var(--scrim) 22%,transparent 50%)}
+
+.topbar{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px var(--gutter)}
+.brand{display:block;line-height:0}
+.brand img{display:block;height:37px;width:auto}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--accent-ink);text-decoration:none;
+  font:600 14px/1 var(--display);padding:11px 16px;border-radius:3px;border:0;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.actions{display:flex;align-items:center;gap:10px;flex:none}
+.snd{display:inline-flex;align-items:center;gap:7px;background:var(--scrim);color:var(--ink);border:1px solid var(--line);border-radius:3px;
+  font:700 12px/1 var(--display);letter-spacing:.09em;padding:10px 12px;cursor:pointer;position:relative}
+.snd svg{width:17px;height:17px;flex:none}
+.snd .w{opacity:0;transition:opacity .2s}
+.snd[aria-pressed="true"] .w{opacity:1}
+.snd[aria-pressed="true"] .x{opacity:0}
+.snd.nudge::after{content:"";position:absolute;inset:-4px;border-radius:6px;border:2px solid var(--accent);opacity:0;animation:nudge 2.4s ease-out 1.2s 3}
+@keyframes nudge{0%{opacity:.8;transform:scale(.96)}100%{opacity:0;transform:scale(1.12)}}
+.more{position:absolute;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translate(-50%,8px);opacity:0;pointer-events:none;
+  display:inline-flex;align-items:center;gap:9px;padding:13px 22px;border-radius:999px;background:var(--accent);border:0;
+  color:var(--accent-ink);text-decoration:none;font:700 15px/1 var(--display);letter-spacing:.01em;white-space:nowrap;
+  box-shadow:0 6px 20px rgba(0,0,0,.25);transition:opacity .4s,transform .4s}
+.more svg{width:16px;height:16px;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(-1px)}50%{transform:translateY(3px)}}
+.more.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.more:hover{filter:brightness(1.1)}
+
+.card{position:absolute;left:var(--gutter);top:50%;transform:translateY(-50%);width:min(430px,38vw);display:grid;gap:14px}
+.eyebrow{margin:0;display:flex;align-items:center;gap:8px;font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--accent);display:block}
+.address{margin:0;font-weight:800;font-stretch:112%;font-size:clamp(30px,4.1vw,58px);line-height:.98;letter-spacing:-.015em;text-wrap:balance}
+.town{margin:-6px 0 0;color:var(--muted);font-size:15px}
+.price-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px}
+.price{margin:0;font-weight:700;font-size:28px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.specs{margin:0;padding:0;list-style:none;display:flex;gap:14px;color:var(--muted);font-size:15px}
+.specs b{color:var(--ink);font-weight:700}
+.phase{border-top:1px solid var(--line);padding-top:14px;display:grid;gap:6px;min-height:150px;align-content:start}
+.phase .tag{margin:0;font:500 12px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.phase h2{margin:0;font-weight:700;font-size:23px;line-height:1.15;text-wrap:balance}
+.phase p.body{margin:0;font-family:var(--prose);font-size:18px;line-height:1.45;color:var(--muted);max-width:38ch}
+.phase.swap>*{animation:rise .45s cubic-bezier(.2,.7,.2,1) both}
+.phase.swap>*:nth-child(2){animation-delay:.04s}
+.phase.swap>*:nth-child(3){animation-delay:.08s}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.hud{position:absolute;left:var(--gutter);right:var(--gutter);bottom:calc(20px + env(safe-area-inset-bottom,0px));display:grid;gap:10px;transition:opacity .4s}
+.stage.done .hud{opacity:0;pointer-events:none}   /* the details button takes the bottom spot once the house is finished */
+.tally{margin:0;justify-self:end;font:500 12px/1 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.tally b{color:var(--ink);font-weight:500}
+.rail{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.rail li{display:grid;gap:7px;min-width:0}
+.rail span{font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rail li.on span,.rail li.done span{color:var(--ink);opacity:1}
+.rail .bar{height:3px;background:var(--line);border-radius:2px;overflow:hidden}
+.rail .bar i{display:block;height:100%;background:var(--accent);transform-origin:left;transform:scaleX(0)}
+/* centred over the 3D view (which sits right of the listing card on wide screens) */
+.hint{position:absolute;left:66%;top:46%;transform:translate(-50%,-50%);font:700 16px/1 var(--display);letter-spacing:.16em;text-transform:uppercase;color:#fff;
+  text-shadow:0 1px 3px rgba(0,0,0,.55),0 0 18px rgba(0,0,0,.35);
+  display:flex;flex-direction:column;align-items:center;gap:10px;transition:opacity .4s}
+.hint::after{content:"";width:2px;height:34px;background:linear-gradient(#fff,transparent);box-shadow:0 0 6px rgba(0,0,0,.35);animation:drip 1.6s ease-in-out infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.hint.gone{opacity:0}
+.no-webgl #scene{display:none}
+
+@media (max-width:899px){
+  .frames{bottom:auto;height:58%}
+  .brand img{height:32px}
+  .topbar{background:linear-gradient(180deg,var(--scrim) 0%,var(--scrim) 55%,transparent 100%);padding-bottom:34px}
+  .btn,.snd{white-space:nowrap}
+  /* on phones the sound button drops below the top bar so the brand and booking button have room */
+  .snd{position:absolute;right:16px;top:calc(64px + env(safe-area-inset-top,0px));padding:9px 11px;font-size:11px}
+  .photo{left:0;right:0;top:0;bottom:auto;height:48%}
+  .photo img{object-position:58% 50%}
+  .photo::before{inset:auto 0 0 0;width:auto;height:35%;background:linear-gradient(0deg,var(--bg),transparent)}
+  .photo::after{content:"";position:absolute;inset:0 0 auto 0;height:90px;background:linear-gradient(180deg,var(--scrim),transparent);z-index:1}
+  .scrim{background:linear-gradient(0deg,var(--scrim) 0%,var(--scrim) 40%,transparent 66%)}
+  .card{top:auto;bottom:calc(76px + env(safe-area-inset-bottom,0px));transform:none;left:16px;right:16px;width:auto;gap:10px}
+  .address{font-size:clamp(28px,8vw,40px)}
+  .price{font-size:22px}
+  .specs{font-size:14px;gap:10px}
+  .phase{min-height:0;padding-top:10px;gap:4px}
+  .phase h2{font-size:19px}
+  .phase p.body{font-size:16px}
+  .hud{left:16px;right:16px}
+  .rail span{font-size:9.5px;letter-spacing:.03em}
+  .tally{display:none}
+  .hint{left:50%;top:32%;font-size:14px}
+  .btn{padding:10px 13px;font-size:13px}
+}
+@media (max-width:899px) and (max-height:700px){ .phase p.body{display:none} }
+
+/* ---------- Listing details ---------- */
+.details{max-width:1120px;margin:0 auto;padding-block:72px 40px;padding-inline:var(--gutter);display:grid;gap:72px}
+.kicker{margin:0 0 10px;font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.details h2{margin:0;font-weight:800;font-stretch:108%;font-size:clamp(26px,3.2vw,40px);line-height:1.05;letter-spacing:-.01em;text-wrap:balance}
+.facts{margin:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-top:1px solid var(--ink);border-bottom:1px solid var(--line)}
+.facts div{padding:18px 16px 18px 0;display:grid;gap:4px;min-width:0}
+.facts div+div{padding-left:16px;border-left:1px solid var(--line)}
+.facts dt{font:500 11px/1.2 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:0;font-weight:700;font-size:26px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.facts dd small{font-size:14px;font-weight:500;color:var(--muted);margin-left:3px}
+.about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:48px;align-items:start}
+.prose{display:grid;gap:16px;font-family:var(--prose);font-size:19px;line-height:1.6;max-width:62ch}
+.prose p{margin:0}
+.was{margin:14px 0 0;color:var(--muted);font-size:15px;font-variant-numeric:tabular-nums}
+.was b{color:var(--ink)}
+.acc{margin-top:24px;border-top:1px solid var(--ink)}
+.acc details{border-bottom:1px solid var(--line)}
+.acc summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;align-items:center;padding:18px 0}
+.acc summary::-webkit-details-marker{display:none}
+.acc .ttl{font-weight:700;font-size:20px;line-height:1.2}
+.acc .sum{grid-column:1;color:var(--muted);font-size:14px}
+.acc summary i{grid-column:2;grid-row:1 / span 2;width:30px;height:30px;border:1px solid var(--line);border-radius:50%;position:relative}
+.acc summary i::before,.acc summary i::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:1.5px;background:var(--ink);transform:translate(-50%,-50%);transition:transform .2s}
+.acc summary i::after{transform:translate(-50%,-50%) rotate(90deg)}
+.acc details[open] summary i::after{transform:translate(-50%,-50%) rotate(0deg)}
+.acc summary:hover .ttl{color:var(--accent)}
+.acc-body{padding:0 0 24px;display:grid;gap:10px}
+.acc dl{margin:0;display:grid;grid-template-columns:minmax(120px,220px) minmax(0,1fr)}
+.acc dt,.acc dd{margin:0;padding:10px 0;border-top:1px solid var(--line)}
+.acc dt{font:500 11px/1.6 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding-right:16px}
+.acc dd{font-size:15px;font-variant-numeric:tabular-nums}
+.acc .lvl{margin:10px 0 0;font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.tel{user-select:all;color:var(--ink)}
+.showing{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:48px;align-items:start;background:var(--panel);border:1px solid var(--line);padding:clamp(20px,4vw,44px);border-radius:4px}
+.showing p.lead{font-family:var(--prose);font-size:18px;color:var(--muted);margin:14px 0 0;max-width:36ch}
+form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+label{display:grid;gap:6px;font:500 12px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+input,select{font:400 16px/1.2 var(--display);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:3px;padding:11px 12px;width:100%;min-width:0}
+input:focus,select:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 30%,transparent)}
+form .wide{grid-column:1/-1}
+form .btn{justify-self:start;padding:13px 20px;font-size:15px}
+.status{margin:0;font-family:var(--prose);font-size:17px;color:var(--ink)}
+.foot{border-top:1px solid var(--line);padding-top:20px;color:var(--muted);font-size:13px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px}
+@media (max-width:899px){
+  .facts{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .facts div:nth-child(4){padding-left:0;border-left:0}
+  .facts div:nth-child(n+4){border-top:1px solid var(--line)}
+  .facts dd{font-size:22px}
+  .about,.showing{grid-template-columns:minmax(0,1fr);gap:24px}
+  .acc dl{grid-template-columns:minmax(0,1fr)}
+  .acc dd{border-top:0;padding-top:0}
+  .acc dt{padding-bottom:4px}
+  form{grid-template-columns:minmax(0,1fr)}
+  .details{gap:56px;padding-block:56px 32px}
+}
+@media (prefers-reduced-motion: reduce){
+  .more svg{animation:none}
+  .phase.swap>*{animation:none}
+  .hint::after{animation:none}
+  .snd.nudge::after{animation:none}
+  .sign.in svg,.sign.in .swing,.sign.in .sign-shadow,.sign.in .dust{animation:none}
+  .sign.in .sign-shadow{transform:none}
+}
+</style>
+</head>
+<body>
+
+<section class="build" id="build" aria-label="Scroll through the home">
+  <div class="stage">
+    <div class="frames" id="frames"></div>
+    <div class="sign" id="sign" hidden aria-hidden="true">
+      <span class="sign-shadow"></span>
+      <svg viewBox="0 0 220 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Independent Realty Group yard sign">
+        <rect x="12" y="18" width="16" height="302" fill="#FBFBF8" stroke="#D5D5CF" stroke-width="1.5"/>
+        <rect x="7" y="9" width="26" height="12" rx="2" fill="#FBFBF8" stroke="#D5D5CF" stroke-width="1.5"/>
+        <circle cx="20" cy="5" r="5" fill="#FBFBF8" stroke="#D5D5CF" stroke-width="1.5"/>
+        <rect x="12" y="36" width="200" height="14" fill="#FBFBF8" stroke="#D5D5CF" stroke-width="1.5"/>
+        <path d="M28 82 L62 50" stroke="#FBFBF8" stroke-width="7"/>
+        <g class="swing">
+          <path d="M80 50 V64 M188 50 V64" stroke="#55585C" stroke-width="2.2" fill="none"/>
+          <rect x="68" y="62" width="132" height="132" rx="2" fill="#FFFFFF"/>
+          <image href="sign.jpg" x="70" y="64" width="128" height="128" preserveAspectRatio="xMidYMid slice"/>
+        </g>
+      </svg>
+      <i class="dust"></i><i class="dust"></i><i class="dust"></i><i class="dust"></i><i class="dust"></i>
+    </div>
+    <div class="scrim"></div>
+    <div class="scrim-b" id="scrim-b"></div>
+
+    <header class="topbar">
+      <span class="brand"><img src="logo.png" alt="Independent Realty Group" width="100" height="37"></span>
+      <div class="actions">
+        <button class="snd nudge" id="sound" type="button" aria-pressed="false" aria-label="Play sound">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor" stroke="none"/>
+            <path class="w" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>
+            <path class="x" d="M17 9.5l5 5M22 9.5l-5 5"/>
+          </svg><span>SOUND ON!</span>
+        </button>
+        <a class="btn" href="#showing">Book a showing</a>
+      </div>
+    </header>
+
+    <div class="card">
+      <p class="eyebrow"><i></i>Active · Price reduced</p>
+      <h1 class="address">106 Steinmann Avenue</h1>
+      <p class="town">Middlebury, CT 06762</p>
+      <div class="price-row">
+        <p class="price">$439,900</p>
+        <ul class="specs">
+          <li><b>4</b> bd</li>
+          <li><b>2</b> ba</li>
+          <li><b>1,630</b> sq ft</li>
+        </ul>
+      </div>
+      <div class="phase" id="phase" aria-live="polite">
+        <p class="tag" id="ph-tag">01 / 07 · Cape Cod · Built 1953</p>
+        <h2 id="ph-title">Welcome home.</h2>
+        <p class="body" id="ph-body">A nicely updated, move-in ready New England Cape with a comfortable, easy layout.</p>
+      </div>
+    </div>
+
+    <div class="hint" id="hint">Scroll to explore</div>
+
+    <a class="more" id="more" href="#details">Listing details
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
+
+    <div class="hud">
+      <ol class="rail" id="rail">
+        <li><span>Welcome</span><div class="bar"><i></i></div></li>
+        <li><span>The house</span><div class="bar"><i></i></div></li>
+        <li><span>The lot</span><div class="bar"><i></i></div></li>
+        <li><span>Primary</span><div class="bar"><i></i></div></li>
+        <li><span>Deck</span><div class="bar"><i></i></div></li>
+        <li><span>Yard</span><div class="bar"><i></i></div></li>
+        <li><span>Ready</span><div class="bar"><i></i></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<main class="details" id="details">
+  <dl class="facts">
+    <div><dt>Bedrooms</dt><dd>4</dd></div>
+    <div><dt>Bathrooms</dt><dd>2<small>full</small></dd></div>
+    <div><dt>Living area</dt><dd>1,630<small>sq ft</small></dd></div>
+    <div><dt>Lot</dt><dd>0.39<small>ac</small></dd></div>
+    <div><dt>Built</dt><dd>1953</dd></div>
+    <div><dt>Garage</dt><dd>1<small>car</small></dd></div>
+  </dl>
+
+  <section class="about">
+    <div>
+      <p class="kicker">About the home</p>
+      <h2>A move-in ready Cape in Middlebury.</h2>
+      <p class="was">Listed at <b>$439,900</b> · reduced from $455,900 on Oct 2</p>
+    </div>
+    <div class="prose">
+      <p>This nicely updated New England Cape has a comfortable, easy layout. The living room is built around a fireplace, and the dining area flows into a large kitchen with tile floors, plenty of cabinets and workspace, and a door straight out to the big back deck.</p>
+      <p>Two bedrooms and a recently renovated full bath finish the main level, all on hardwood floors. Upstairs is a remodeled full bath, a third bedroom, and a large primary bedroom with a vaulted ceiling, a big closet, and a slider to a balcony over the landscaped backyard.</p>
+      <p>The full basement walks out into a one-car garage, with lots of storage. There's a large shed and parking for six. It's close to Route 84 and the Middlebury walking trail, in the award-winning Region 15 school district.</p>
+    </div>
+  </section>
+
+  <section class="acc-wrap" aria-labelledby="acc-h">
+    <h2 id="acc-h">Listing Details</h2>
+    <div class="acc">
+      <details open>
+        <summary><span class="ttl">Rooms by level</span><span class="sum">Main, upper and lower levels</span><i aria-hidden="true"></i></summary>
+        <div class="acc-body">
+          <h3 class="lvl">Main level</h3>
+          <dl>
+            <dt>Living room</dt><dd>Fireplace, opens to the dining area</dd>
+            <dt>Dining area</dt><dd>Between the living room and kitchen</dd>
+            <dt>Kitchen</dt><dd>Large, tile floors, lots of cabinets and workspace, door to the deck</dd>
+            <dt>Bedrooms</dt><dd>2, hardwood floors</dd>
+            <dt>Full bath</dt><dd>Recently renovated</dd>
+            <dt>Laundry</dt><dd>Off the kitchen</dd>
+          </dl>
+          <h3 class="lvl">Upper level</h3>
+          <dl>
+            <dt>Primary bedroom</dt><dd>Vaulted ceiling, slider to a balcony, large closet, hardwood floors, fresh paint</dd>
+            <dt>Bedroom</dt><dd>1</dd>
+            <dt>Full bath</dt><dd>Remodeled</dd>
+          </dl>
+          <h3 class="lvl">Lower level</h3>
+          <dl>
+            <dt>Basement</dt><dd>Full, walk-out</dd>
+            <dt>Garage</dt><dd>One car, attached, entered from the basement</dd>
+            <dt>Storage</dt><dd>Ample</dd>
+          </dl>
+        </div>
+      </details>
+      <details>
+        <summary><span class="ttl">Interior</span><span class="sum">6 rooms · 1,630 sq ft · fireplace</span><i aria-hidden="true"></i></summary>
+        <div class="acc-body"><dl>
+          <dt>Total rooms</dt><dd>6</dd>
+          <dt>Bedrooms</dt><dd>4</dd>
+          <dt>Bathrooms</dt><dd>2 full</dd>
+          <dt>Living area</dt><dd>1,630 sq ft, heated, above grade</dd>
+          <dt>Fireplaces</dt><dd>1</dd>
+          <dt>Appliances</dt><dd>Oven/range, microwave, refrigerator, freezer, dishwasher</dd>
+          <dt>Not included</dt><dd>Washer and dryer</dd>
+          <dt>Laundry</dt><dd>Main level, off the kitchen</dd>
+          <dt>Attic</dt><dd>No</dd>
+        </dl></div>
+      </details>
+      <details>
+        <summary><span class="ttl">Exterior and lot</span><span class="sum">Cape Cod · 0.39 acres · 1-car garage</span><i aria-hidden="true"></i></summary>
+        <div class="acc-body"><dl>
+          <dt>Style</dt><dd>Cape Cod</dd>
+          <dt>Year built</dt><dd>1953 (public records)</dd>
+          <dt>Lot</dt><dd>0.39 acres, lightly wooded, professionally landscaped</dd>
+          <dt>Siding</dt><dd>Vinyl, beige</dd>
+          <dt>Roof</dt><dd>Gable</dd>
+          <dt>Foundation</dt><dd>Block</dd>
+          <dt>Garage</dt><dd>Attached, 1 car</dd>
+          <dt>Parking</dt><dd>Paved driveway, 6 spaces total</dd>
+          <dt>Outdoor</dt><dd>Large deck off the kitchen, balcony off the primary bedroom, large shed</dd>
+          <dt>Pool</dt><dd>No</dd>
+          <dt>Waterfront</dt><dd>No</dd>
+        </dl></div>
+      </details>
+      <details>
+        <summary><span class="ttl">Utilities and systems</span><span class="sum">Electric baseboard heat · public sewer</span><i aria-hidden="true"></i></summary>
+        <div class="acc-body"><dl>
+          <dt>Heat</dt><dd>Baseboard</dd>
+          <dt>Heat fuel</dt><dd>Electric</dd>
+          <dt>Cooling</dt><dd>Ceiling fans</dd>
+          <dt>Hot water</dt><dd>40-gallon tank</dd>
+          <dt>Water</dt><dd>Public water in street, private well</dd>
+          <dt>Sewer</dt><dd>Public sewer connected</dd>
+        </dl></div>
+      </details>
+      <details>
+        <summary><span class="ttl">Taxes and financial</span><span class="sum">$7,968/yr taxes · no HOA</span><i aria-hidden="true"></i></summary>
+        <div class="acc-body"><dl>
+          <dt>Price</dt><dd>$439,900</dd>
+          <dt>Previous price</dt><dd>$455,900, reduced Oct 2, 2026</dd>
+          <dt>Property tax</dt><dd>$7,968 (July 2026 to June 2027)</dd>
+          <dt>Assessed value</dt><dd>$301,140</dd>
+          <dt>Mil rate</dt><dd>32.52</dd>
+          <dt>HOA</dt><dd>None</dd>
+          <dt>Possession</dt><dd>Negotiable</dd>
+          <dt>Bank owned</dt><dd>No</dd>
+          <dt>Short sale</dt><dd>No</dd>
+          <dt>Home warranty</dt><dd>Not offered</dd>
+        </dl></div>
+      </details>
+      <details>
+        <summary><span class="ttl">Location and schools</span><span class="sum">Middlebury · Region 15 schools</span><i aria-hidden="true"></i></summary>
+        <div class="acc-body"><dl>
+          <dt>Town</dt><dd>Middlebury, New Haven County</dd>
+          <dt>Zoning</dt><dd>R40</dd>
+          <dt>Schools</dt><dd>Region 15 district; elementary and high school assigned by the Board of Ed</dd>
+          <dt>Nearby</dt><dd>Park, Middlebury walking trail, close to Route 84</dd>
+          <dt>Directions</dt><dd>Route 64 to Steinmann Avenue</dd>
+          <dt>Listing ID</dt><dd>24200006</dd>
+        </dl></div>
+      </details>
+    </div>
+  </section>
+
+  <section class="showing" id="showing">
+    <div>
+      <p class="kicker">Open house · Sunday, Oct 4, 12:00 to 2:30 pm</p>
+      <h2>Book a private showing</h2>
+      <p class="lead">Pick a day and we'll confirm a time. Or call <b class="tel">203.733.3969</b>.</p>
+    </div>
+    <form id="showing-form" novalidate>
+      <label for="f-name">Name<input id="f-name" name="name" autocomplete="name" required></label>
+      <label for="f-phone">Phone<input id="f-phone" name="phone" type="tel" autocomplete="tel"></label>
+      <label class="wide" for="f-email">Email<input id="f-email" name="email" type="email" autocomplete="email" required></label>
+      <label class="wide" for="f-day">Preferred day
+        <select id="f-day" name="day">
+          <option selected>Sunday, Oct 4 (open house)</option><option>Monday, Oct 5</option><option>Tuesday, Oct 6</option><option>Wednesday, Oct 7</option><option>Thursday, Oct 8</option>
+        </select>
+      </label>
+      <button class="btn" type="submit">Request showing</button>
+      <p class="status wide" id="f-status" role="status"></p>
+    </form>
+  </section>
+
+  <footer class="foot">
+    <span>Listing data from SmartMLS, deemed reliable but not guaranteed. Listing ID 24200006.</span>
+    <span>Independent Realty Group · Christina Cavallo · 203.733.3969</span>
+  </footer>
+</main>
+
+<script src="src/sound.js"></script>
+<!--/MODULES-->
+<script>
+(function(){
+"use strict";
+
+/* ---------- the story: one chapter per photo, captions from the MLS sheet ----------
+   kb: Ken Burns drift for the chapter, [scale, x%, y%] at the start and at the end (scroll-driven).
+   pos: object-position, chosen so the subject stays clear of the listing card on wide screens. */
+const CHAPTERS = [
+  {src:"photos/01.jpg", alt:"Front of the house", pos:"68% 50%", kb:[[1.16, -2, 1], [1.05, 0, 0]],
+   tag:"Cape Cod · Built 1953", title:"Welcome home.",
+   body:"A nicely updated, move-in ready New England Cape with a comfortable, easy layout."},
+  {src:"photos/02.jpg", alt:"Front and right side, with the chimney", pos:"62% 50%", kb:[[1.04, 2, 0], [1.14, -1, -1]],
+   tag:"4 bedrooms · 2 full baths", title:"A classic New England Cape.",
+   body:"A living room built around a fireplace, a dining area, and a large kitchen with tile floors and lots of cabinets."},
+  {src:"photos/03.jpg", alt:"Left side of the house and the shed", pos:"55% 50%", kb:[[1.14, 2, 0], [1.04, -2, 0]],
+   tag:"0.39 acres · walk-out basement", title:"Room to spread out.",
+   body:"A full walk-out basement into a one-car garage, plenty of storage, a large shed, and parking for six."},
+  {src:"photos/04.jpg", alt:"Rear of the house with the balcony", pos:"45% 40%", kb:[[1.05, 0, 1], [1.16, 1, -2]],
+   tag:"Upstairs", title:"A primary bedroom with its own balcony.",
+   body:"Vaulted ceiling, a large closet, hardwood floors, and a slider out to the balcony over the backyard."},
+  {src:"photos/05.jpg", alt:"Deck off the kitchen", pos:"60% 50%", kb:[[1.15, -1, 1], [1.05, 1, 0]],
+   tag:"Off the kitchen", title:"Dinner on the deck.",
+   body:"The kitchen opens right onto a large deck, made for outdoor entertaining."},
+  {src:"photos/06.jpg", alt:"Backyard lawn", pos:"55% 55%", kb:[[1.04, 0, 0], [1.14, -2, -1]],
+   tag:"Lightly wooded · professionally landscaped", title:"A backyard to enjoy.",
+   body:"Close to Route 84 and the Middlebury walking trail, in the award-winning Region 15 school district."},
+  {src:"photos/01.jpg", alt:"Front of the house with the For Sale sign", pos:"70% 50%", kb:[[1.12, 0, 0], [1.0, 0, 0]], finale:true,
+   tag:"Move-in ready", title:"Ready for you.",
+   body:"Open house Sunday, Oct 4, noon to 2:30. Private showings all week."}
+];
+const N = CHAPTERS.length;
+/* a chapter's caption switches a little before its photo finishes wiping in */
+const PHASES = CHAPTERS.map((c, i) => ({at: i === 0 ? 0 : (i - 0.15)/N, tag: c.tag, title: c.title, body: c.body}));
+const $ = id => document.getElementById(id);
+const phaseEl = $("phase"), railItems = [...document.querySelectorAll("#rail li")];
+const hint = $("hint");
+let curPhase = 0;
+function setPhase(i){
+  if (i === curPhase) return;
+  curPhase = i;
+  const ph = PHASES[i];
+  $("ph-tag").textContent = String(i+1).padStart(2,"0") + " / " + String(N).padStart(2,"0") + " · " + ph.tag;
+  $("ph-title").textContent = ph.title;
+  $("ph-body").textContent = ph.body;
+  phaseEl.classList.remove("swap"); void phaseEl.offsetWidth; phaseEl.classList.add("swap");
+}
+function updateUI(p){
+  let i = 0;
+  for (let k = 0; k < PHASES.length; k++) if (p >= PHASES[k].at) i = k;
+  setPhase(i);
+  railItems.forEach((li, k) => {
+    const a = PHASES[k].at, b = k < PHASES.length-1 ? PHASES[k+1].at : 1;
+    const f = Math.min(1, Math.max(0, (p - a)/(b - a)));
+    li.querySelector("i").style.transform = "scaleX(" + (k === PHASES.length-1 && p >= 0.999 ? 1 : f) + ")";
+    li.classList.toggle("on", k === i);
+    li.classList.toggle("done", k < i);
+  });
+  hint.classList.toggle("gone", p > 0.015);
+  const done = scrollProgress() >= 0.97;
+  $("more").classList.toggle("on", done);
+  $("more").parentElement.classList.toggle("done", done);
+}
+
+$("showing-form").addEventListener("submit", e => {
+  e.preventDefault();
+  const name = $("f-name").value.trim(), email = $("f-email").value.trim();
+  const st = $("f-status");
+  if (!name || !/^\S+@\S+\.\S+$/.test(email)){ st.textContent = "Add your name and a valid email so we can confirm."; return; }
+  st.textContent = "Thanks, " + name.split(" ")[0] + ". This sample form isn't connected yet, so nothing was sent.";
+});
+
+const build = $("build");
+/* the build completes before the end of its section; the remaining DWELL holds on the finished house */
+const DWELL = () => window.innerHeight*0.7;
+function scrollProgress(){
+  const r = build.getBoundingClientRect();
+  const total = r.height - window.innerHeight - DWELL();
+  return total > 0 ? Math.min(1, Math.max(0, -r.top/total)) : 0;
+}
+
+/* ---------- reveal stop: the first time the house finishes, scrolling pauses for a beat ---------- */
+const HOLD_MS = 1100;
+let holdArmed = true, holdUntil = 0;
+const holding = () => performance.now() < holdUntil;
+const holdY = () => build.offsetTop + build.offsetHeight - window.innerHeight - DWELL();
+["wheel", "touchmove"].forEach(ev => window.addEventListener(ev, e => { if (holding()) e.preventDefault(); }, {passive:false}));
+window.addEventListener("keydown", e => {
+  if (holding() && [" ", "Spacebar", "PageDown", "ArrowDown", "End"].includes(e.key)) e.preventDefault();
+});
+function onScrollHold(){
+  const p = scrollProgress();
+  if (holding()){ if (window.scrollY > holdY() + 2) window.scrollTo(0, holdY()); }
+  else if (holdArmed && p >= 1){ holdArmed = false; holdUntil = performance.now() + HOLD_MS; window.scrollTo(0, holdY()); }
+  if (p < 0.9) holdArmed = true;
+  /* construction sound fades as the listing details scroll in */
+  if (window.SiteSound){
+    const r = build.getBoundingClientRect();
+    SiteSound.setLevel((r.bottom - window.innerHeight*0.25)/(window.innerHeight*0.75));
+  }
+}
+window.addEventListener("scroll", onScrollHold, {passive:true});
+$("more").addEventListener("click", e => {
+  e.preventDefault();
+  holdArmed = false; holdUntil = 0;
+  if (window.SiteSound) SiteSound.hush();
+  window.scrollTo({top: $("details").getBoundingClientRect().top + window.scrollY, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
+});
+
+/* ---------- sound: off until the visitor asks (browsers block autoplay) ---------- */
+const soundBtn = $("sound");
+soundBtn.addEventListener("click", () => {
+  const on = window.SiteSound ? SiteSound.toggle() : false;
+  soundBtn.setAttribute("aria-pressed", String(on));
+  soundBtn.classList.remove("nudge");
+  soundBtn.querySelector("span").textContent = on ? "SOUND OFF" : "SOUND ON!";
+  soundBtn.setAttribute("aria-label", on ? "Mute sound" : "Play sound");
+  if (on) onScrollHold();
+});
+/* ---------- photo frames ---------- */
+const framesEl = $("frames");
+const frames = CHAPTERS.map((c, i) => {
+  const f = document.createElement("div");
+  f.className = "frame"; f.style.zIndex = String(i + 1);
+  const img = document.createElement("img");
+  img.src = c.src; img.alt = c.alt; img.decoding = "async";
+  if (i > 1) img.loading = "eager";
+  img.style.objectPosition = c.pos;
+  f.appendChild(img);
+  framesEl.appendChild(f);
+  return {el: f, img, c};
+});
+const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a)/(b - a))); return t*t*(3 - 2*t); };
+const WIPE = 0.32;   /* fraction of a chapter spent wiping the next photo in */
+function renderFrames(p){
+  const pos = p*N;
+  frames.forEach((fr, i) => {
+    const w = i === 0 ? 1 : smooth(i - WIPE, i, pos);
+    const covered = i < N - 1 && smooth(i + 1 - WIPE, i + 1, pos) >= 1 && i + 1 < N;
+    fr.el.style.display = (w <= 0 || covered) ? "none" : "";
+    if (fr.el.style.display) return;
+    fr.el.style.setProperty("--w", w.toFixed(4));
+    /* drift runs from the start of the wipe-in to the end of the chapter */
+    const k = Math.min(1, Math.max(0, (pos - (i - WIPE))/(1 + WIPE)));
+    const e = k*k*(3 - 2*k), a = fr.c.kb[0], b = fr.c.kb[1];
+    const sc = a[0] + (b[0] - a[0])*e, tx = a[1] + (b[1] - a[1])*e, ty = a[2] + (b[2] - a[2])*e;
+    fr.img.style.transform = "scale(" + sc.toFixed(4) + ") translate(" + tx.toFixed(3) + "%," + ty.toFixed(3) + "%)";
+  });
+}
+
+/* ---------- yard sign on the final photo ---------- */
+const sign = $("sign"), finale = frames[N - 1];
+/* where the sign stands in the front photo (photo pixels, 1800×1200) */
+const SIGN_AT = { wide:{x:1404, y:1017}, narrow:{x:1278, y:1026}, h:0.29 };
+let wide = window.innerWidth >= 900;
+function placeSign(){
+  const st = framesEl.parentElement.getBoundingClientRect(), r = framesEl.getBoundingClientRect();
+  if (!r.width) return;
+  const iw = 1800, ih = 1200;
+  const s = Math.max(r.width/iw, r.height/ih);
+  const pos = getComputedStyle(finale.img).objectPosition.split(" ").map(v => parseFloat(v)/100);
+  const ox = (r.width - iw*s)*(isNaN(pos[0]) ? 0.5 : pos[0]), oy = (r.height - ih*s)*(isNaN(pos[1]) ? 0.5 : pos[1]);
+  const at = wide ? SIGN_AT.wide : SIGN_AT.narrow;
+  sign.style.left = (r.left - st.left + ox + at.x*s) + "px";
+  sign.style.top = (r.top - st.top + oy + at.y*s) + "px";
+  sign.style.height = (ih*s*SIGN_AT.h) + "px";
+}
+let signIn = false;
+
+/* ---------- scroll loop ---------- */
+const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+let target = scrollProgress(), cur = target, dirty = true;
+window.addEventListener("scroll", () => { target = scrollProgress(); }, {passive:true});
+window.addEventListener("resize", () => { wide = window.innerWidth >= 900; target = scrollProgress(); dirty = true; if (signIn) placeSign(); });
+function frame(){
+  const d = target - cur;
+  if (Math.abs(d) > 0.00005){ cur = reduce.matches ? target : cur + d*0.14; dirty = true; }
+  else if (cur !== target){ cur = target; dirty = true; }
+  if (dirty){
+    dirty = false;
+    renderFrames(cur);
+    const wantSign = cur >= 0.985;
+    if (wantSign !== signIn){
+      signIn = wantSign;
+      if (signIn){ placeSign(); sign.hidden = false; void sign.offsetWidth; sign.classList.add("in"); if (window.SiteSound) SiteSound.cue("mallet", 0.55); }
+      else { sign.classList.remove("in"); sign.hidden = true; }
+    }
+    updateUI(cur);
+    window.__ready = true;
+  }
+  requestAnimationFrame(frame);
+}
+window.__story = { setProgress(p){ target = cur = p; dirty = true; } };
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

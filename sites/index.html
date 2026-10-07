@@ -1,5 +1,7 @@
 <!doctype html>
-<title>Five Houses</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>House Tours</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Fragment+Mono&display=swap">
@@ -40,6 +42,12 @@ header p { margin: 0; font-size: 18px; line-height: 1.55; color: var(--soft); ma
 .go { align-self: flex-start; margin-top: 6px; font-weight: 600; font-size: 16px; color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--accent); padding-bottom: 3px; }
 .go:hover { color: var(--accent); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.section-head { padding-block: clamp(48px, 8vh, 88px) 8px; display: grid; gap: 10px; }
+.section-head h2 { font-weight: 800; font-size: clamp(34px, 5vw, 64px); line-height: .95; letter-spacing: -.025em; margin: 0; }
+.section-head p { margin: 0; font-size: 17px; line-height: 1.55; color: var(--soft); max-width: 40em; }
+.local { display: none; margin: 16px 0 0; padding: 14px 16px; border: 1px solid var(--accent); font-size: 15px; line-height: 1.5; }
+.local code { font-family: var(--mono); font-size: 13px; background: var(--card); padding: 2px 6px; overflow-wrap: anywhere; }
+html.file .local { display: block; }
 footer { padding-block: 32px 48px; font-family: var(--mono); font-size: 12px; line-height: 1.7; color: var(--soft); }
 @media (max-width: 820px) {
   header, .row { grid-template-columns: minmax(0, 1fr); }
@@ -56,68 +64,89 @@ footer { padding-block: 32px 48px; font-family: var(--mono); font-size: 12px; li
     </div>
     <p>Same raw material for every house: the panoramas from its 360 tour, color corrected, and the tour's own door links. Each page turns that into a different idea, drawn from the house itself.</p>
   </header>
+  <div class="local" role="note"><b>You opened this file straight from disk.</b> The house pages load their panoramas with code the browser blocks on file:// links, so they will not run this way. In a terminal, go to the repo folder and run <code>python3 -m http.server 8000</code>, then open <code>http://localhost:8000/sites/</code>. Or use the Vercel link.</div>
+  <script>if (location.protocol === "file:") document.documentElement.classList.add("file");</script>
 
   <main>
     <article class="row">
-      <a class="shot" href="mission-house/" target="_blank" rel="noopener"><img src="img/mission.jpg" alt="The Mission House page: the rooftop terrace as a little planet with the address orbiting it"></a>
+      <a class="shot" href="mission-house/index.html" target="_blank" rel="noopener"><img src="img/mission.jpg" alt="The Mission House page: the rooftop terrace as a little planet with the address orbiting it"></a>
       <div class="txt">
         <div class="lab">1146 Florida Street · San Francisco</div>
         <h2>The Mission House</h2>
         <p class="idea">The house starts as a planet and unrolls into a walk.</p>
         <p>Scroll and the rooftop planet flattens into the terrace view, then walks down through all three levels on the tour's real doors. A live floor plan shows where you stand and which way you face.</p>
         <ul class="tags"><li>Little-planet projection</li><li>Scroll-driven walk</li><li>Floor plan tracking</li></ul>
-        <a class="go" href="mission-house/" target="_blank" rel="noopener">Open the page</a>
+        <a class="go" href="mission-house/index.html" target="_blank" rel="noopener">Open the page</a>
       </div>
     </article>
 
     <article class="row">
-      <a class="shot" href="noe-valley-victorian/" target="_blank" rel="noopener"><img src="img/victorian.jpg" alt="The Noe Valley Victorian page: the facade as a sepia print on an 1890s cabinet card"></a>
+      <a class="shot" href="noe-valley-victorian/index.html" target="_blank" rel="noopener"><img src="img/victorian.jpg" alt="The Noe Valley Victorian page: the facade as a sepia print on an 1890s cabinet card"></a>
       <div class="txt">
         <div class="lab">4250 23rd Street · Noe Valley</div>
         <h2>The Noe Valley Victorian</h2>
         <p class="idea">An 1893 house shown as an 1890s photo album.</p>
         <p>Every room is a cabinet card whose print develops from sepia into color as you reach it. A brass slider runs from 1893 to today. Open a card and you are standing in the room.</p>
         <ul class="tags"><li>Period object as interface</li><li>Print development</li><li>Re-inked floor plan</li></ul>
-        <a class="go" href="noe-valley-victorian/" target="_blank" rel="noopener">Open the page</a>
+        <a class="go" href="noe-valley-victorian/index.html" target="_blank" rel="noopener">Open the page</a>
       </div>
     </article>
 
     <article class="row">
-      <a class="shot" href="sun-drenched-production-space/" target="_blank" rel="noopener"><img src="img/loft.jpg" alt="The West Town loft page: the entrance seen through a cinema camera viewfinder with a slate"></a>
+      <a class="shot" href="sun-drenched-production-space/index.html" target="_blank" rel="noopener"><img src="img/loft.jpg" alt="The West Town loft page: the entrance seen through a cinema camera viewfinder with a slate"></a>
       <div class="txt">
         <div class="lab">West Town · Chicago</div>
         <h2>The Production Loft</h2>
         <p class="idea">A rental for film crews, seen through the camera.</p>
         <p>The page is a cinema monitor with timecode, lens and slate. Scroll dives from a drone shot over the skyline down into the set, then a spec sheet lists every space with its real dimensions.</p>
         <ul class="tags"><li>Interface as the camera</li><li>Drone dive</li><li>Set sheet with dimensions</li></ul>
-        <a class="go" href="sun-drenched-production-space/" target="_blank" rel="noopener">Open the page</a>
+        <a class="go" href="sun-drenched-production-space/index.html" target="_blank" rel="noopener">Open the page</a>
       </div>
     </article>
 
     <article class="row">
-      <a class="shot" href="47-ross-avenue/" target="_blank" rel="noopener"><img src="img/ross.jpg" alt="The 47 Ross Avenue page: rooms as glass marbles connected by their doorways"></a>
+      <a class="shot" href="47-ross-avenue/index.html" target="_blank" rel="noopener"><img src="img/ross.jpg" alt="The 47 Ross Avenue page: rooms as glass marbles connected by their doorways"></a>
       <div class="txt">
         <div class="lab">47 Ross Avenue · San Anselmo</div>
         <h2>47 Ross Avenue</h2>
         <p class="idea">The house as a constellation of its rooms.</p>
         <p>Each room is a glass marble, joined to the others by its real doorways. Pick one and you fall into it. A guided walk lights its path across the map as it goes.</p>
         <ul class="tags"><li>Door graph as navigation</li><li>Marble to room transition</li><li>Guided walk</li></ul>
-        <a class="go" href="47-ross-avenue/" target="_blank" rel="noopener">Open the page</a>
+        <a class="go" href="47-ross-avenue/index.html" target="_blank" rel="noopener">Open the page</a>
       </div>
     </article>
 
     <article class="row">
-      <a class="shot" href="vine-leaf-residence/" target="_blank" rel="noopener"><img src="img/vine.jpg" alt="The Vine Leaf page: the living room as an ink drawing with a circle of daylight showing the photo"></a>
+      <a class="shot" href="vine-leaf-residence/index.html" target="_blank" rel="noopener"><img src="img/vine.jpg" alt="The Vine Leaf page: the living room as an ink drawing with a circle of daylight showing the photo"></a>
       <div class="txt">
         <div class="lab">8902 Vine Leaf · Schertz, Texas</div>
         <h2>Vine Leaf Residence</h2>
         <p class="idea">An empty new build that starts as a drawing.</p>
         <p>The rooms appear as an architect's ink drawing, and your cursor carries the daylight that turns them into photos. Rooms are numbered like a drawing set, and a slider shows the photo correction before and after.</p>
         <ul class="tags"><li>Reveal by light</li><li>Drawing set navigation</li><li>Before and after grade</li></ul>
-        <a class="go" href="vine-leaf-residence/" target="_blank" rel="noopener">Open the page</a>
+        <a class="go" href="vine-leaf-residence/index.html" target="_blank" rel="noopener">Open the page</a>
       </div>
     </article>
   </main>
 
-  <footer>Concept demos built from each property's public 360 tour. Photography belongs to the credited photographers, named on each page.</footer>
+  <section aria-labelledby="stein">
+    <div class="section-head">
+      <div class="lab">106 Steinmann Avenue · Middlebury, Connecticut</div>
+      <h2 id="stein">One house, eight ways in.</h2>
+      <p>A different approach: no 360 tour, just the listing photos and the MLS sheet. The same house becomes a 3D build you scroll through, a fly-through, a day to dusk shift, a living photo, a depth story and a photo story.</p>
+    </div>
+    <article class="row">
+      <a class="shot" href="106-steinmann-avenue/index.html" target="_blank" rel="noopener"><img src="106-steinmann-avenue/media/poster-v1.jpg" alt="106 Steinmann Avenue: the house framing going up in 3D as you scroll"></a>
+      <div class="txt">
+        <div class="lab">All styles on one page</div>
+        <h2>106 Steinmann Avenue</h2>
+        <p class="idea">The house goes up as you scroll.</p>
+        <p>Foundation, framing, roof and siding go up piece by piece with job-site sound, then the yard sign stakes into the lawn. Two endings (finished 3D house or the real photo), the original first cut, and four photo-based styles.</p>
+        <ul class="tags"><li>3D build, two endings</li><li>3D build, first cut</li><li>Fly-through</li><li>Day to dusk</li><li>Living photo</li><li>Depth story</li><li>Photo story</li></ul>
+        <a class="go" href="106-steinmann-avenue/index.html" target="_blank" rel="noopener">See all eight styles</a>
+      </div>
+    </article>
+  </section>
+
+  <footer>Concept demos built from each property's public 360 tour or listing photos. Photography belongs to the credited photographers, named on each page.</footer>
 </div>

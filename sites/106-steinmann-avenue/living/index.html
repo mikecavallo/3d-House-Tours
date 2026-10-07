@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Steinmann Living Photo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<style>
+/* Shared chrome for the hero lineup: a full-bleed cinematic stage (always dark, it is a photo),
+   then a themed listing page below. Brand teal from the Independent Realty Group sign. */
+:root{
+  --bg:#EDF1F0; --panel:#F8FAF9; --ink:#14211F; --muted:#56655F; --line:#C9D3CF;
+  --accent:#087174; --accent-ink:#FFFFFF; --accent-soft:rgba(8,113,116,.10);
+  --stage:#0B1211; --on-stage:#F4F7F6; --on-stage-dim:rgba(244,247,246,.72);
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --prose:"Newsreader",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gutter:clamp(16px,4vw,56px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1614; --panel:#141E1C; --ink:#E4ECE9; --muted:#97A7A1; --line:#26332F;
+    --accent:#4FC4C6; --accent-ink:#06201F; --accent-soft:rgba(79,196,198,.12); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1614; --panel:#141E1C; --ink:#E4ECE9; --muted:#97A7A1; --line:#26332F;
+  --accent:#4FC4C6; --accent-ink:#06201F; --accent-soft:rgba(79,196,198,.12); color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--display);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+button{font:inherit;color:inherit}
+
+/* ---------- top bar (over the stage) ---------- */
+.bar{position:fixed;z-index:30;left:0;right:0;top:0;display:flex;align-items:center;gap:12px;
+  padding:calc(env(safe-area-inset-top,0px) + 14px) var(--gutter) 14px;pointer-events:none;color:var(--on-stage)}
+.bar::before{content:"";position:absolute;inset:0 0 -30px;background:linear-gradient(rgba(5,10,9,.55),transparent);pointer-events:none;z-index:-1;transition:opacity .4s}
+.bar > *{pointer-events:auto}
+.bar .logo{display:flex;align-items:center;gap:10px;text-decoration:none;margin-right:auto}
+.bar .logo img{height:34px;width:auto;display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
+.chip{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35);
+  background:rgba(10,18,17,.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--on-stage);
+  font:600 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;text-decoration:none;white-space:nowrap}
+.chip:hover{background:rgba(10,18,17,.55)}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:#7d8b87;box-shadow:0 0 0 3px rgba(255,255,255,.08)}
+.chip[aria-pressed="true"] .dot{background:#5FE0C8;box-shadow:0 0 0 3px rgba(95,224,200,.25)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 18px;border-radius:999px;border:0;
+  background:var(--accent);color:var(--accent-ink);font:700 14px/1 var(--display);font-stretch:108%;letter-spacing:.01em;text-decoration:none;cursor:pointer}
+.bar .btn{background:#4FC4C6;color:#06201F}
+.btn:hover{filter:brightness(1.07)}
+@media (max-width:560px){ .bar .chip .lbl{display:none} .bar .chip{padding:0 12px} .bar .logo img{height:28px} .bar .btn{padding:0 14px;font-size:13px} }
+
+/* ---------- the listing card that sits on every hero ---------- */
+.card{color:var(--on-stage);max-width:min(560px,100%)}
+.card .eyebrow{margin:0 0 10px;font:500 12px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--on-stage-dim);display:flex;align-items:center;gap:10px}
+.card .eyebrow i{width:8px;height:8px;border-radius:50%;background:#5FE0C8;box-shadow:0 0 0 4px rgba(95,224,200,.2)}
+.card h1{margin:0;font-weight:800;font-stretch:118%;font-size:clamp(34px,5.6vw,76px);line-height:.94;letter-spacing:-.02em;text-wrap:balance;text-shadow:0 2px 24px rgba(0,0,0,.35)}
+.card .town{margin:8px 0 0;font:400 clamp(17px,1.7vw,21px)/1.3 var(--prose);font-style:italic;color:var(--on-stage-dim)}
+.card .facts{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px;margin:18px 0 0;padding:0;list-style:none;font:500 13px/1.2 var(--mono);letter-spacing:.04em;color:var(--on-stage-dim)}
+.card .facts .price{font:700 26px/1 var(--display);font-stretch:100%;letter-spacing:-.01em;color:var(--on-stage);font-variant-numeric:tabular-nums}
+.card .facts b{color:var(--on-stage);font-weight:600}
+
+/* ---------- listing page below the hero ---------- */
+.page{position:relative;z-index:2;background:var(--bg);padding:clamp(48px,8vw,104px) var(--gutter) 40px;display:grid;gap:clamp(56px,8vw,96px)}
+.wrap{max-width:1180px;margin:0 auto;width:100%}
+.kicker{margin:0 0 12px;font:500 12px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.page h2{margin:0;font-weight:800;font-stretch:112%;font-size:clamp(28px,3.6vw,46px);line-height:1.02;letter-spacing:-.015em;text-wrap:balance}
+.factbar{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.factbar div{padding:20px 16px 18px;border-left:1px solid var(--line);min-width:0}
+.factbar div:first-child{border-left:0;padding-left:0}
+.factbar dt{font:500 11px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.factbar dd{margin:8px 0 0;font-weight:700;font-size:clamp(22px,2.4vw,30px);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.factbar dd small{font:500 12px var(--mono);color:var(--muted);margin-left:4px;letter-spacing:.04em}
+@media (max-width:820px){ .factbar{grid-template-columns:repeat(3,minmax(0,1fr))} .factbar div:nth-child(4){border-left:0;padding-left:0} .factbar div:nth-child(n+4){border-top:1px solid var(--line)} }
+@media (max-width:440px){ .factbar{grid-template-columns:repeat(2,minmax(0,1fr))} .factbar div{border-left:0;padding-left:0} .factbar div:nth-child(n+3){border-top:1px solid var(--line)} .factbar div:nth-child(even){border-left:1px solid var(--line);padding-left:16px} }
+
+.about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:clamp(28px,5vw,72px);align-items:start}
+.about .prose p{font:400 clamp(18px,1.6vw,20px)/1.6 var(--prose);margin:0 0 16px;max-width:62ch}
+.about .prose p:first-child::first-letter{font-family:var(--display);font-weight:800;float:left;font-size:3.3em;line-height:.82;margin:.06em .08em 0 0;color:var(--accent)}
+.was{font:500 13px/1.4 var(--mono);color:var(--muted);margin:16px 0 0;letter-spacing:.02em}
+.was b{color:var(--ink)}
+
+.rooms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2vw,24px)}
+.room{margin:0;display:grid;gap:12px;align-content:start;min-width:0}
+.room .ph{position:relative;aspect-ratio:4/3;overflow:hidden;border-radius:3px;background:var(--line)}
+.room img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.room:hover img{transform:scale(1.04)}
+.room figcaption{display:grid;gap:6px}
+.room h3{margin:0;font-weight:700;font-stretch:108%;font-size:19px;letter-spacing:-.005em}
+.room p{margin:0;font:400 16.5px/1.5 var(--prose);color:var(--muted)}
+.room .tag{position:absolute;left:10px;top:10px;font:500 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;background:rgba(10,18,17,.62);color:#F4F7F6;padding:6px 8px;border-radius:2px}
+@media (max-width:900px){ .rooms{grid-template-columns:repeat(2,minmax(0,1fr))} .about{grid-template-columns:minmax(0,1fr)} }
+@media (max-width:520px){ .rooms{grid-template-columns:minmax(0,1fr)} }
+.ai-note{margin:18px 0 0;font:500 12px/1.5 var(--mono);color:var(--muted);letter-spacing:.02em}
+
+.showing{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.2fr);gap:clamp(28px,5vw,64px);align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:clamp(22px,4vw,48px)}
+.showing .lead{font:400 19px/1.5 var(--prose);color:var(--muted);margin:14px 0 0;max-width:38ch}
+.agent{display:flex;gap:14px;align-items:center;margin:28px 0 0;padding-top:22px;border-top:1px solid var(--line)}
+.agent .mono{width:52px;height:52px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-weight:800;font-stretch:115%;font-size:18px;flex:none}
+.agent b{display:block;font-size:17px}
+.agent span{font:500 13px/1.5 var(--mono);color:var(--muted)}
+.tel{font-variant-numeric:tabular-nums;user-select:all}
+.slots{display:grid;gap:18px}
+.slots fieldset{border:0;margin:0;padding:0;min-width:0}
+.slots legend{font:500 11px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;padding:0}
+.days,.times{display:flex;flex-wrap:wrap;gap:8px}
+.pick{position:relative}
+.pick input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.pick span{display:grid;place-items:center;min-width:64px;padding:9px 12px;border:1px solid var(--line);border-radius:3px;background:var(--bg);font:600 13px/1.15 var(--display);text-align:center;font-variant-numeric:tabular-nums}
+.pick span small{display:block;font:500 10.5px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.pick input:checked + span{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+.pick input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.fields label{display:grid;gap:6px;font:500 11px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);min-width:0}
+.fields .wide{grid-column:1/-1}
+.fields input,.fields textarea{font:400 16px/1.3 var(--display);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:3px;padding:11px 12px;width:100%;letter-spacing:0;text-transform:none}
+.fields textarea{resize:vertical;min-height:84px}
+.fields input:focus,.fields textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.status{margin:0;font:500 13px/1.5 var(--mono);color:var(--accent);min-height:1.5em}
+@media (max-width:820px){ .showing{grid-template-columns:minmax(0,1fr)} }
+@media (max-width:440px){ .fields{grid-template-columns:minmax(0,1fr)} }
+
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 24px;border-top:1px solid var(--line);padding-top:20px;font:500 12px/1.6 var(--mono);color:var(--muted)}
+.foot .disclose{flex-basis:100%;max-width:90ch}
+.lineup{display:flex;flex-wrap:wrap;gap:8px}
+.lineup a{font:600 12px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:9px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
+.lineup a[aria-current="page"]{border-color:var(--accent);color:var(--accent)}
+.lineup a:hover{color:var(--ink)}
+@media (prefers-reduced-motion: reduce){ *{animation-duration:.01ms!important;transition-duration:.01ms!important} }
+
+/* Layout: one full-bleed photo that is quietly alive (clouds cross, leaves move, the gazebo curtains
+   lift in the breeze) with the listing card over it and the listing page below. */
+.hero{position:relative;height:100vh;height:100svh;min-height:560px;overflow:hidden;background:var(--stage);color:var(--on-stage)}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block}
+.fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.scrim{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(5,10,9,.7) 0%,rgba(5,10,9,.16) 34%,transparent 52%),linear-gradient(90deg,rgba(5,10,9,.32),transparent 42%)}
+.card{position:absolute;left:var(--gutter);bottom:calc(env(safe-area-inset-bottom,0px) + clamp(40px,8vh,84px))}
+.card .acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.card .btn{background:#4FC4C6;color:#06201F}
+.card .ghost{background:transparent;color:var(--on-stage);border:1px solid rgba(244,247,246,.5)}
+.live{position:absolute;right:var(--gutter);bottom:calc(env(safe-area-inset-bottom,0px) + clamp(40px,8vh,84px));display:grid;gap:10px;justify-items:end;text-align:right}
+.live .badge{display:inline-flex;align-items:center;gap:8px;font:600 11.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--on-stage)}
+.live .badge::before{content:"";width:8px;height:8px;border-radius:50%;background:#5FE0C8;box-shadow:0 0 0 0 rgba(95,224,200,.6);animation:pulse 2.4s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(95,224,200,.55)}80%,100%{box-shadow:0 0 0 12px rgba(95,224,200,0)}}
+.live p{margin:0;font:400 italic 16px/1.4 var(--prose);color:var(--on-stage-dim);max-width:30ch}
+.live .wind{display:flex;gap:6px;align-items:center;font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--on-stage-dim)}
+.live .wind input{accent-color:#5FE0C8;width:110px}
+@media (max-width:760px){ .live{left:var(--gutter);right:auto;justify-items:start;text-align:left;top:calc(env(safe-area-inset-top,0px) + 80px);bottom:auto} .live p{display:none} }
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="logo" href="#top" aria-label="Independent Realty Group"><img src="../media/logo.png" alt="Independent Realty Group" width="100" height="37"></a>
+  <button class="chip" id="snd" type="button" aria-pressed="false"><span class="dot"></span><span class="lbl">Sound on!</span></button>
+  <a class="btn" href="#showing">Book a showing</a>
+</header>
+
+<section class="hero" id="top" aria-label="The backyard at 106 Steinmann Avenue">
+  <img class="fallback" src="../media/back.jpg" alt="The rear of 106 Steinmann Avenue with the deck and backyard">
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <div class="scrim"></div>
+  <div class="card">
+    <p class="eyebrow"><i></i>New listing · Middlebury, CT</p>
+    <h1>106 Steinmann Avenue</h1>
+    <p class="town">A New England Cape on 0.39 acres</p>
+    <ul class="facts"><li class="price">$439,900</li><li><b>4</b> bd</li><li><b>2</b> ba</li><li><b>1,630</b> sq ft</li></ul>
+    <div class="acts"><a class="btn" href="#showing">Book a showing</a><a class="btn ghost" href="#details">Listing details</a></div>
+  </div>
+  <div class="live">
+    <span class="badge">Living photo</span>
+    <p>The backyard on a breezy summer afternoon, from the far edge of the lawn.</p>
+    <label class="wind" for="wind">Breeze <input id="wind" type="range" min="0" max="2" step="0.05" value="1"></label>
+  </div>
+</section>
+
+<main class="page" id="details">
+  <section class="wrap" aria-label="Listing facts">
+    <dl class="factbar">
+      <div><dt>Price</dt><dd>$439,900</dd></div>
+      <div><dt>Bedrooms</dt><dd>4</dd></div>
+      <div><dt>Baths</dt><dd>2<small>full</small></dd></div>
+      <div><dt>Living area</dt><dd>1,630<small>sq ft</small></dd></div>
+      <div><dt>Lot</dt><dd>0.39<small>acres</small></dd></div>
+      <div><dt>Built</dt><dd>1953</dd></div>
+    </dl>
+  </section>
+
+  <section class="wrap about">
+    <div>
+      <p class="kicker">106 Steinmann Avenue · Middlebury, CT</p>
+      <h2>A move-in ready Cape in Middlebury.</h2>
+      <p class="was">Listed at <b>$439,900</b>, reduced from $455,900 on Oct 2. Taxes $7,968 a year, no HOA.</p>
+    </div>
+    <div class="prose">
+      <p>A nicely updated New England Cape with an easy, comfortable layout. The living room is built around a brick fireplace with built-in shelves, and opens through the dining area to a large kitchen with tile floors and plenty of cabinets.</p>
+      <p>Two bedrooms and a renovated full bath finish the main level, all on hardwood. Upstairs are a remodeled full bath, a third bedroom, and a primary bedroom with a vaulted ceiling, a large closet and a slider to a balcony over the backyard.</p>
+      <p>The full basement walks out into a one-car garage. There's a large shed, parking for six, and a big deck off the kitchen. Close to Route 84 and the Middlebury walking trail, in the Region 15 school district.</p>
+    </div>
+  </section>
+
+  <section class="wrap" aria-labelledby="rooms-h">
+    <p class="kicker">Room by room</p>
+    <h2 id="rooms-h">Walk through it.</h2>
+    <div class="rooms" style="margin-top:28px">
+      <figure class="room"><div class="ph"><img src="../media/front.jpg" alt="Front of the house with the entry deck and bay window" loading="lazy"><span class="tag">Curb appeal</span></div>
+        <figcaption><h3>Front entry</h3><p>A raised entry deck, a bay window and a stone-faced chimney, set back on a lawn ringed by mature pines.</p></figcaption></figure>
+      <figure class="room"><div class="ph"><img src="../media/fireplace.jpg" alt="Living room fireplace with white mantel and built-in shelves" loading="lazy"><span class="tag">Main level</span></div>
+        <figcaption><h3>Living room</h3><p>Oak floors, crown molding and a brick fireplace with a white mantel and built-in shelves, lit by a wide front window.</p></figcaption></figure>
+      <figure class="room"><div class="ph"><img src="../media/living.jpg" alt="View from the living room through the dining area to the kitchen" loading="lazy"><span class="tag">Main level</span></div>
+        <figcaption><h3>Dining area</h3><p>The dining area sits between the living room and the kitchen, open on both sides, with the stairs just off it.</p></figcaption></figure>
+      <figure class="room"><div class="ph"><img src="../media/kitchen.jpg" alt="Kitchen with white cabinets and the back door" loading="lazy"><span class="tag">Main level</span></div>
+        <figcaption><h3>Kitchen</h3><p>White cabinets up to the ceiling, dark counters, tile floors and a half-glass door straight out to the deck.</p></figcaption></figure>
+      <figure class="room"><div class="ph"><img src="../media/sitting.jpg" alt="Sitting room with two windows and a ceiling fan" loading="lazy"><span class="tag">Main level</span></div>
+        <figcaption><h3>Sitting room</h3><p>Warm walls, hardwood floors and windows on two sides. Use it as a den, an office or a reading room.</p></figcaption></figure>
+      <figure class="room"><div class="ph"><img src="../media/bed1.jpg" alt="First-floor bedroom with a ceiling fan" loading="lazy"><span class="tag">Main level</span></div>
+        <figcaption><h3>First-floor bedroom</h3><p>A bright bedroom on hardwood with crown molding, a ceiling fan and a window to the trees.</p></figcaption></figure>
+      <figure class="room"><div class="ph"><img src="../media/bath1.jpg" alt="First-floor full bath" loading="lazy"><span class="tag">Main level · renovated</span></div>
+        <figcaption><h3>Full bath</h3><p>A recently renovated bath with a quartz-top vanity, marble-look tile and a tub with shower.</p></figcaption></figure>
+      <figure class="room"><div class="ph"><img src="../media/primary2.jpg" alt="Primary bedroom with vaulted ceiling and octagon window" loading="lazy"><span class="tag">Upstairs</span></div>
+        <figcaption><h3>Primary bedroom</h3><p>A vaulted ceiling, an octagon window, a large closet and a slider out to a private balcony over the backyard.</p></figcaption></figure>
+      <figure class="room"><div class="ph"><img src="../media/bed2.jpg" alt="Upstairs bedroom with vaulted ceiling" loading="lazy"><span class="tag">Upstairs</span></div>
+        <figcaption><h3>Upstairs bedroom</h3><p>Another vaulted ceiling, with windows on two walls, an octagon window and a ceiling fan.</p></figcaption></figure>
+      <figure class="room"><div class="ph"><img src="../media/bath2.jpg" alt="Second-floor full bath" loading="lazy"><span class="tag">Upstairs · remodeled</span></div>
+        <figcaption><h3>Upstairs bath</h3><p>A remodeled full bath with a stone-top vanity, brushed-nickel fixtures and a tub with a handheld shower.</p></figcaption></figure>
+      <figure class="room"><div class="ph"><img src="../media/decktub.jpg" alt="Deck off the kitchen looking out to the yard" loading="lazy"><span class="tag">Off the kitchen</span></div>
+        <figcaption><h3>The deck</h3><p>A large wood deck right off the kitchen, with room for a dining set and lounge chairs, looking out over the lawn.</p></figcaption></figure>
+      <figure class="room"><div class="ph"><img src="../media/back.jpg" alt="Rear of the house with the deck and balcony" loading="lazy"><span class="tag">0.39 acres</span></div>
+        <figcaption><h3>Backyard</h3><p>A level, landscaped lawn behind the house, with flowering rose of Sharon and the primary bedroom's balcony overhead.</p></figcaption></figure>
+    </div>
+    <p class="ai-note">Room descriptions drafted with AI from the listing sheet and photos, then checked against the MLS record.</p>
+  </section>
+
+  <section class="wrap showing" id="showing" aria-labelledby="show-h">
+    <div>
+      <p class="kicker">Private showings this week</p>
+      <h2 id="show-h">See it in person.</h2>
+      <p class="lead">Pick a day and a time and we'll confirm by text. Or call <b class="tel">203.733.3969</b>.</p>
+      <div class="agent"><div class="mono" aria-hidden="true">CC</div><div><b>Christina Cavallo</b><span>Independent Realty Group · <span class="tel">203.733.3969</span></span></div></div>
+    </div>
+    <form class="slots" id="show-form" novalidate>
+      <fieldset><legend>Day</legend><div class="days" id="days"></div></fieldset>
+      <fieldset><legend>Time</legend><div class="times" id="times"></div></fieldset>
+      <div class="fields">
+        <label for="f-name">Name<input id="f-name" name="name" autocomplete="name" required></label>
+        <label for="f-phone">Mobile<input id="f-phone" name="phone" type="tel" autocomplete="tel" required></label>
+        <label class="wide" for="f-email">Email<input id="f-email" name="email" type="email" autocomplete="email"></label>
+        <label class="wide" for="f-note">Anything we should know?<textarea id="f-note" name="note" placeholder="Pre-approved, first showing, bringing a contractor..."></textarea></label>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px"><button class="btn" type="submit">Request showing</button><p class="status" id="f-status" role="status"></p></div>
+    </form>
+  </section>
+
+  <footer class="wrap foot">
+    <span>Independent Realty Group · Christina Cavallo · <span class="tel">203.733.3969</span></span>
+    <span>SmartMLS listing 24200006 · data deemed reliable, not guaranteed</span>
+    <p class="disclose">Living photo: subtle motion (clouds, leaves, curtains) is animated from a single listing photo. Nothing in the property was added or removed.</p>
+    <nav class="lineup" aria-label="Other hero styles for this listing"><a href="../index.html">All styles</a><a href="../flythrough/index.html">Fly-through</a><a href="../dusk/index.html">Day to dusk</a><a href="../living/index.html" aria-current="page">Living photo</a><a href="../parallax/index.html">Depth story</a></nav>
+  </footer>
+</main>
+
+
+<script>/* depthcam */
+/* DepthCam: fly a virtual camera through a single photo plus its disparity map.
+   Each pixel's ray is marched through the depth map (parallax occlusion), so foreground
+   objects slide over the background as the camera moves. WebGL2, no libraries.
+
+   Coordinates: x right, y up, z forward (into the photo). The photo was taken from the origin
+   looking down +z. Disparity d in [0,1] (1 = nearest) maps to depth Z = 1 / (NEAR + d*(1-NEAR)). */
+(function(){
+"use strict";
+const NEAR = 0.06;              // d = 0 (sky) sits at Z = 16.7
+const F = 1.35;                 // photo focal length, image half-height = 1
+
+const VS = `#version 300 es
+in vec2 p; out vec2 v;
+void main(){ v = p*0.5 + 0.5; gl_Position = vec4(p, 0.0, 1.0); }`;
+
+const SCENE_FS = `#version 300 es
+precision highp float;
+in vec2 v; out vec4 o;
+uniform sampler2D uImg, uDep;
+uniform vec2 uRes;
+uniform float uAsp, uF, uZoom, uNear;
+uniform vec3 uCam;
+uniform mat3 uRot;
+uniform float uExpo;
+float Zof(float d){ return 1.0/(uNear + d*(1.0 - uNear)); }
+float dOf(float z){ return clamp((1.0/z - uNear)/(1.0 - uNear), 0.0, 1.0); }
+vec2 uvOf(vec3 P){ vec2 q = uF*P.xy/P.z; return vec2(q.x/uAsp, q.y)*0.5 + 0.5; }
+void main(){
+  float va = uRes.x/uRes.y;
+  float cover = min(1.0, uAsp/va);
+  vec2 s = (v*2.0 - 1.0)*vec2(va, 1.0)*cover;
+  vec3 rd = uRot*vec3(s/(uF*uZoom), 1.0);
+  rd /= max(rd.z, 1e-3);
+  float d0 = dOf(max(uCam.z + 0.04, 1.0));   /* nearest surface the camera can still see */
+  const int N = 56;
+  float prevD = d0, hitD = 0.0; bool hit = false;
+  for (int i = 1; i <= N; i++){
+    float dr = d0*(1.0 - float(i)/float(N));
+    vec3 P = uCam + rd*(Zof(dr) - uCam.z);
+    float ds = texture(uDep, uvOf(P)).r;
+    if (ds >= dr){ hitD = dr; hit = true; break; }
+    prevD = dr;
+  }
+  float lo = hit ? hitD : 0.0, hi = hit ? prevD : 0.0;
+  for (int k = 0; k < 6; k++){
+    float m = 0.5*(lo + hi);
+    vec3 P = uCam + rd*(Zof(m) - uCam.z);
+    if (texture(uDep, uvOf(P)).r >= m) lo = m; else hi = m;
+  }
+  vec3 P = uCam + rd*(Zof(lo) - uCam.z);
+  vec2 uv = uvOf(P);
+  vec3 c = texture(uImg, uv).rgb * uExpo;
+  o = vec4(c, lo);
+}`;
+
+const COMP_FS = `#version 300 es
+precision highp float;
+in vec2 v; out vec4 o;
+uniform sampler2D uA, uB;
+uniform float uMix, uBlur, uWhip, uFlash, uTime, uGrain, uVig;
+uniform vec2 uCenter, uRes;
+vec3 zoomBlur(sampler2D t, vec2 uv, float k){
+  if (k < 0.002) return texture(t, uv).rgb;
+  vec3 a = vec3(0.0);
+  for (int i = 0; i < 14; i++){ float s = 1.0 - k*float(i)/13.0; a += texture(t, uCenter + (uv - uCenter)*s).rgb; }
+  return a/14.0;
+}
+vec3 whip(sampler2D t, vec2 uv, float k){
+  vec3 a = vec3(0.0);
+  for (int i = 0; i < 14; i++){ a += texture(t, uv + vec2(k*(float(i)/13.0 - 0.5), 0.0)).rgb; }
+  return a/14.0;
+}
+float hash(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233)))*43758.5453); }
+void main(){
+  vec3 a, b;
+  if (uWhip > 0.001){ a = whip(uA, v, uWhip); b = whip(uB, v, uWhip); }
+  else { a = zoomBlur(uA, v, uBlur); b = zoomBlur(uB, v, uBlur*0.6); }
+  vec3 c = mix(a, b, uMix);
+  c = mix(c, vec3(1.0, 0.97, 0.92), uFlash);
+  vec2 q = v - 0.5;
+  c *= 1.0 - uVig*dot(q, q)*1.6;
+  c += (hash(v*uRes + fract(uTime)*91.0) - 0.5)*uGrain;
+  o = vec4(c, 1.0);
+}`;
+
+function compile(gl, vs, fs){
+  const p = gl.createProgram();
+  for (const [type, src] of [[gl.VERTEX_SHADER, vs], [gl.FRAGMENT_SHADER, fs]]){
+    const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+    gl.attachShader(p, s);
+  }
+  gl.bindAttribLocation(p, 0, "p"); gl.linkProgram(p);
+  if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
+  const u = {}; const n = gl.getProgramParameter(p, gl.ACTIVE_UNIFORMS);
+  for (let i = 0; i < n; i++){ const a = gl.getActiveUniform(p, i); u[a.name] = gl.getUniformLocation(p, a.name); }
+  return {p, u};
+}
+function loadImage(src){
+  return new Promise((res, rej) => { const im = new Image(); im.decoding = "async"; im.onload = () => res(im); im.onerror = () => rej(new Error("could not load " + src)); im.src = src; });
+}
+function texFrom(gl, im, wrap){
+  const t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, im);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrap === "mirror" ? gl.MIRRORED_REPEAT : wrap === "repeat" ? gl.REPEAT : gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrap === "mirror" ? gl.MIRRORED_REPEAT : gl.CLAMP_TO_EDGE);
+  gl.generateMipmap(gl.TEXTURE_2D);
+  return t;
+}
+function target(gl, w, h){
+  const t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  const fb = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+  gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t, 0);
+  return {t, fb, w, h};
+}
+
+/* rotation matrix (column-major for uniformMatrix3fv) from yaw (right), pitch (up), roll */
+function rotMat(yaw, pitch, roll){
+  const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch), cr = Math.cos(roll), sr = Math.sin(roll);
+  // R = Ry(yaw) * Rx(-pitch) * Rz(roll); camera looks down +z, y up
+  const Rz = [cr, sr, 0, -sr, cr, 0, 0, 0, 1];
+  const Rx = [1, 0, 0, 0, cp, -sp, 0, sp, cp];     // columns
+  const Ry = [cy, 0, -sy, 0, 1, 0, sy, 0, cy];
+  const mul = (A, B) => { const C = new Array(9); for (let c = 0; c < 3; c++) for (let r = 0; r < 3; r++){ let s = 0; for (let k = 0; k < 3; k++) s += A[k*3 + r]*B[c*3 + k]; C[c*3 + r] = s; } return C; };
+  return new Float32Array(mul(Ry, mul(Rx, Rz)));
+}
+
+/* a point on the photo, given as percent across, percent down and disparity, in 3D */
+function P3(u, v, d, asp){
+  asp = asp || 1.6;
+  const Z = 1/(NEAR + d*(1 - NEAR));
+  const qx = (u/100*2 - 1)*asp, qy = 1 - v/100*2;
+  return [qx*Z/F, qy*Z/F, Z];
+}
+/* yaw and pitch that aim a camera at pos toward the point tgt */
+function aim(pos, tgt){
+  const dx = tgt[0] - pos[0], dy = tgt[1] - pos[1], dz = tgt[2] - pos[2];
+  return [Math.atan2(dx, dz), Math.atan2(dy, Math.hypot(dx, dz))];
+}
+
+function create(canvas, opts){
+  opts = opts || {};
+  const gl = canvas.getContext("webgl2", {antialias: false, alpha: false, preserveDrawingBuffer: !!opts.preserve, powerPreference: "high-performance"});
+  if (!gl) return null;
+  const quad = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, quad);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const vao = gl.createVertexArray(); gl.bindVertexArray(vao);
+  gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+  const scene = compile(gl, VS, SCENE_FS);
+  const comp = compile(gl, VS, opts.compFS || COMP_FS);
+  let A = null, B = null, W = 0, H = 0;
+  const scenes = {};
+  function size(){
+    const maxPx = opts.maxPixels || 2.4e6;
+    let dpr = Math.min(window.devicePixelRatio || 1, opts.maxDpr || 1.75);
+    let w = Math.round(canvas.clientWidth*dpr), h = Math.round(canvas.clientHeight*dpr);
+    const k = Math.min(1, Math.sqrt(maxPx/(w*h || 1)));
+    w = Math.max(2, Math.round(w*k)); h = Math.max(2, Math.round(h*k));
+    if (w === W && h === H) return;
+    W = w; H = h; canvas.width = w; canvas.height = h;
+    A = target(gl, w, h); B = target(gl, w, h);
+  }
+  async function add(name, img, depth){
+    const [im, dp] = await Promise.all([loadImage(img), loadImage(depth)]);
+    scenes[name] = {img: texFrom(gl, im), dep: texFrom(gl, dp), asp: im.naturalWidth/im.naturalHeight, im};
+    return scenes[name];
+  }
+  const extra = {};
+  async function addTex(name, url, wrap){ extra[name] = texFrom(gl, await loadImage(url), wrap); return extra[name]; }
+  function drawScene(tgt, sc, cam){
+    gl.bindFramebuffer(gl.FRAMEBUFFER, tgt.fb); gl.viewport(0, 0, tgt.w, tgt.h);
+    gl.useProgram(scene.p);
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, sc.img); gl.uniform1i(scene.u.uImg, 0);
+    gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, sc.dep); gl.uniform1i(scene.u.uDep, 1);
+    gl.uniform2f(scene.u.uRes, tgt.w, tgt.h);
+    gl.uniform1f(scene.u.uAsp, sc.asp); gl.uniform1f(scene.u.uF, F); gl.uniform1f(scene.u.uNear, NEAR);
+    gl.uniform1f(scene.u.uZoom, cam.zoom || 1);
+    gl.uniform3f(scene.u.uCam, cam.pos[0], cam.pos[1], cam.pos[2]);
+    gl.uniformMatrix3fv(scene.u.uRot, false, rotMat(cam.yaw || 0, cam.pitch || 0, cam.roll || 0));
+    gl.uniform1f(scene.u.uExpo, cam.expo == null ? 1 : cam.expo);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  }
+  /* frame: {a:{scene, cam}, b:{scene, cam}|null, mix, blur, whip, flash, center:[x,y], time, extra uniforms} */
+  function render(fr){
+    size();
+    drawScene(A, scenes[fr.a.scene], fr.a.cam);
+    if (fr.b) drawScene(B, scenes[fr.b.scene], fr.b.cam);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, W, H);
+    gl.useProgram(comp.p);
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, A.t); gl.uniform1i(comp.u.uA, 0);
+    gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, (fr.b ? B : A).t); gl.uniform1i(comp.u.uB, 1);
+    const set1 = (n, x) => comp.u[n] && gl.uniform1f(comp.u[n], x);
+    set1("uMix", fr.b ? (fr.mix || 0) : 0); set1("uBlur", fr.blur || 0); set1("uWhip", fr.whip || 0);
+    set1("uFlash", fr.flash || 0); set1("uTime", fr.time || 0); set1("uGrain", fr.grain == null ? 0.035 : fr.grain); set1("uVig", fr.vig == null ? 0.35 : fr.vig);
+    comp.u.uCenter && gl.uniform2f(comp.u.uCenter, (fr.center || [0.5, 0.5])[0], (fr.center || [0.5, 0.5])[1]);
+    comp.u.uRes && gl.uniform2f(comp.u.uRes, W, H);
+    if (fr.tex){ let unit = 2; for (const k in fr.tex){ if (!comp.u[k]) continue; gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, extra[fr.tex[k]]); gl.uniform1i(comp.u[k], unit); unit++; } }
+    if (fr.uniforms) for (const k in fr.uniforms){ const val = fr.uniforms[k]; if (!comp.u[k]) continue; if (typeof val === "number") gl.uniform1f(comp.u[k], val); else if (val.length === 2) gl.uniform2fv(comp.u[k], val); else if (val.length === 3) gl.uniform3fv(comp.u[k], val); else if (val.length === 4) gl.uniform4fv(comp.u[k], val); }
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  }
+  return {gl, add, addTex, render, scenes, size, get width(){ return W; }, get height(){ return H; }};
+}
+
+window.DepthCam = {create, P3, aim, NEAR, F, loadImage, compile, texFrom, VS};
+})();
+
+</script>
+<script>/* listing */
+/* Showing picker: the next six days with three time windows each, and a form that confirms in place. */
+(function(){
+"use strict";
+const days = document.getElementById("days"), times = document.getElementById("times");
+if (!days) return;
+const fmtD = new Intl.DateTimeFormat("en-US", {weekday: "short"}), fmtN = new Intl.DateTimeFormat("en-US", {month: "short", day: "numeric"});
+const now = new Date();
+for (let i = 1; i <= 6; i++){
+  const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
+  const id = "day-" + i;
+  days.insertAdjacentHTML("beforeend", `<label class="pick" for="${id}"><input type="radio" name="day" id="${id}" value="${fmtD.format(d)}, ${fmtN.format(d)}"${i === 1 ? " checked" : ""}><span><small>${fmtD.format(d)}</small>${fmtN.format(d)}</span></label>`);
+}
+[["t-am", "Morning", "9–12"], ["t-pm", "Afternoon", "12–4"], ["t-ev", "Evening", "4–7"]].forEach(([id, a, b], k) => {
+  times.insertAdjacentHTML("beforeend", `<label class="pick" for="${id}"><input type="radio" name="time" id="${id}" value="${a}"${k === 2 ? " checked" : ""}><span><small>${a}</small>${b}</span></label>`);
+});
+const form = document.getElementById("show-form"), st = document.getElementById("f-status");
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  const f = new FormData(form);
+  if (!String(f.get("name") || "").trim() || !String(f.get("phone") || "").trim()){ st.textContent = "Add your name and a mobile number so we can confirm."; return; }
+  st.textContent = `Request received for ${f.get("day")}, ${String(f.get("time")).toLowerCase()}. This is a demo page, so no message was sent.`;
+});
+})();
+
+</script>
+
+<script>
+(function(){
+"use strict";
+const $ = id => document.getElementById(id);
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const LIVE_FS = `#version 300 es
+precision highp float;
+in vec2 v; out vec4 o;
+uniform sampler2D uA, uB, uCloud;
+uniform float uTime, uGrain, uWind;
+uniform vec4 uView;   /* view aspect, cover, zoom, image aspect */
+uniform vec2 uRes;
+float hash(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233)))*43758.5453); }
+vec2 imgUV(vec2 p){ vec2 s = (p*2.0 - 1.0)*vec2(uView.x, 1.0)*uView.y; vec2 q = s/uView.z; return vec2(q.x/uView.w, q.y)*0.5 + 0.5; }
+void main(){
+  float t = uTime;
+  vec3 M = texture(uB, v).rgb;      /* r sky, g foliage, b curtains */
+  float gust = uWind*(0.65 + 0.35*sin(t*0.23)*sin(t*0.37 + 1.0));
+  vec2 off = vec2(0.0);
+  off.x += M.g*(sin(t*1.25 + v.y*14.0 + v.x*5.0)*0.0016 + sin(t*2.3 + v.x*31.0 + v.y*9.0)*0.0006)*gust;
+  off.y += M.g*sin(t*1.7 + v.x*11.0 + v.y*4.0)*0.0005*gust;
+  off.x += M.b*(sin(t*1.4 + v.x*38.0)*0.0030 + sin(t*0.8 + v.x*13.0)*0.0018)*gust;
+  off.y += M.b*sin(t*1.1 + v.x*21.0)*0.0011*gust;
+  vec3 c = texture(uA, v + off).rgb;
+  /* clouds drift right to left across the sky */
+  vec2 iu = imgUV(v);
+  vec2 pu = vec2((iu.x - 0.20)/0.52 + t*0.0045*(0.6 + 0.4*uWind), 1.0 - (1.0 - iu.y)/0.225);
+  pu.x += 0.006*sin(t*0.07 + pu.y*4.0);
+  vec3 cl = texture(uCloud, pu).rgb;
+  c = mix(c, cl, clamp(M.r, 0.0, 1.0));
+  /* soft cloud shadows sliding over the yard and the house */
+  float n = (sin((iu.x*1.7 - t*0.016)*6.2832)*0.5 + 0.5)*(sin((iu.x*1.1 + iu.y*0.9 - t*0.010)*6.2832)*0.5 + 0.5);
+  c *= 1.0 - 0.08*smoothstep(0.3, 0.85, n)*(1.0 - M.r);
+  vec2 q = v - 0.5;
+  c *= 1.0 - 0.2*dot(q, q)*1.6;
+  c += (hash(v*uRes + fract(t)*91.0) - 0.5)*uGrain;
+  o = vec4(c, 1.0);
+}`;
+
+const audio = new Audio("../media/birds.mp3"); audio.loop = true; audio.volume = 0.55;
+let soundOn = false;
+$("snd").addEventListener("click", () => {
+  soundOn = !soundOn; $("snd").setAttribute("aria-pressed", String(soundOn));
+  $("snd").querySelector(".lbl").textContent = soundOn ? "Sound off" : "Sound on!";
+  if (soundOn) audio.play().catch(() => {}); else audio.pause();
+});
+let wind = 1; $("wind").addEventListener("input", e => { wind = +e.target.value; });
+let mx = 0, my = 0, tmx = 0, tmy = 0;
+addEventListener("pointermove", e => { tmx = e.clientX/innerWidth*2 - 1; tmy = e.clientY/innerHeight*2 - 1; });
+
+const cv = $("gl"), hero = document.querySelector(".hero");
+const eng = DepthCam.create(cv, {compFS: LIVE_FS, maxPixels: 2.4e6});
+window.__live = {time: null};
+if (!eng){ cv.remove(); window.__ready = true; return; }
+Promise.all([eng.add("photo", "../media/back.jpg", "../media/back-depth.png"), eng.add("mask", "../media/back-motion.png", "../media/back-depth.png"), eng.addTex("cloud", "../media/back-clouds.jpg", "mirror")]).then(() => {
+  document.querySelector(".fallback").hidden = true;
+  const t0 = performance.now();
+  let visible = true;
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(hero);
+  function tick(now){
+    requestAnimationFrame(tick);
+    if (!visible) return;
+    const time = window.__live.time != null ? window.__live.time : (reduce ? 0 : (now - t0)/1000);
+    mx += (tmx - mx)*0.035; my += (tmy - my)*0.035;
+    const sc = Math.min(1, Math.max(0, scrollY/innerHeight));
+    const zoom = 1.05;
+    const cam = {pos: [0.02*Math.sin(time*0.09) + mx*0.03, 0.01*Math.sin(time*0.07) - my*0.015, 0.04 + 0.03*Math.sin(time*0.12) + sc*0.25], yaw: -mx*0.01, pitch: 0.02 + my*0.006, roll: 0, zoom};
+    const va = cv.clientWidth/cv.clientHeight, asp = eng.scenes.photo.asp;
+    eng.render({a: {scene: "photo", cam}, b: {scene: "mask", cam}, time, tex: {uCloud: "cloud"}, uniforms: {uTime: time, uGrain: 0.03, uWind: reduce ? 0 : wind, uView: [va, Math.min(1, asp/va), zoom, asp]}});
+    if (soundOn) audio.volume = 0.55*(1 - sc*0.8);
+  }
+  requestAnimationFrame(tick);
+  window.__ready = true;
+}).catch(e => { console.error(e); cv.remove(); window.__ready = true; });
+})();
+</script>
+</body>
+</html>
