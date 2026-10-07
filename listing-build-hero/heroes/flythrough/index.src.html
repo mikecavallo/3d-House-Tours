@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Steinmann Fly-Through</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<style>
+/*SHARED_CSS*/
+/* Layout: one pinned stage scrubbed by scroll. A camera flies a single continuous route through the
+   listing photos (front walk, living room, kitchen, deck, backyard); route rail at the bottom, the stop's
+   caption at left, and the listing page below. */
+.fly{position:relative;height:1400vh;background:var(--stage)}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--stage);color:var(--on-stage)}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block}
+.fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.scrim{position:absolute;inset:0;pointer-events:none;background:
+  linear-gradient(0deg,rgba(5,10,9,.72) 0%,rgba(5,10,9,.25) 34%,transparent 55%),
+  linear-gradient(90deg,rgba(5,10,9,.45) 0%,transparent 45%)}
+/* viewfinder: four corner ticks and a recording readout, the drone camera's own frame */
+.vf{position:absolute;inset:calc(env(safe-area-inset-top,0px) + 78px) var(--gutter) 108px;pointer-events:none;opacity:.75}
+.vf i{position:absolute;width:22px;height:22px;border:1.5px solid rgba(244,247,246,.75)}
+.vf i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}
+.vf i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+.vf i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}
+.vf i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+.osd{position:absolute;right:calc(var(--gutter) + 30px);top:calc(env(safe-area-inset-top,0px) + 88px);display:flex;gap:16px;font:500 11.5px/1 var(--mono);letter-spacing:.1em;color:rgba(244,247,246,.82);pointer-events:none;font-variant-numeric:tabular-nums}
+.osd .rec{display:flex;align-items:center;gap:7px}
+.osd .rec::before{content:"";width:8px;height:8px;border-radius:50%;background:#FF5A4E;animation:blink 1.4s steps(2,start) infinite}
+@keyframes blink{to{visibility:hidden}}
+
+.intro{position:absolute;left:var(--gutter);bottom:clamp(120px,16vh,170px);right:var(--gutter);transition:opacity .5s,transform .5s}
+.hint{display:inline-flex;align-items:center;gap:10px;margin-top:26px;font:500 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--on-stage)}
+.hint .wheel{width:20px;height:30px;border:1.5px solid currentColor;border-radius:12px;position:relative}
+.hint .wheel::after{content:"";position:absolute;left:50%;top:6px;width:2px;height:6px;margin-left:-1px;border-radius:2px;background:currentColor;animation:wheel 1.6s ease-in-out infinite}
+@keyframes wheel{0%{transform:translateY(0);opacity:1}70%{transform:translateY(9px);opacity:0}100%{opacity:0}}
+
+.stop{position:absolute;left:var(--gutter);bottom:clamp(116px,15vh,150px);max-width:min(440px,calc(100% - 2*var(--gutter)));opacity:0;transition:opacity .45s}
+.stop .eyebrow{margin:0 0 10px;font:500 11.5px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#7FE3D0}
+.stop h2{margin:0;font-weight:800;font-stretch:115%;font-size:clamp(28px,3.6vw,48px);line-height:.98;letter-spacing:-.015em;text-wrap:balance;text-shadow:0 2px 20px rgba(0,0,0,.35)}
+.stop p{margin:12px 0 0;font:400 clamp(17px,1.5vw,19px)/1.45 var(--prose);color:var(--on-stage-dim);max-width:38ch}
+.stop.swap .in{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.route{position:absolute;left:var(--gutter);right:var(--gutter);bottom:calc(env(safe-area-inset-bottom,0px) + 28px);display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:0;padding:0;list-style:none}
+.route li{display:grid;gap:9px;font:500 11px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(244,247,246,.55);min-width:0}
+.route li span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.route li b{display:block;height:2px;background:rgba(244,247,246,.22);overflow:hidden;border-radius:2px}
+.route li b i{display:block;height:100%;background:#7FE3D0;transform-origin:left;transform:scaleX(0)}
+.route li.on{color:var(--on-stage)}
+@media (max-width:640px){ .route li span{display:none} .route li.on span{display:block;position:absolute;left:0;bottom:12px} .route{gap:6px} }
+
+.final{position:absolute;inset:auto var(--gutter) clamp(110px,15vh,150px);opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s;pointer-events:none}
+.final.on{opacity:1;transform:none;pointer-events:auto}
+.final .acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.final .ghost{background:transparent;color:var(--on-stage);border:1px solid rgba(244,247,246,.5)}
+.final .bar .btn{background:#4FC4C6}
+.final .btn:not(.ghost){background:#4FC4C6;color:#06201F}
+@media (max-width:640px){ .osd{display:none} .vf{inset:calc(env(safe-area-inset-top,0px) + 70px) 12px 96px} }
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="logo" href="#top" aria-label="Independent Realty Group"><img src="media/logo.png" alt="Independent Realty Group" width="100" height="37"></a>
+  <button class="chip" id="snd" type="button" aria-pressed="false"><span class="dot"></span><span class="lbl">Sound on!</span></button>
+  <a class="btn" href="#showing">Book a showing</a>
+</header>
+
+<section class="fly" id="top" aria-label="Fly-through of 106 Steinmann Avenue">
+  <div class="stage">
+    <img class="fallback" src="media/front.jpg" alt="Front of 106 Steinmann Avenue">
+    <canvas id="gl" aria-hidden="true"></canvas>
+    <div class="scrim"></div>
+    <div class="vf" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="osd" aria-hidden="true"><span class="rec" id="tc">00:00:00</span><span id="alt">ALT 1.6 M</span></div>
+
+    <div class="intro card" id="intro">
+      <p class="eyebrow"><i></i>New listing · Middlebury, CT</p>
+      <h1>106 Steinmann Avenue</h1>
+      <p class="town">A New England Cape on 0.39 acres</p>
+      <ul class="facts"><li class="price">$439,900</li><li><b>4</b> bd</li><li><b>2</b> ba</li><li><b>1,630</b> sq ft</li></ul>
+      <span class="hint"><span class="wheel"></span>Scroll to fly through</span>
+    </div>
+
+    <div class="stop" id="stop" aria-live="polite">
+      <div class="in"><p class="eyebrow" id="st-k"></p><h2 id="st-h"></h2><p id="st-p"></p></div>
+    </div>
+
+    <div class="final card" id="final">
+      <p class="eyebrow"><i></i>Private showings this week</p>
+      <h1>Come see it for real.</h1>
+      <ul class="facts"><li class="price">$439,900</li><li><b>4</b> bd</li><li><b>2</b> ba</li><li><b>0.39</b> acres</li></ul>
+      <div class="acts"><a class="btn" href="#showing">Book a showing</a><a class="btn ghost" href="#details">Listing details</a></div>
+    </div>
+
+    <ol class="route" id="route" aria-label="Route"></ol>
+  </div>
+</section>
+
+<!--LISTING-->
+
+<!--SCRIPTS-->
+<script>
+(function(){
+"use strict";
+const $ = id => document.getElementById(id);
+const P = DepthCam.P3;
+const lerp = (a, b, t) => a + (b - a)*t;
+const clamp01 = x => Math.max(0, Math.min(1, x));
+const smooth = x => { x = clamp01(x); return x*x*(3 - 2*x); };
+const toward = (a, b, t) => [lerp(a[0], b[0], t), lerp(a[1], b[1], t), lerp(a[2], b[2], t)];
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---- the route. Each shot is one photo; keys are camera positions and look-at points on the photo
+   (percent across, percent down, disparity). Shots overlap where a transition blends them. ---- */
+const DOOR = P(38.3, 46, 0.47), BACKDOOR = P(44.5, 50, 0.31);
+const DINING = P(42, 56, 0.384), KDOOR = P(74, 56, 0.765), BALCONY = P(31, 37, 0.37);
+const BED = P(55, 45, 0.55), REAR = P(57, 48, 0.52);
+const SHOTS = [
+  {scene: "front", t0: 0.00, t1: 0.15, keys: [
+    {pos: [0.03, 0.03, -0.08], look: P(52, 47, 0.45), zoom: 1.1, roll: 0},
+    {pos: [-0.04, 0.04, 0.6], look: P(45, 46, 0.47), zoom: 1.2, roll: 0.006},
+    {pos: toward([0, 0, 0], DOOR, 0.62), look: DOOR, zoom: 1.3, roll: 0},
+    {pos: toward([0, 0, 0], DOOR, 0.8), look: DOOR, zoom: 1.42, roll: 0}]},
+  {scene: "livingwide", t0: 0.115, t1: 0.315, keys: [
+    {pos: [0.0, 0.0, -0.04], look: DINING, zoom: 1.6, roll: 0.01},
+    {pos: toward([0, 0, 0], DINING, 0.3), look: DINING, zoom: 1.5, roll: 0.004},
+    {pos: toward([0, 0, 0], DINING, 0.48), look: P(38, 56, 0.38), zoom: 1.55, roll: -0.004},
+    {pos: toward([0, 0, 0], DINING, 0.62), look: P(36, 56, 0.38), zoom: 1.7, roll: 0}]},
+  {scene: "living", t0: 0.28, t1: 0.455, keys: [
+    {pos: [0.04, 0.0, -0.06], look: P(42, 48, 0.36), zoom: 1.36, roll: 0.012},
+    {pos: [0.0, 0.0, 0.5], look: P(43, 49, 0.34), zoom: 1.22, roll: 0.0},
+    {pos: [-0.14, -0.01, 1.2], look: BACKDOOR, zoom: 1.18, roll: -0.008},
+    {pos: toward([0, 0, 0], BACKDOOR, 0.78), look: BACKDOOR, zoom: 1.22, roll: 0}]},
+  {scene: "kitchen", t0: 0.425, t1: 0.585, keys: [
+    {pos: [0.0, 0.0, 0.0], look: P(56, 53, 0.7), zoom: 1.25, roll: 0},
+    {pos: toward([0, 0, 0], P(64, 55, 0.74), 0.4), look: P(64, 55, 0.74), zoom: 1.28, roll: -0.004},
+    {pos: toward([0, 0, 0], KDOOR, 0.62), look: KDOOR, zoom: 1.32, roll: 0},
+    {pos: toward([0, 0, 0], KDOOR, 0.78), look: KDOOR, zoom: 1.42, roll: 0}]},
+  {scene: "decktub", t0: 0.545, t1: 0.705, keys: [
+    {pos: [-0.02, 0.02, -0.1], look: P(47, 52, 0.22), zoom: 1.1, roll: 0.0},
+    {pos: [0.0, 0.04, 0.25], look: P(48, 50, 0.16), zoom: 1.14, roll: -0.006},
+    {pos: [0.02, 0.07, 0.42], look: P(52, 49, 0.14), zoom: 1.16, roll: -0.014},
+    {pos: [0.03, 0.08, 0.5], look: P(55, 49, 0.14), zoom: 1.16, roll: -0.02}]},
+  {scene: "back", t0: 0.665, t1: 0.805, keys: [
+    {pos: [0.02, 0.0, 0.35], look: P(47, 50, 0.4), zoom: 1.16, roll: 0.01},
+    {pos: [0.0, 0.04, 0.55], look: P(42, 44, 0.38), zoom: 1.22, roll: 0.004},
+    {pos: toward([0, 0.06, 0], BALCONY, 0.42), look: P(37, 40, 0.37), zoom: 1.75, roll: 0},
+    {pos: toward([0, 0.06, 0], BALCONY, 0.66), look: P(35, 39, 0.37), zoom: 2.0, roll: 0}]},
+  {scene: "primary", t0: 0.775, t1: 0.9, keys: [
+    {pos: [0.0, 0.0, -0.04], look: BED, zoom: 1.32, roll: 0.008},
+    {pos: [0.02, 0.0, 0.18], look: BED, zoom: 1.26, roll: 0.003},
+    {pos: [0.04, 0.01, 0.38], look: BED, zoom: 1.24, roll: -0.004},
+    {pos: [0.05, 0.01, 0.5], look: BED, zoom: 1.24, roll: -0.006}]},
+  {scene: "rear2", t0: 0.86, t1: 0.975, keys: [
+    {pos: [0.0, 0.0, 0.5], look: P(54, 48, 0.52), zoom: 1.22, roll: 0.01},
+    {pos: [0.0, 0.03, 0.28], look: P(52, 47, 0.52), zoom: 1.18, roll: 0.004},
+    {pos: [0.0, 0.05, 0.05], look: P(50, 46, 0.5), zoom: 1.14, roll: 0},
+    {pos: [0.0, 0.06, -0.03], look: P(50, 45, 0.5), zoom: 1.13, roll: 0}]}
+];
+const TRANS = [
+  {a: 0, b: 1, p0: 0.115, p1: 0.15, kind: "zoom", center: [0.5, 0.52]},
+  {a: 1, b: 2, p0: 0.28, p1: 0.315, kind: "zoom", center: [0.42, 0.5]},
+  {a: 2, b: 3, p0: 0.425, p1: 0.455, kind: "zoom", center: [0.5, 0.5]},
+  {a: 3, b: 4, p0: 0.545, p1: 0.585, kind: "flash"},
+  {a: 4, b: 5, p0: 0.665, p1: 0.705, kind: "whip"},
+  {a: 5, b: 6, p0: 0.775, p1: 0.805, kind: "zoom", center: [0.5, 0.5]},
+  {a: 6, b: 7, p0: 0.86, p1: 0.9, kind: "flash"}
+];
+const STOPS = [
+  {at: 0.0,   k: "Front walk",       h: "Up the walk to the front door.",    p: "A raised entry deck, a bay window and a stone-faced chimney, on a lawn ringed by mature pines."},
+  {at: 0.13,  k: "Living room",      h: "Hardwood and a real fireplace.",     p: "Oak floors, crown molding and a brick fireplace with built-in shelves, with the stairs just inside the door."},
+  {at: 0.3,   k: "Dining · kitchen", h: "Straight through to the kitchen.",   p: "The dining area opens onto a white kitchen with cabinets to the ceiling, tile floors and a door to the deck."},
+  {at: 0.565, k: "The deck",         h: "Out the back door, onto the deck.",  p: "A big wood deck right off the kitchen, with room to eat outside and a view of the yard."},
+  {at: 0.685, k: "Backyard",         h: "0.39 acres, level and landscaped.",  p: "Rose of Sharon along the side, lawn to the tree line, and a balcony off the primary bedroom."},
+  {at: 0.79,  k: "Primary suite",    h: "Up to the vaulted primary bedroom.", p: "A vaulted ceiling, an octagon window, a big closet and a slider out to that balcony."}
+];
+
+/* Catmull-Rom through a shot's keys */
+function cr(p0, p1, p2, p3, t){ const t2 = t*t, t3 = t2*t; return 0.5*((2*p1) + (-p0 + p2)*t + (2*p0 - 5*p1 + 4*p2 - p3)*t2 + (-p0 + 3*p1 - 3*p2 + p3)*t3); }
+function evalShot(sh, u){
+  const K = sh.keys, n = K.length - 1;
+  const x = clamp01(u)*n, i = Math.min(n - 1, Math.floor(x)), t = x - i;
+  const k0 = K[Math.max(0, i - 1)], k1 = K[i], k2 = K[i + 1], k3 = K[Math.min(n, i + 2)];
+  const v3 = f => [0, 1, 2].map(j => cr(k0[f][j], k1[f][j], k2[f][j], k3[f][j], t));
+  const v1 = (f, dflt) => cr(k0[f] ?? dflt, k1[f] ?? dflt, k2[f] ?? dflt, k3[f] ?? dflt, t);
+  const pos = v3("pos"), look = v3("look");
+  const [yaw, pitch] = DepthCam.aim(pos, look);
+  return {pos, yaw, pitch, roll: v1("roll", 0), zoom: v1("zoom", 1), expo: v1("expo", 1)};
+}
+function shotCam(k, p, time){
+  const sh = SHOTS[k];
+  const c = evalShot(sh, (p - sh.t0)/(sh.t1 - sh.t0));
+  if (!reduce){
+    c.pos[0] += Math.sin(time*0.61 + k)*0.005; c.pos[1] += Math.sin(time*0.83 + 2*k)*0.004;
+    c.roll += Math.sin(time*0.37 + k)*0.004; c.yaw += Math.sin(time*0.29 + k)*0.002;
+  }
+  return c;
+}
+const bell = x => Math.sin(Math.PI*clamp01(x));
+
+function frameAt(p, time){
+  for (const T of TRANS){
+    if (p >= T.p0 && p < T.p1){
+      const x = (p - T.p0)/(T.p1 - T.p0);
+      const A = shotCam(T.a, p, time), B = shotCam(T.b, p, time);
+      const fr = {a: {scene: SHOTS[T.a].scene, cam: A}, b: {scene: SHOTS[T.b].scene, cam: B}, time};
+      if (T.kind === "zoom"){ fr.mix = smooth((x - 0.3)/0.4); fr.blur = 0.22*bell(x); fr.center = T.center; B.zoom *= 1 + 0.18*(1 - smooth(x)); }
+      else if (T.kind === "flash"){ fr.mix = smooth((x - 0.42)/0.16); fr.flash = 0.92*Math.pow(bell(x), 1.6); fr.blur = 0.12*bell(x); A.expo *= 1 + 0.8*smooth(x*2); B.expo *= 1 + 0.8*(1 - smooth((x - 0.5)*2)); }
+      else { fr.mix = smooth((x - 0.4)/0.2); fr.whip = 0.22*Math.pow(bell(x), 1.3); A.yaw += 0.16*Math.pow(smooth(x), 2); B.yaw -= 0.16*Math.pow(1 - smooth(x), 2); }
+      return fr;
+    }
+  }
+  let k = 0; for (let i = 0; i < SHOTS.length; i++) if (p >= SHOTS[i].t0) k = i;
+  return {a: {scene: SHOTS[k].scene, cam: shotCam(k, p, time)}, b: null, time};
+}
+
+/* ---- page ---- */
+const route = $("route");
+STOPS.forEach((s, i) => route.insertAdjacentHTML("beforeend", `<li><span>${s.k}</span><b><i></i></b></li>`));
+const rItems = [...route.children];
+let curStop = -1;
+function ui(p){
+  $("intro").style.opacity = String(1 - smooth((p - 0.015)/0.04));
+  $("intro").style.transform = `translateY(${-30*smooth((p - 0.015)/0.04)}px)`;
+  let s = 0; STOPS.forEach((st, i) => { if (p >= st.at) s = i; });
+  const showStop = p > 0.05 && p < 0.955;
+  $("stop").style.opacity = showStop ? "1" : "0";
+  if (s !== curStop){
+    curStop = s; const st = STOPS[s];
+    $("st-k").textContent = String(s + 1).padStart(2, "0") + " / " + String(STOPS.length).padStart(2, "0") + " · " + st.k; $("st-h").textContent = st.h; $("st-p").textContent = st.p;
+    $("stop").classList.remove("swap"); void $("stop").offsetWidth; $("stop").classList.add("swap");
+  }
+  rItems.forEach((li, i) => {
+    const a = STOPS[i].at, b = i < STOPS.length - 1 ? STOPS[i + 1].at : 0.955;
+    li.querySelector("i").style.transform = `scaleX(${clamp01((p - a)/(b - a))})`;
+    li.classList.toggle("on", i === s);
+  });
+  $("final").classList.toggle("on", p > 0.96);
+  const secs = Math.floor(p*128);
+  $("tc").textContent = "00:" + String(Math.floor(secs/60)).padStart(2, "0") + ":" + String(secs%60).padStart(2, "0");
+}
+
+const stageEl = document.querySelector(".fly");
+function scrollP(){
+  const r = stageEl.getBoundingClientRect(), span = r.height - innerHeight;
+  return clamp01(-r.top/span);
+}
+
+/* sound: birds outside, quieter inside */
+const audio = new Audio("media/birds.mp3"); audio.loop = true; audio.volume = 0;
+let soundOn = false;
+$("snd").addEventListener("click", () => {
+  soundOn = !soundOn;
+  $("snd").setAttribute("aria-pressed", String(soundOn));
+  $("snd").querySelector(".lbl").textContent = soundOn ? "Sound off" : "Sound on!";
+  if (soundOn) audio.play().catch(() => {}); else audio.pause();
+});
+
+const cv = $("gl");
+const eng = DepthCam.create(cv, {maxPixels: 2.2e6});
+let shown = scrollP(), target = shown;
+window.__fly = {set(p){ this.lock = target = shown = p; }, lock: null, frameAt};
+if (!eng){ cv.remove(); ui(0); window.__ready = true; return; }
+Promise.all(["front", "livingwide", "living", "kitchen", "decktub", "back", "primary", "rear2"].map(n => eng.add(n, `media/${n}.jpg`, `media/${n}-depth.png`))).then(() => {
+  document.querySelector(".fallback").hidden = true;
+  const t0 = performance.now();
+  function tick(now){
+    target = window.__fly.lock != null ? window.__fly.lock : scrollP();
+    shown += (target - shown)*(reduce ? 1 : 0.09);
+    if (Math.abs(target - shown) < 1e-4) shown = target;
+    const time = (now - t0)/1000;
+    eng.render(frameAt(shown, time));
+    ui(shown);
+    const inside = (shown > 0.13 && shown < 0.56) || (shown > 0.79 && shown < 0.88);
+    if (soundOn) audio.volume += ((inside ? 0.12 : 0.6) - audio.volume)*0.05;
+    $("alt").textContent = "ALT " + (shown > 0.79 && shown < 0.88 ? 4.4 : 1.6 + 2.8*smooth((shown - 0.7)/0.1)*(shown < 0.79 ? 1 : 0) + (shown >= 0.88 ? 1.2 : 0)).toFixed(1) + " M";
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+  window.__ready = true;
+}).catch(e => { console.error(e); cv.remove(); window.__ready = true; });
+ui(shown);
+})();
+</script>
+</body>
+</html>

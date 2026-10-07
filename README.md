@@ -21,3 +21,11 @@ From the repo folder run `python3 -m http.server 8000` and open http://localhost
 3D build (finished 3D ending in `build/`, real-photo ending in `build-reveal/`), the first-cut build (`build-v1/`),
 fly-through, day to dusk, living photo, depth story and photo story. Its `index.html` is the lineup of all eight.
 Rebuild with `python3 listing-heroes/heroes/build.py --bundle` and `python3 listing-heroes/v2/build.py <out> --end render|photo`.
+
+## listing-build-hero
+
+`listing-build-hero/` is the 106 Steinmann hero work exactly as it was built in the CAD-slides project
+(commit 270d95b): the first-cut 3D build (`index.html`), the v2 3D build (`v2/`), the photo story (`story/`),
+the hero lineup sources (`heroes/`) and the raw listing photos (`listing/`). Open `index.html`, `v2/index.html`
+and `story/index.html` through the local server. The heroes in `heroes/` are sources; their built pages are in
+`sites/106-steinmann-avenue/`.

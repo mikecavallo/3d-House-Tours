@@ -1,0 +1,1694 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>106 Steinmann Avenue v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+<style>
+/* Layout: a pinned 3D build stage scrubbed by scroll. Listing card at left (bottom on phones), six-phase rail along the bottom, listing details below. */
+:root{
+  --bg:#E7ECEE; --sky-top:#C6D6E1; --sky-low:#EDF0EE; --ink:#15202A; --muted:#55636E;
+  --line:#C2CBD1; --panel:#F5F7F7; --accent:#087174; --accent-ink:#FFFFFF;
+  --ground:#A6B788; --scrim:rgba(231,236,238,.94); --scene-dark:0;
+  --paper:#F3F6F7; --pen:#174B4D; --grid:rgba(8,113,116,.08); --ink-tint:.17;
+  --sign-main:#1D3557; --sign-rider:#A8322D;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --prose:"Newsreader",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gutter:clamp(16px,4vw,56px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F161D; --sky-top:#0C141E; --sky-low:#262C36; --ink:#E5EBEF; --muted:#98A6B1;
+    --line:#2B3742; --panel:#151F29; --accent:#4FC4C6; --accent-ink:#0C141E;
+    --ground:#22301F; --scrim:rgba(15,22,29,.92); --scene-dark:1; color-scheme:dark;
+    --paper:#11201F; --pen:#8FD6D7; --grid:rgba(79,196,198,.08); --ink-tint:.06;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F161D; --sky-top:#0C141E; --sky-low:#262C36; --ink:#E5EBEF; --muted:#98A6B1;
+  --line:#2B3742; --panel:#151F29; --accent:#4FC4C6; --accent-ink:#0C141E;
+  --ground:#22301F; --scrim:rgba(15,22,29,.92); --scene-dark:1; color-scheme:dark;
+    --paper:#11201F; --pen:#8FD6D7; --grid:rgba(79,196,198,.08); --ink-tint:.06;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--display);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* ---------- Build stage ---------- */
+.build{position:relative;height:710vh}   /* last 70vh is a hold on the finished house */
+.stage{position:sticky;top:env(safe-area-inset-top,0px);height:100vh;height:100svh;overflow:hidden;
+  background-color:var(--bg)}
+#scene{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* the real photo wipes in over the finished drawing */
+.photo{position:absolute;top:0;bottom:0;left:14vw;right:0;--rv:0;pointer-events:none;
+  -webkit-mask-image:linear-gradient(100deg,#000 calc(var(--rv)*130% - 30%),transparent calc(var(--rv)*130%));
+          mask-image:linear-gradient(100deg,#000 calc(var(--rv)*130% - 30%),transparent calc(var(--rv)*130%))}
+.scrim-b{position:absolute;left:0;right:0;bottom:0;height:150px;pointer-events:none;opacity:0;background:linear-gradient(0deg,var(--scrim),transparent)}
+.photo img{width:100%;height:100%;object-fit:cover;object-position:70% 50%;display:block}
+.photo::before{content:"";position:absolute;inset:0 auto 0 0;width:160px;background:linear-gradient(90deg,var(--bg),transparent);z-index:1}
+
+/* yard sign: a New England post sign that drops in and stakes into the lawn */
+.sign{position:absolute;aspect-ratio:220/320;transform:translate(-9%,-100%);pointer-events:none;
+  clip-path:inset(-300% -60% 0 -60%)}
+.sign svg{width:100%;height:100%;display:block;overflow:visible;filter:drop-shadow(0 6px 10px rgba(0,0,0,.28))}
+.sign .swing{transform-box:view-box;transform-origin:134px 50px}
+.sign-shadow{position:absolute;left:-12%;bottom:-3%;width:70%;height:7%;border-radius:50%;background:radial-gradient(rgba(0,0,0,.35),transparent 70%);transform:scaleX(0)}
+.dust{position:absolute;left:9%;bottom:0;width:7%;aspect-ratio:1;border-radius:50%;background:#7a5d3f;opacity:0}
+.sign.in svg{animation:plant .75s cubic-bezier(.5,0,.75,.25) both}
+.sign.in .swing{animation:swing 1.8s .62s ease-out both}
+.sign.in .sign-shadow{animation:shadow .75s ease-in both}
+.sign.in .dust{animation:dust .7s .6s ease-out both}
+.sign.in .dust:nth-of-type(2){--dx:-180%;--dy:-160%}
+.sign.in .dust:nth-of-type(3){--dx:160%;--dy:-210%;animation-delay:.62s}
+.sign.in .dust:nth-of-type(4){--dx:-90%;--dy:-260%;animation-delay:.64s}
+.sign.in .dust:nth-of-type(5){--dx:240%;--dy:-110%;animation-delay:.61s}
+@keyframes plant{0%{transform:translateY(-150%)}72%{transform:translateY(5%)}84%{transform:translateY(1.5%)}100%{transform:translateY(2.5%)}}
+@keyframes swing{0%{transform:rotate(0)}12%{transform:rotate(7deg)}32%{transform:rotate(-5deg)}52%{transform:rotate(3deg)}72%{transform:rotate(-1.4deg)}100%{transform:rotate(0)}}
+@keyframes shadow{0%{transform:scaleX(.2);opacity:0}100%{transform:scaleX(1);opacity:1}}
+@keyframes dust{0%{transform:translate(0,0) scale(.4);opacity:.85}100%{transform:translate(var(--dx,120%),var(--dy,-200%)) scale(1.3);opacity:0}}
+.scrim{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,var(--scrim) 0%,var(--scrim) 22%,transparent 50%)}
+
+.topbar{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px var(--gutter)}
+.brand{display:block;line-height:0}
+.brand img{display:block;height:37px;width:auto}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--accent-ink);text-decoration:none;
+  font:600 14px/1 var(--display);padding:11px 16px;border-radius:3px;border:0;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.actions{display:flex;align-items:center;gap:10px;flex:none}
+.snd{display:inline-flex;align-items:center;gap:7px;background:var(--scrim);color:var(--ink);border:1px solid var(--line);border-radius:3px;
+  font:700 12px/1 var(--display);letter-spacing:.09em;padding:10px 12px;cursor:pointer;position:relative}
+.snd svg{width:17px;height:17px;flex:none}
+.snd .w{opacity:0;transition:opacity .2s}
+.snd[aria-pressed="true"] .w{opacity:1}
+.snd[aria-pressed="true"] .x{opacity:0}
+.snd.nudge::after{content:"";position:absolute;inset:-4px;border-radius:6px;border:2px solid var(--accent);opacity:0;animation:nudge 2.4s ease-out 1.2s 3}
+@keyframes nudge{0%{opacity:.8;transform:scale(.96)}100%{opacity:0;transform:scale(1.12)}}
+.more{position:absolute;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translate(-50%,8px);opacity:0;pointer-events:none;
+  display:inline-flex;align-items:center;gap:9px;padding:13px 22px;border-radius:999px;background:var(--accent);border:0;
+  color:var(--accent-ink);text-decoration:none;font:700 15px/1 var(--display);letter-spacing:.01em;white-space:nowrap;
+  box-shadow:0 6px 20px rgba(0,0,0,.25);transition:opacity .4s,transform .4s}
+.more svg{width:16px;height:16px;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(-1px)}50%{transform:translateY(3px)}}
+.more.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.more:hover{filter:brightness(1.1)}
+
+.card{position:absolute;left:var(--gutter);top:50%;transform:translateY(-50%);width:min(430px,38vw);display:grid;gap:14px}
+.eyebrow{margin:0;display:flex;align-items:center;gap:8px;font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--accent);display:block}
+.address{margin:0;font-weight:800;font-stretch:112%;font-size:clamp(30px,4.1vw,58px);line-height:.98;letter-spacing:-.015em;text-wrap:balance}
+.town{margin:-6px 0 0;color:var(--muted);font-size:15px}
+.price-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px}
+.price{margin:0;font-weight:700;font-size:28px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.specs{margin:0;padding:0;list-style:none;display:flex;gap:14px;color:var(--muted);font-size:15px}
+.specs b{color:var(--ink);font-weight:700}
+.phase{border-top:1px solid var(--line);padding-top:14px;display:grid;gap:6px;min-height:150px;align-content:start}
+.phase .tag{margin:0;font:500 12px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.phase h2{margin:0;font-weight:700;font-size:23px;line-height:1.15;text-wrap:balance}
+.phase p.body{margin:0;font-family:var(--prose);font-size:18px;line-height:1.45;color:var(--muted);max-width:38ch}
+.phase.swap>*{animation:rise .45s cubic-bezier(.2,.7,.2,1) both}
+.phase.swap>*:nth-child(2){animation-delay:.04s}
+.phase.swap>*:nth-child(3){animation-delay:.08s}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.hud{position:absolute;left:var(--gutter);right:var(--gutter);bottom:calc(20px + env(safe-area-inset-bottom,0px));display:grid;gap:10px;transition:opacity .4s}
+.stage.done .hud{opacity:0;pointer-events:none}   /* the details button takes the bottom spot once the house is finished */
+.tally{margin:0;justify-self:end;font:500 12px/1 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.tally b{color:var(--ink);font-weight:500}
+.rail{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.rail li{display:grid;gap:7px;min-width:0}
+.rail span{font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rail li.on span,.rail li.done span{color:var(--ink);opacity:1}
+.rail .bar{height:3px;background:var(--line);border-radius:2px;overflow:hidden}
+.rail .bar i{display:block;height:100%;background:var(--accent);transform-origin:left;transform:scaleX(0)}
+/* centred over the 3D view (which sits right of the listing card on wide screens) */
+.hint{position:absolute;left:66%;top:46%;transform:translate(-50%,-50%);font:700 16px/1 var(--display);letter-spacing:.16em;text-transform:uppercase;color:#fff;
+  text-shadow:0 1px 3px rgba(0,0,0,.55),0 0 18px rgba(0,0,0,.35);
+  display:flex;flex-direction:column;align-items:center;gap:10px;transition:opacity .4s}
+.hint::after{content:"";width:2px;height:34px;background:linear-gradient(#fff,transparent);box-shadow:0 0 6px rgba(0,0,0,.35);animation:drip 1.6s ease-in-out infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.hint.gone{opacity:0}
+.no-webgl #scene{display:none}
+
+@media (max-width:899px){
+  .brand img{height:32px}
+  .topbar{background:linear-gradient(180deg,var(--scrim) 0%,var(--scrim) 55%,transparent 100%);padding-bottom:34px}
+  .btn,.snd{white-space:nowrap}
+  /* on phones the sound button drops below the top bar so the brand and booking button have room */
+  .snd{position:absolute;right:16px;top:calc(64px + env(safe-area-inset-top,0px));padding:9px 11px;font-size:11px}
+  .photo{left:0;right:0;top:0;bottom:auto;height:48%}
+  .photo img{object-position:58% 50%}
+  .photo::before{inset:auto 0 0 0;width:auto;height:35%;background:linear-gradient(0deg,var(--bg),transparent)}
+  .photo::after{content:"";position:absolute;inset:0 0 auto 0;height:90px;background:linear-gradient(180deg,var(--scrim),transparent);z-index:1}
+  .scrim{background:linear-gradient(0deg,var(--scrim) 0%,var(--scrim) 40%,transparent 66%)}
+  .card{top:auto;bottom:calc(76px + env(safe-area-inset-bottom,0px));transform:none;left:16px;right:16px;width:auto;gap:10px}
+  .address{font-size:clamp(28px,8vw,40px)}
+  .price{font-size:22px}
+  .specs{font-size:14px;gap:10px}
+  .phase{min-height:0;padding-top:10px;gap:4px}
+  .phase h2{font-size:19px}
+  .phase p.body{font-size:16px}
+  .hud{left:16px;right:16px}
+  .rail span{font-size:9.5px;letter-spacing:.03em}
+  .tally{display:none}
+  .hint{left:50%;top:32%;font-size:14px}
+  .btn{padding:10px 13px;font-size:13px}
+}
+@media (max-width:899px) and (max-height:700px){ .phase p.body{display:none} }
+
+/* ---------- Listing details ---------- */
+.details{max-width:1120px;margin:0 auto;padding-block:72px 40px;padding-inline:var(--gutter);display:grid;gap:72px}
+.kicker{margin:0 0 10px;font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.details h2{margin:0;font-weight:800;font-stretch:108%;font-size:clamp(26px,3.2vw,40px);line-height:1.05;letter-spacing:-.01em;text-wrap:balance}
+.facts{margin:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-top:1px solid var(--ink);border-bottom:1px solid var(--line)}
+.facts div{padding:18px 16px 18px 0;display:grid;gap:4px;min-width:0}
+.facts div+div{padding-left:16px;border-left:1px solid var(--line)}
+.facts dt{font:500 11px/1.2 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:0;font-weight:700;font-size:26px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.facts dd small{font-size:14px;font-weight:500;color:var(--muted);margin-left:3px}
+.about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:48px;align-items:start}
+.prose{display:grid;gap:16px;font-family:var(--prose);font-size:19px;line-height:1.6;max-width:62ch}
+.prose p{margin:0}
+.was{margin:14px 0 0;color:var(--muted);font-size:15px;font-variant-numeric:tabular-nums}
+.was b{color:var(--ink)}
+.acc{margin-top:24px;border-top:1px solid var(--ink)}
+.acc details{border-bottom:1px solid var(--line)}
+.acc summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;align-items:center;padding:18px 0}
+.acc summary::-webkit-details-marker{display:none}
+.acc .ttl{font-weight:700;font-size:20px;line-height:1.2}
+.acc .sum{grid-column:1;color:var(--muted);font-size:14px}
+.acc summary i{grid-column:2;grid-row:1 / span 2;width:30px;height:30px;border:1px solid var(--line);border-radius:50%;position:relative}
+.acc summary i::before,.acc summary i::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:1.5px;background:var(--ink);transform:translate(-50%,-50%);transition:transform .2s}
+.acc summary i::after{transform:translate(-50%,-50%) rotate(90deg)}
+.acc details[open] summary i::after{transform:translate(-50%,-50%) rotate(0deg)}
+.acc summary:hover .ttl{color:var(--accent)}
+.acc-body{padding:0 0 24px;display:grid;gap:10px}
+.acc dl{margin:0;display:grid;grid-template-columns:minmax(120px,220px) minmax(0,1fr)}
+.acc dt,.acc dd{margin:0;padding:10px 0;border-top:1px solid var(--line)}
+.acc dt{font:500 11px/1.6 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding-right:16px}
+.acc dd{font-size:15px;font-variant-numeric:tabular-nums}
+.acc .lvl{margin:10px 0 0;font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.tel{user-select:all;color:var(--ink)}
+.showing{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:48px;align-items:start;background:var(--panel);border:1px solid var(--line);padding:clamp(20px,4vw,44px);border-radius:4px}
+.showing p.lead{font-family:var(--prose);font-size:18px;color:var(--muted);margin:14px 0 0;max-width:36ch}
+form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+label{display:grid;gap:6px;font:500 12px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+input,select{font:400 16px/1.2 var(--display);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:3px;padding:11px 12px;width:100%;min-width:0}
+input:focus,select:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 30%,transparent)}
+form .wide{grid-column:1/-1}
+form .btn{justify-self:start;padding:13px 20px;font-size:15px}
+.status{margin:0;font-family:var(--prose);font-size:17px;color:var(--ink)}
+.foot{border-top:1px solid var(--line);padding-top:20px;color:var(--muted);font-size:13px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px}
+@media (max-width:899px){
+  .facts{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .facts div:nth-child(4){padding-left:0;border-left:0}
+  .facts div:nth-child(n+4){border-top:1px solid var(--line)}
+  .facts dd{font-size:22px}
+  .about,.showing{grid-template-columns:minmax(0,1fr);gap:24px}
+  .acc dl{grid-template-columns:minmax(0,1fr)}
+  .acc dd{border-top:0;padding-top:0}
+  .acc dt{padding-bottom:4px}
+  form{grid-template-columns:minmax(0,1fr)}
+  .details{gap:56px;padding-block:56px 32px}
+}
+@media (prefers-reduced-motion: reduce){
+  .more svg{animation:none}
+  .phase.swap>*{animation:none}
+  .hint::after{animation:none}
+  .snd.nudge::after{animation:none}
+  .sign.in svg,.sign.in .swing,.sign.in .sign-shadow,.sign.in .dust{animation:none}
+  .sign.in .sign-shadow{transform:none}
+}
+</style>
+</head>
+<body>
+
+<section class="build" id="build" aria-label="Scroll to watch the home being built">
+  <div class="stage">
+    <canvas id="scene" aria-hidden="true"></canvas>
+    <div class="photo" id="photo" hidden><img id="photo-img" src="front.jpg" alt="Front of 106 Steinmann Avenue" decoding="async"></div>
+    <div class="sign" id="sign" hidden aria-hidden="true">
+      <span class="sign-shadow"></span>
+      <svg viewBox="0 0 220 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Independent Realty Group yard sign">
+        <rect x="12" y="18" width="16" height="302" fill="#FBFBF8" stroke="#D5D5CF" stroke-width="1.5"/>
+        <rect x="7" y="9" width="26" height="12" rx="2" fill="#FBFBF8" stroke="#D5D5CF" stroke-width="1.5"/>
+        <circle cx="20" cy="5" r="5" fill="#FBFBF8" stroke="#D5D5CF" stroke-width="1.5"/>
+        <rect x="12" y="36" width="200" height="14" fill="#FBFBF8" stroke="#D5D5CF" stroke-width="1.5"/>
+        <path d="M28 82 L62 50" stroke="#FBFBF8" stroke-width="7"/>
+        <g class="swing">
+          <path d="M80 50 V64 M188 50 V64" stroke="#55585C" stroke-width="2.2" fill="none"/>
+          <rect x="68" y="62" width="132" height="132" rx="2" fill="#FFFFFF"/>
+          <image href="sign.jpg" x="70" y="64" width="128" height="128" preserveAspectRatio="xMidYMid slice"/>
+        </g>
+      </svg>
+      <i class="dust"></i><i class="dust"></i><i class="dust"></i><i class="dust"></i><i class="dust"></i>
+    </div>
+    <div class="scrim"></div>
+    <div class="scrim-b" id="scrim-b"></div>
+
+    <header class="topbar">
+      <span class="brand"><img src="logo.png" alt="Independent Realty Group" width="100" height="37"></span>
+      <div class="actions">
+        <button class="snd nudge" id="sound" type="button" aria-pressed="false" aria-label="Play construction sounds">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor" stroke="none"/>
+            <path class="w" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>
+            <path class="x" d="M17 9.5l5 5M22 9.5l-5 5"/>
+          </svg><span>SOUND ON!</span>
+        </button>
+        <a class="btn" href="#showing">Book a showing</a>
+      </div>
+    </header>
+
+    <div class="card">
+      <p class="eyebrow"><i></i>Active · Price reduced</p>
+      <h1 class="address">106 Steinmann Avenue</h1>
+      <p class="town">Middlebury, CT 06762</p>
+      <div class="price-row">
+        <p class="price">$439,900</p>
+        <ul class="specs">
+          <li><b>4</b> bd</li>
+          <li><b>2</b> ba</li>
+          <li><b>1,630</b> sq ft</li>
+        </ul>
+      </div>
+      <div class="phase" id="phase" aria-live="polite">
+        <p class="tag" id="ph-tag">01 / 06 · Poured footings + block foundation</p>
+        <h2 id="ph-title">It starts with concrete.</h2>
+        <p class="body" id="ph-body">A full walk-out basement with its own one-car garage, on 0.39 lightly wooded acres.</p>
+      </div>
+    </div>
+
+    <div class="hint" id="hint">Scroll to build</div>
+
+    <a class="more" id="more" href="#details">Listing details
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
+
+    <div class="hud">
+      <p class="tally" id="tally">Pieces set <b id="tally-n">0</b> / <span id="tally-t">0</span></p>
+      <ol class="rail" id="rail">
+        <li><span>Foundation</span><div class="bar"><i></i></div></li>
+        <li><span>Floor</span><div class="bar"><i></i></div></li>
+        <li><span>Framing</span><div class="bar"><i></i></div></li>
+        <li><span>Roof</span><div class="bar"><i></i></div></li>
+        <li><span>Exterior</span><div class="bar"><i></i></div></li>
+        <li><span>Ready</span><div class="bar"><i></i></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<main class="details" id="details">
+  <dl class="facts">
+    <div><dt>Bedrooms</dt><dd>4</dd></div>
+    <div><dt>Bathrooms</dt><dd>2<small>full</small></dd></div>
+    <div><dt>Living area</dt><dd>1,630<small>sq ft</small></dd></div>
+    <div><dt>Lot</dt><dd>0.39<small>ac</small></dd></div>
+    <div><dt>Built</dt><dd>1953</dd></div>
+    <div><dt>Garage</dt><dd>1<small>car</small></dd></div>
+  </dl>
+
+  <section class="about">
+    <div>
+      <p class="kicker">About the home</p>
+      <h2>A move-in ready Cape in Middlebury.</h2>
+      <p class="was">Listed at <b>$439,900</b> · reduced from $455,900 on Oct 2</p>
+    </div>
+    <div class="prose">
+      <p>This nicely updated New England Cape has a comfortable, easy layout. The living room is built around a fireplace, and the dining area flows into a large kitchen with tile floors, plenty of cabinets and workspace, and a door straight out to the big back deck.</p>
+      <p>Two bedrooms and a recently renovated full bath finish the main level, all on hardwood floors. Upstairs is a remodeled full bath, a third bedroom, and a large primary bedroom with a vaulted ceiling, a big closet, and a slider to a balcony over the landscaped backyard.</p>
+      <p>The full basement walks out into a one-car garage, with lots of storage. There's a large shed and parking for six. It's close to Route 84 and the Middlebury walking trail, in the award-winning Region 15 school district.</p>
+    </div>
+  </section>
+
+  <section class="acc-wrap" aria-labelledby="acc-h">
+    <h2 id="acc-h">Listing Details</h2>
+    <div class="acc">
+      <details open>
+        <summary><span class="ttl">Rooms by level</span><span class="sum">Main, upper and lower levels</span><i aria-hidden="true"></i></summary>
+        <div class="acc-body">
+          <h3 class="lvl">Main level</h3>
+          <dl>
+            <dt>Living room</dt><dd>Fireplace, opens to the dining area</dd>
+            <dt>Dining area</dt><dd>Between the living room and kitchen</dd>
+            <dt>Kitchen</dt><dd>Large, tile floors, lots of cabinets and workspace, door to the deck</dd>
+            <dt>Bedrooms</dt><dd>2, hardwood floors</dd>
+            <dt>Full bath</dt><dd>Recently renovated</dd>
+            <dt>Laundry</dt><dd>Off the kitchen</dd>
+          </dl>
+          <h3 class="lvl">Upper level</h3>
+          <dl>
+            <dt>Primary bedroom</dt><dd>Vaulted ceiling, slider to a balcony, large closet, hardwood floors, fresh paint</dd>
+            <dt>Bedroom</dt><dd>1</dd>
+            <dt>Full bath</dt><dd>Remodeled</dd>
+          </dl>
+          <h3 class="lvl">Lower level</h3>
+          <dl>
+            <dt>Basement</dt><dd>Full, walk-out</dd>
+            <dt>Garage</dt><dd>One car, attached, entered from the basement</dd>
+            <dt>Storage</dt><dd>Ample</dd>
+          </dl>
+        </div>
+      </details>
+      <details>
+        <summary><span class="ttl">Interior</span><span class="sum">6 rooms · 1,630 sq ft · fireplace</span><i aria-hidden="true"></i></summary>
+        <div class="acc-body"><dl>
+          <dt>Total rooms</dt><dd>6</dd>
+          <dt>Bedrooms</dt><dd>4</dd>
+          <dt>Bathrooms</dt><dd>2 full</dd>
+          <dt>Living area</dt><dd>1,630 sq ft, heated, above grade</dd>
+          <dt>Fireplaces</dt><dd>1</dd>
+          <dt>Appliances</dt><dd>Oven/range, microwave, refrigerator, freezer, dishwasher</dd>
+          <dt>Not included</dt><dd>Washer and dryer</dd>
+          <dt>Laundry</dt><dd>Main level, off the kitchen</dd>
+          <dt>Attic</dt><dd>No</dd>
+        </dl></div>
+      </details>
+      <details>
+        <summary><span class="ttl">Exterior and lot</span><span class="sum">Cape Cod · 0.39 acres · 1-car garage</span><i aria-hidden="true"></i></summary>
+        <div class="acc-body"><dl>
+          <dt>Style</dt><dd>Cape Cod</dd>
+          <dt>Year built</dt><dd>1953 (public records)</dd>
+          <dt>Lot</dt><dd>0.39 acres, lightly wooded, professionally landscaped</dd>
+          <dt>Siding</dt><dd>Vinyl, beige</dd>
+          <dt>Roof</dt><dd>Gable</dd>
+          <dt>Foundation</dt><dd>Block</dd>
+          <dt>Garage</dt><dd>Attached, 1 car</dd>
+          <dt>Parking</dt><dd>Paved driveway, 6 spaces total</dd>
+          <dt>Outdoor</dt><dd>Large deck off the kitchen, balcony off the primary bedroom, large shed</dd>
+          <dt>Pool</dt><dd>No</dd>
+          <dt>Waterfront</dt><dd>No</dd>
+        </dl></div>
+      </details>
+      <details>
+        <summary><span class="ttl">Utilities and systems</span><span class="sum">Electric baseboard heat · public sewer</span><i aria-hidden="true"></i></summary>
+        <div class="acc-body"><dl>
+          <dt>Heat</dt><dd>Baseboard</dd>
+          <dt>Heat fuel</dt><dd>Electric</dd>
+          <dt>Cooling</dt><dd>Ceiling fans</dd>
+          <dt>Hot water</dt><dd>40-gallon tank</dd>
+          <dt>Water</dt><dd>Public water in street, private well</dd>
+          <dt>Sewer</dt><dd>Public sewer connected</dd>
+        </dl></div>
+      </details>
+      <details>
+        <summary><span class="ttl">Taxes and financial</span><span class="sum">$7,968/yr taxes · no HOA</span><i aria-hidden="true"></i></summary>
+        <div class="acc-body"><dl>
+          <dt>Price</dt><dd>$439,900</dd>
+          <dt>Previous price</dt><dd>$455,900, reduced Oct 2, 2026</dd>
+          <dt>Property tax</dt><dd>$7,968 (July 2026 to June 2027)</dd>
+          <dt>Assessed value</dt><dd>$301,140</dd>
+          <dt>Mil rate</dt><dd>32.52</dd>
+          <dt>HOA</dt><dd>None</dd>
+          <dt>Possession</dt><dd>Negotiable</dd>
+          <dt>Bank owned</dt><dd>No</dd>
+          <dt>Short sale</dt><dd>No</dd>
+          <dt>Home warranty</dt><dd>Not offered</dd>
+        </dl></div>
+      </details>
+      <details>
+        <summary><span class="ttl">Location and schools</span><span class="sum">Middlebury · Region 15 schools</span><i aria-hidden="true"></i></summary>
+        <div class="acc-body"><dl>
+          <dt>Town</dt><dd>Middlebury, New Haven County</dd>
+          <dt>Zoning</dt><dd>R40</dd>
+          <dt>Schools</dt><dd>Region 15 district; elementary and high school assigned by the Board of Ed</dd>
+          <dt>Nearby</dt><dd>Park, Middlebury walking trail, close to Route 84</dd>
+          <dt>Directions</dt><dd>Route 64 to Steinmann Avenue</dd>
+          <dt>Listing ID</dt><dd>24200006</dd>
+        </dl></div>
+      </details>
+    </div>
+  </section>
+
+  <section class="showing" id="showing">
+    <div>
+      <p class="kicker">Open house · Sunday, Oct 4, 12:00 to 2:30 pm</p>
+      <h2>Book a private showing</h2>
+      <p class="lead">Pick a day and we'll confirm a time. Or call <b class="tel">203.733.3969</b>.</p>
+    </div>
+    <form id="showing-form" novalidate>
+      <label for="f-name">Name<input id="f-name" name="name" autocomplete="name" required></label>
+      <label for="f-phone">Phone<input id="f-phone" name="phone" type="tel" autocomplete="tel"></label>
+      <label class="wide" for="f-email">Email<input id="f-email" name="email" type="email" autocomplete="email" required></label>
+      <label class="wide" for="f-day">Preferred day
+        <select id="f-day" name="day">
+          <option selected>Sunday, Oct 4 (open house)</option><option>Monday, Oct 5</option><option>Tuesday, Oct 6</option><option>Wednesday, Oct 7</option><option>Thursday, Oct 8</option>
+        </select>
+      </label>
+      <button class="btn" type="submit">Request showing</button>
+      <p class="status wide" id="f-status" role="status"></p>
+    </form>
+  </section>
+
+  <footer class="foot">
+    <span>Listing data from SmartMLS, deemed reliable but not guaranteed. Listing ID 24200006. The construction animation is illustrative and does not show this home's actual framing.</span>
+    <span>Independent Realty Group · Christina Cavallo · 203.733.3969</span>
+  </footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/objects/Sky.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/SAOShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/DepthLimitedBlurShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/UnpackDepthRGBAShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/GammaCorrectionShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/SAOPass.js"></script>
+<!--MODULES-->
+<script src="src/_core.js"></script>
+<script src="src/rig.js"></script>
+<script src="src/wood.js"></script>
+<script src="src/sheet.js"></script>
+<script src="src/masonry.js"></script>
+<script src="src/finish.js"></script>
+<script src="src/ground.js"></script>
+<script src="src/veg.js"></script>
+<script src="src/sound.js"></script>
+<!--/MODULES-->
+<script>
+(function(){
+"use strict";
+
+/* ---------- settings ---------- */
+const SHOW_BLUEPRINT = true;   /* faint blue outline of the finished house while it's being built; set false to hide it */
+const END_MODE = "render";     /* "render": end on the finished 3D house from the front, with a 3D yard sign planted in the lawn
+                                  "photo":  end by wiping from the finished house into the real listing photo, sign stakes into the photo */
+
+/* ---------- UI: phases, rail, form ---------- */
+const PHASES = [
+  {at:0.00, tag:"Poured footings + block foundation", title:"It starts with concrete.",
+   body:"A full walk-out basement with its own one-car garage, on 0.39 lightly wooded acres."},
+  {at:0.158, tag:"2×10 joists @ 16″ o.c.", title:"Built on a solid floor.",
+   body:"Hardwood floors, and a living room built around a fireplace and a wide bay window."},
+  {at:0.264, tag:"2×4 studs @ 16″ o.c.", title:"Room for everyone.",
+   body:"Four bedrooms and two full baths: two bedrooms on the main level, two upstairs."},
+  {at:0.563, tag:"Gable roof + masonry chimney", title:"Under roof.",
+   body:"Upstairs, the primary bedroom gets a vaulted ceiling and a slider to its own balcony."},
+  {at:0.704, tag:"Vinyl siding, windows, decks", title:"Made for being outside.",
+   body:"A large deck right off the kitchen, and a professionally landscaped yard."},
+  {at:0.9, tag:"Move-in ready", title:"Ready for you.",
+   body:"Open house Sunday, Oct 4, noon to 2:30. Private showings all week."}
+];
+const $ = id => document.getElementById(id);
+const phaseEl = $("phase"), railItems = [...document.querySelectorAll("#rail li")];
+const hint = $("hint");
+let curPhase = 0;
+function setPhase(i){
+  if (i === curPhase) return;
+  curPhase = i;
+  const ph = PHASES[i];
+  $("ph-tag").textContent = String(i+1).padStart(2,"0") + " / 06 · " + ph.tag;
+  $("ph-title").textContent = ph.title;
+  $("ph-body").textContent = ph.body;
+  phaseEl.classList.remove("swap"); void phaseEl.offsetWidth; phaseEl.classList.add("swap");
+}
+function updateUI(p){
+  let i = 0;
+  for (let k = 0; k < PHASES.length; k++) if (p >= PHASES[k].at) i = k;
+  setPhase(i);
+  railItems.forEach((li, k) => {
+    const a = PHASES[k].at, b = k < PHASES.length-1 ? PHASES[k+1].at : 1;
+    const f = Math.min(1, Math.max(0, (p - a)/(b - a)));
+    li.querySelector("i").style.transform = "scaleX(" + (k === PHASES.length-1 && p >= 0.999 ? 1 : f) + ")";
+    li.classList.toggle("on", k === i);
+    li.classList.toggle("done", k < i);
+  });
+  hint.classList.toggle("gone", p > 0.015);
+  const done = scrollProgress() >= 0.97;
+  $("more").classList.toggle("on", done);
+  $("more").parentElement.classList.toggle("done", done);
+}
+
+$("showing-form").addEventListener("submit", e => {
+  e.preventDefault();
+  const name = $("f-name").value.trim(), email = $("f-email").value.trim();
+  const st = $("f-status");
+  if (!name || !/^\S+@\S+\.\S+$/.test(email)){ st.textContent = "Add your name and a valid email so we can confirm."; return; }
+  st.textContent = "Thanks, " + name.split(" ")[0] + ". This sample form isn't connected yet, so nothing was sent.";
+});
+
+const build = $("build");
+/* the build completes before the end of its section; the remaining DWELL holds on the finished house */
+const DWELL = () => window.innerHeight*0.7;
+function scrollProgress(){
+  const r = build.getBoundingClientRect();
+  const total = r.height - window.innerHeight - DWELL();
+  return total > 0 ? Math.min(1, Math.max(0, -r.top/total)) : 0;
+}
+
+/* ---------- reveal stop: the first time the house finishes, scrolling pauses for a beat ---------- */
+const HOLD_MS = 1100;
+let holdArmed = true, holdUntil = 0;
+const holding = () => performance.now() < holdUntil;
+const holdY = () => build.offsetTop + build.offsetHeight - window.innerHeight - DWELL();
+["wheel", "touchmove"].forEach(ev => window.addEventListener(ev, e => { if (holding()) e.preventDefault(); }, {passive:false}));
+window.addEventListener("keydown", e => {
+  if (holding() && [" ", "Spacebar", "PageDown", "ArrowDown", "End"].includes(e.key)) e.preventDefault();
+});
+function onScrollHold(){
+  const p = scrollProgress();
+  if (holding()){ if (window.scrollY > holdY() + 2) window.scrollTo(0, holdY()); }
+  else if (holdArmed && p >= 1){ holdArmed = false; holdUntil = performance.now() + HOLD_MS; window.scrollTo(0, holdY()); }
+  if (p < 0.9) holdArmed = true;
+  /* construction sound fades as the listing details scroll in */
+  if (window.SiteSound){
+    const r = build.getBoundingClientRect();
+    SiteSound.setLevel((r.bottom - window.innerHeight*0.25)/(window.innerHeight*0.75));
+  }
+}
+window.addEventListener("scroll", onScrollHold, {passive:true});
+$("more").addEventListener("click", e => {
+  e.preventDefault();
+  holdArmed = false; holdUntil = 0;
+  if (window.SiteSound) SiteSound.hush();
+  window.scrollTo({top: $("details").getBoundingClientRect().top + window.scrollY, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
+});
+
+/* ---------- sound: off until the visitor asks (browsers block autoplay) ---------- */
+const soundBtn = $("sound");
+soundBtn.addEventListener("click", () => {
+  const on = window.SiteSound ? SiteSound.toggle() : false;
+  soundBtn.setAttribute("aria-pressed", String(on));
+  soundBtn.classList.remove("nudge");
+  soundBtn.querySelector("span").textContent = on ? "SOUND OFF" : "SOUND ON!";
+  soundBtn.setAttribute("aria-label", on ? "Mute construction sounds" : "Play construction sounds");
+  if (on) onScrollHold();
+});
+/* which soundscape belongs to this point in the build */
+function soundStage(bp, revealed){
+  if (revealed) return "finished";
+  if (bp < 0.025) return "site";
+  if (bp < 0.165) return "concrete";
+  if (bp < 0.635) return "framing";
+  if (bp < 0.81) return "roofing";
+  if (bp < 0.945) return "exterior";
+  return "landscape";
+}
+
+/* ---------- 3D scene ---------- */
+const canvas = $("scene");
+let renderer;
+try {
+  if (!window.THREE) throw new Error("three.js not loaded");
+  renderer = new THREE.WebGLRenderer({canvas, antialias:true, powerPreference:"high-performance"});
+} catch (err) {
+  document.documentElement.classList.add("no-webgl");
+  window.addEventListener("scroll", () => updateUI(scrollProgress()), {passive:true});
+  return;
+}
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(33, 1, 2, 1300);
+const isDark = () => getComputedStyle(document.documentElement).getPropertyValue("--scene-dark").trim() === "1";
+const narrowScreen = Math.min(window.innerWidth, window.innerHeight) < 700;
+const rig = REAL.rig.create(THREE, renderer, scene, {dark: isDark(), shadowSize: narrowScreen ? 2048 : 4096});
+rig.sky.scale.setScalar(1100);   /* keep the sky inside a tight depth range so occlusion stays precise */
+
+/* ambient occlusion (contact shadows in corners, under eaves, between boards) on larger screens */
+let composer = null, saoPass = null;
+if (!narrowScreen && THREE.EffectComposer && THREE.RenderPass && THREE.SAOPass && THREE.ShaderPass && THREE.GammaCorrectionShader){
+  try {
+    const gl2 = renderer.capabilities.isWebGL2;
+    const half = gl2 && renderer.extensions.has("EXT_color_buffer_float");
+    const opts = {type: half ? THREE.HalfFloatType : THREE.UnsignedByteType};
+    const rt = gl2 && THREE.WebGLMultisampleRenderTarget ? new THREE.WebGLMultisampleRenderTarget(16, 16, opts) : new THREE.WebGLRenderTarget(16, 16, opts);
+    /* a 24-bit depth attachment; the default 16-bit one makes thin, nearly coplanar pieces fight */
+    rt.depthTexture = new THREE.DepthTexture(16, 16); rt.depthTexture.type = THREE.UnsignedIntType;
+    composer = new THREE.EffectComposer(renderer, rt);
+    composer.addPass(new THREE.RenderPass(scene, camera));
+    saoPass = new THREE.SAOPass(scene, camera, false, true);
+    Object.assign(saoPass.params, {saoBias: 0.7, saoIntensity: 0.012, saoScale: 8, saoKernelRadius: 10, saoMinResolution: 0,
+      saoBlur: true, saoBlurRadius: 4, saoBlurStdDev: 2, saoBlurDepthCutoff: 0.0003});
+    composer.addPass(saoPass);
+    composer.addPass(new THREE.ShaderPass(THREE.GammaCorrectionShader));
+  } catch (err){ console.warn("ambient occlusion disabled", err); composer = null; }
+}
+
+/* deterministic randomness so every visit builds the same house */
+let seed = 20261003;
+const rnd = () => { seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+const col = h => new THREE.Color(h).convertSRGBToLinear();
+const pick = a => a[Math.floor(rnd() * a.length)];
+
+/* colors sampled from the listing photos where the house shows them */
+const COL = {
+  dirt: col("#7E6650"), pitDirt: col("#6E5844"), gravel: col("#8D8A84"), footing: col("#9A9C97"), cmu: ["#A3A49F","#9C9D98","#AAABA6","#979893"].map(col), concrete: col("#ABADA8"),
+  stake: col("#C79A5E"), string: col("#EB6B26"), steel: col("#5E656B"),
+  pt: col("#93A070"), lvl: col("#C99556"),
+  lumber: ["#DDB67F","#D4AB71","#E3C18D","#CDA36A","#D8B078"].map(col),
+  osb: ["#C59B5F","#BB9056","#CDA568","#C29760"].map(col), ply: col("#CFAA72"),
+  siding: ["#8F7C77","#8C7974","#927F7A"].map(col), trim: col("#F4F3EF"), glass: col("#55697A"),
+  roof: ["#6E7175","#6A6D71","#73767A"].map(col), stucco: ["#5E474B","#624B4F","#5A4448"].map(col), parge: col("#6C5155"),
+  deck: ["#5C3F32","#604236","#583C2F"].map(col), deckDark: col("#4A3228"),
+  paver: col("#BDB8AD"), mulch: col("#5A3D2C"),
+  shrub: ["#56744A","#5E7E4D","#4D6A44"].map(col), maple: col("#5E1F26"), pink: col("#D9608F"),
+  trunk: col("#5E4836"), pine: ["#3F5A3B","#466342","#3A5337"].map(col), leaf: ["#4D6B3F","#587A47","#4A653D"].map(col)
+};
+
+/* ---------- materials: realistic PBR from the REAL.* modules, plain fallbacks if a module is missing ---------- */
+const MODS = {};
+function mod(name){
+  if (!(name in MODS)){
+    try { MODS[name] = (window.REAL && REAL[name] && REAL[name].create) ? REAL[name].create(THREE, renderer, {}) : null; }
+    catch (err){ console.warn("module " + name + " failed", err); MODS[name] = null; }
+  }
+  return MODS[name];
+}
+const MATSRC = {
+  spf:["wood","spf"], pt:["wood","pt"], lvl:["wood","lvl"], deck:["wood","deck"], deckDark:["wood","deckDark"], lattice:["wood","lattice"],
+  osb:["sheet","osb"], ply:["sheet","ply"],
+  concrete:["masonry","concrete"], concreteWet:["masonry","concreteWet"], cmu:["masonry","cmu"], stucco:["masonry","stucco"],
+  parge:["masonry","parge"], walk:["masonry","walk"],
+  shingle:["finish","shingle"], siding:["finish","siding"], trim:["finish","trim"], frame:["finish","frame"],
+  glass:["finish","glass"], door:["finish","door"], steel:["finish","steel"],
+  soil:["ground","soil"], gravel:["ground","gravel"], mulch:["ground","mulch"]
+};
+const FALLBACK = {
+  spf:"#D9B47E", pt:"#93A070", lvl:"#C99556", deck:"#5C3F32", deckDark:"#4A3228", lattice:"#5C3F32", osb:"#C29760", ply:"#CFAA72",
+  concrete:"#A3A5A0", concreteWet:"#6E716F", cmu:"#A3A49F", stucco:"#6F555A", parge:"#6C5155", walk:"#BDB8AD",
+  shingle:"#6E7175", siding:"#A9968F", trim:"#EDEBE6", frame:"#F2F1EE", glass:"#2A3138", door:"#F2F1EE", steel:"#5E656B",
+  soil:"#7E6650", gravel:"#8D8A84", mulch:"#4A3225", string:"#EB6B26", lamp:"#1E2023", fence:"#1C1F22"
+};
+const MATS = {};
+const TINT = { siding:[1.0, 0.95, 0.84], shingle:[0.7, 0.7, 0.72], stucco:[1.55, 1.42, 1.36], parge:[1.15, 1.08, 1.04] };
+function material(key){
+  if (MATS[key]) return MATS[key];
+  const src = MATSRC[key], m = src && mod(src[0]);
+  const v = m && m.variants && m.variants[src[1]];
+  let mat = v && v.material;
+  if (!mat){
+    mat = new THREE.MeshStandardMaterial({color: col(FALLBACK[key] || "#999999"), roughness: key === "glass" ? 0.08 : 0.85, metalness: key === "glass" ? 0.6 : 0});
+    if (key === "lattice") mat.color = col(FALLBACK.lattice);
+  }
+  /* colour matching against the listing photos (taupe-tan siding, charcoal-grey roof, light mauve chimney) */
+  const t = TINT[key];
+  if (t && !mat.userData.tinted){ mat.color.multiply(new THREE.Color(t[0], t[1], t[2])); mat.userData.tinted = true; }
+  return (MATS[key] = mat);
+}
+
+/* ---------- instanced piece system ---------- */
+const BOX = new THREE.BoxGeometry(1,1,1);
+const CYL8 = new THREE.CylinderGeometry(1,1,1,8);
+const KINDS = {};
+function kind(key, geo){
+  const id = key + (geo === CYL8 ? ":cyl" : "");
+  return KINDS[id] || (KINDS[id] = {key, geo: geo || BOX, list: []});
+}
+/* the scene code still speaks in colours; route each colour to its real material */
+const ROUTE = new Map();
+const route = (c, key) => [].concat(c).forEach(x => ROUTE.set(x, key));
+route(COL.lumber, "spf"); route(COL.stake, "spf"); route(COL.pt, "pt"); route(COL.lvl, "lvl");
+route(COL.osb, "osb"); route(COL.ply, "osb");
+route(COL.footing, "concrete"); route(COL.concrete, "concrete"); route(COL.cmu, "cmu");
+route(COL.stucco, "stucco"); route(COL.parge, "parge"); route(COL.paver, "walk");
+route(COL.siding, "siding"); route(COL.trim, "trim"); route(COL.glass, "glass"); route(COL.roof, "shingle");
+route(COL.deck, "deck"); route(COL.deckDark, "deckDark"); route(COL.steel, "steel");
+route(COL.dirt, "soil"); route(COL.pitDirt, "soil"); route(COL.gravel, "gravel"); route(COL.mulch, "mulch");
+route(COL.string, "string");
+const eul = new THREE.Euler();
+let shadeRnd = 7;
+function add(k, x, y, z, sx, sy, sz, c, t0, dur, mode, o){
+  o = o || {};
+  let key = o.mat || ROUTE.get(c) || "spf", geo = BOX;
+  if (k === "glass") key = "glass";
+  else if (k === "lattice") key = "lattice";
+  else if (k === "oct"){ key = "trim"; geo = CYL8; }
+  else if (k === "octGlass"){ key = "glass"; geo = CYL8; }
+  const q = new THREE.Quaternion();
+  if (o.rx || o.ry || o.rz) q.setFromEuler(eul.set(o.rx || 0, o.ry || 0, o.rz || 0, o.order || "XYZ"));
+  /* near-white per-piece variation so no two boards are identical */
+  shadeRnd = (shadeRnd * 16807) % 2147483647;
+  const v = 0.93 + (shadeRnd / 2147483647) * 0.1;
+  kind(key, geo).list.push({p:new THREE.Vector3(x,y,z), q, s:new THREE.Vector3(sx,sy,sz), c:new THREE.Color(v, v, v), t0, dur, t1:o.t1 || 0,
+    mode:mode || "drop", dir:o.dir || null, dist:o.dist == null ? 3.5 : o.dist, site:!!o.site, axis:o.axis || 0});
+}
+const box = (x0,x1,y0,y1,z0,z1,c,t0,dur,mode,o) => add("box",(x0+x1)/2,(y0+y1)/2,(z0+z1)/2,x1-x0,y1-y0,z1-z0,c,t0,dur,mode,o);
+/* a board between two points in the y/z plane (rafters, rake plates, stair stringers) */
+function boardYZ(x, z0, y0, z1, y1, sx, depth, c, t0, dur, mode, o){
+  const len = Math.hypot(z1 - z0, y1 - y0);
+  add("box", x, (y0 + y1)/2, (z0 + z1)/2, sx, depth, len, c, t0, dur, mode, Object.assign({rx:-Math.atan2(y1 - y0, z1 - z0)}, o || {}));
+}
+/* a board between two points in the x/y plane (shed-roof rafters) */
+function boardXY(z, x0, y0, x1, y1, depth, sz, c, t0, dur, mode, o){
+  const len = Math.hypot(x1 - x0, y1 - y0);
+  add("box", (x0 + x1)/2, (y0 + y1)/2, z, len, depth, sz, c, t0, dur, mode, Object.assign({rz:Math.atan2(y1 - y0, x1 - x0)}, o || {}));
+}
+/* poured concrete: flows in along its length while wet and dark, then cures to its dry colour */
+function pour(x0, x1, y0, y1, z0, z1, t0, dur, cure){
+  const axis = (x1 - x0) >= (z1 - z0) ? 0 : 2;
+  box(x0, x1, y0, y1, z0, z1, null, t0, dur, "pour", {mat:"concreteWet", axis, t1:cure});
+  box(x0, x1, y0, y1, z0, z1, null, cure, 0.0001, "none", {mat:"concrete"});
+}
+const VEG = [];
+function plant(type, x, z, size, seed, t0, dur, ry){
+  VEG.push({type, x, z, size, seed, t0, dur: dur || 0.016, ry: ry || 0});
+}
+
+/* ---------- house dimensions (feet) ---------- */
+const IN = 1/12;
+const W = 30, D = 24, T = 3.5*IN, SW = 1.5*IN, JD = 9.25*IN, SUB = 0.75*IN;
+const H1 = 8.5, H2 = 8;
+const PIT = -6.8, FOOT_TOP = -6.0, STEM_TOP = 2.5, SILL_TOP = STEM_TOP + SW;
+const F1 = SILL_TOP + JD + SUB;
+const F2 = F1 + H1 + JD + SUB;
+const BAND = JD + SUB;
+const ZR = -D/2 + 7;                          /* ridge sits 7 ft in from the rear wall */
+const TR = Math.atan(7/12);                   /* short rear slope */
+const YR = F2 + H2 + (ZR + D/2)*Math.tan(TR); /* rafter underside at the ridge */
+const TF = Math.atan((YR - F2)/(D/2 - ZR));   /* long front slope lands on the 2nd-floor deck edge */
+const OHF = 1.0, OHR = 1.0, RAKE = 1.0, OC = 16*IN;
+const under = z => z <= ZR ? YR - (ZR - z)*Math.tan(TR) : YR - (z - ZR)*Math.tan(TF);
+/* the bay is a shallow box that runs from the lattice skirt up under the front soffit (no roof of its own) */
+const BAY = {x0:-W/2 + 11, x1:-W/2 + 26.5, d:0.85, top:(F2 - OHF*Math.tan(TF)) - F1 - 0.06};
+/* small one-story wing on the left front, shed roof sloping away from the house */
+const WING = {x0:-W/2 - 5, x1:-W/2, z0:D/2 - 8, z1:D/2, h:7.6, pitch:Math.atan(4/12)};
+const zu = z => z + D/2 - T;                  /* side-wall u from a world z */
+
+/* ---------- site: excavated pit, string lines, the wooded lot ---------- */
+const PX = W/2 + 2, PZ = D/2 + 2;
+box(-PX, PX, PIT - 0.2, PIT, -PZ, PZ, COL.gravel, -1, 1, "drop", {site:true});
+box(-PX - 1, PX + 1, PIT, -0.02, PZ, PZ + 1, COL.pitDirt, -1, 1, "drop", {site:true});
+box(-PX - 1, PX + 1, PIT, -0.02, -PZ - 1, -PZ, COL.pitDirt, -1, 1, "drop", {site:true});
+box(-PX - 1, -PX, PIT, -0.02, -PZ, PZ, COL.pitDirt, -1, 1, "drop", {site:true});
+box(PX, PX + 1, PIT, -0.02, -PZ, PZ, COL.pitDirt, -1, 1, "drop", {site:true});
+const RING = 10;
+/* disturbed soil around the dig, in 5-ft squares that are swapped for lawn (sod) during final grading */
+for (let gx = -PX - RING; gx < PX + RING - 0.01; gx += 5){
+  for (let gz = -PZ - RING; gz < PZ + RING - 0.01; gz += 5){
+    const x1 = Math.min(gx + 5, PX + RING), z1 = Math.min(gz + 5, PZ + RING);
+    if (gx >= -PX - 0.01 && x1 <= PX + 0.01 && gz >= -PZ - 0.01 && z1 <= PZ + 0.01) continue;
+    const r = Math.hypot((gx + x1)/2, (gz + z1)/2);
+    const tSod = 0.93 + Math.min(1, r/70)*0.025 + rnd()*0.004;
+    box(gx, x1, 0, 0.09, gz, z1, COL.dirt, -1, 1, "drop", {site:true, t1:tSod});
+  }
+}
+[[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([sx,sz]) => add("box", sx*(W/2+4.5), 1.2, sz*(D/2+4.5), 0.16, 2.4, 0.16, COL.stake, -1, 1, "drop", {t1:0.3, site:true}));
+[-1,1].forEach(s => {
+  add("box", 0, 1.9, s*D/2, W + 9, 0.035, 0.035, COL.string, -1, 1, "drop", {t1:0.2, site:true});
+  add("box", s*W/2, 1.9, 0, 0.035, 0.035, D + 9, COL.string, -1, 1, "drop", {t1:0.2, site:true});
+});
+/* the wooded lot: tall white pines and hemlocks behind, hardwoods beyond (they were there first) */
+[[-24,-30,52],[-9,-38,58],[7,-34,50],[22,-31,46],[38,-22,44],[-52,-34,54],[50,-32,48],[-4,-56,60],[28,-52,52]].forEach(([x,z,h], i) => plant("pine", x, z, h, 11 + i, -1));
+/* the hemlock screen stands well off the left side; the side yard itself is open lawn (photos 1 and 3) */
+[[-54,-8,34],[-56,10,30],[-60,26,28],[42,8,32],[-44,-28,30],[46,-6,28]].forEach(([x,z,h], i) => plant("hemlock", x, z, h, 31 + i, -1));
+[[-18,-50,44],[16,-56,48],[34,-44,40],[-36,-46,42],[60,-14,38],[-60,-2,38],[0,-70,46]].forEach(([x,z,h], i) => plant("oak", x, z, h, 51 + i, -1));
+
+/* ---------- foundation: footings, basement walls, slab, backfill ---------- */
+const WIN = 0.333, WT = 0.667;
+[
+  [0, D/2-WIN, W+1.33, 2], [W/2-WIN, 0, 2, D-2.67], [0, -(D/2-WIN), W+1.33, 2], [-(W/2-WIN), 0, 2, D-2.67]
+].forEach(([x,z,sx,sz], i) => {
+  /* form boards go in first, the concrete flows in, cures, and the forms are stripped */
+  const t = 0.03 + i*0.009, along = sx > sz;
+  [-1, 1].forEach(sd => {
+    const o = (along ? sz : sx)/2 + 0.07;
+    add("box", along ? x : x + sd*o, PIT + (FOOT_TOP - PIT)/2 + 0.05, along ? z + sd*o : z, along ? sx : 0.125, FOOT_TOP - PIT + 0.1, along ? 0.125 : sz,
+      pick(COL.lumber), 0.02 + i*0.004, 0.01, "drop", {dist:2, t1:0.075 + i*0.004});
+  });
+  pour(x - sx/2, x + sx/2, PIT, FOOT_TOP, z - sz/2, z + sz/2, t, 0.02, 0.066 + i*0.004);
+});
+const stemH = STEM_TOP - FOOT_TOP, stemY = (STEM_TOP + FOOT_TOP)/2;
+[
+  [0, D/2-WIN, W, WT], [W/2-WIN, 0, WT, D-2*WT], [0, -(D/2-WIN), W, WT], [-(W/2-WIN), 0, WT, D-2*WT]
+].forEach(([x,z,sx,sz], wi) => {
+  /* concrete block, laid course by course in running bond */
+  const along = sx > sz, len = along ? sx : sz, courses = 13, ch = stemH/courses;
+  for (let c = 0; c < courses; c++){
+    for (let a = -len/2 - (c % 2 ? 2 : 0); a < len/2; a += 4){
+      const p0 = Math.max(a, -len/2), p1 = Math.min(a + 4, len/2);
+      if (p1 - p0 < 0.2) continue;
+      const m = (p0 + p1)/2, l = p1 - p0 - 0.03;
+      add("box", along ? x + m : x, FOOT_TOP + ch*(c + 0.5), along ? z : z + m, along ? l : sx, ch - 0.03, along ? sz : l, pick(COL.cmu),
+        0.068 + (c/courses)*0.05 + wi*0.002 + ((m + len/2)/len)*0.006, 0.008, "drop", {dist:1.2});
+    }
+  }
+});
+/* basement slab, poured in strips and screeded */
+for (let k = 0; k < 4; k++){
+  const za = -D/2 + WT + k*(D - 2*WT)/4, zb = za + (D - 2*WT)/4;
+  pour(-W/2 + WT, W/2 - WT, FOOT_TOP, FOOT_TOP + 0.33, za, zb, 0.122 + k*0.006, 0.012, 0.162 + k*0.003);
+}
+/* backfill against the new walls */
+[[-PX, PX, D/2, PZ], [-PX, PX, -PZ, -D/2], [-PX, -W/2, -D/2, D/2], [W/2, PX, -D/2, D/2]].forEach((b, i) =>
+  box(b[0], b[1], PIT, -0.03, b[2], b[3], COL.dirt, 0.15 + i*0.005, 0.02, "grow"));
+/* steel posts + girder, then sill plates */
+const girderBot = SILL_TOP - JD;
+[-7.5, 0, 7.5].forEach((x, i) => box(x - 0.15, x + 0.15, FOOT_TOP + 0.33, girderBot, -0.15, 0.15, COL.steel, 0.16 + i*0.003, 0.012, "grow"));
+add("box", 0, SILL_TOP - JD/2, 0, W - 2*WT, JD, 4.5*IN, COL.lvl, 0.172, 0.012, "drop", {dist:3});
+const sillW = 5.5*IN, sillY = STEM_TOP + SW/2;
+let sq = 0;
+[[0, D/2 - sillW/2, W, sillW], [W/2 - sillW/2, 0, sillW, D - 2*sillW], [0, -(D/2 - sillW/2), W, sillW], [-(W/2 - sillW/2), 0, sillW, D - 2*sillW]].forEach(([x,z,sx,sz]) => {
+  const n = Math.ceil(Math.max(sx, sz)/12);
+  for (let k = 0; k < n; k++){
+    const along = sx > sz;
+    const len = (along ? sx : sz)/n;
+    const c = -(along ? sx : sz)/2 + len*(k + 0.5);
+    add("box", along ? x + c : x, sillY, along ? z : z + c, along ? len - 0.02 : sx, SW, along ? sz : len - 0.02, COL.pt, 0.15 + (sq++)*0.002, 0.01, "drop", {dist:2});
+  }
+});
+
+/* wing: block stem walls on a footing at grade, sill, joists, subfloor */
+{
+  const {x0, x1, z0, z1} = WING;
+  [[x0, x1, z1 - WT, z1], [x0, x0 + WT, z0 + WT, z1 - WT], [x0, x1, z0, z0 + WT]].forEach((b, i) => {
+    box(b[0] - 0.3, b[1] + (b[1] === x1 ? 0 : 0.3), -0.4, 0.1, b[2] - 0.3, b[3] + 0.3, null, 0.1 + i*0.004, 0.02, "pour", {mat:"concrete", axis: (b[1] - b[0]) > (b[3] - b[2]) ? 0 : 2});
+    box(b[0], b[1], 0.1, STEM_TOP, b[2], b[3], COL.cmu[0], 0.13 + i*0.005, 0.02, "grow");
+  });
+  for (let z = z0 + SW/2, i = 0; z < z1; z += OC, i++)
+    box(x0, x1, SILL_TOP, SILL_TOP + JD, z - SW/2, z + SW/2, pick(COL.lumber), 0.27 + i*0.002, 0.01, "drop", {dist:3});
+  box(x0, x1, SILL_TOP + JD, SILL_TOP + JD + SUB, z0, (z0 + z1)/2 - 0.015, pick(COL.osb), 0.295, 0.01, "drop", {dist:2});
+  box(x0, x1, SILL_TOP + JD, SILL_TOP + JD + SUB, (z0 + z1)/2 + 0.015, z1, pick(COL.osb), 0.298, 0.01, "drop", {dist:2});
+}
+
+/* ---------- floor systems ---------- */
+function floorSystem(baseY, t0, t1, withBay){
+  const y = baseY + JD/2, span = (t1 - t0)*0.55;
+  const rims = [[0, -(D/2 - SW/2), W]];
+  if (withBay){
+    rims.push([(-W/2 + BAY.x0)/2, D/2 - SW/2, BAY.x0 + W/2]);
+    rims.push([(BAY.x1 + W/2)/2, D/2 - SW/2, W/2 - BAY.x1]);
+  } else rims.push([0, D/2 - SW/2, W]);
+  rims.forEach(r => add("box", r[0], y, r[1], r[2], JD, SW, pick(COL.lumber), t0, 0.012, "drop", {dist:3}));
+  const xs = [-(W/2 - SW/2)];
+  for (let x = -W/2 + OC; x < W/2 - 0.3; x += OC) xs.push(x);
+  xs.push(W/2 - SW/2);
+  if (withBay) xs.push(BAY.x0 + SW/2, BAY.x1 - SW/2);
+  xs.sort((a,b) => a - b);
+  xs.forEach((x, i) => {
+    const inBay = withBay && x > BAY.x0 && x < BAY.x1;
+    const z0 = -D/2 + SW, z1 = inBay ? D/2 + BAY.d - SW : D/2 - SW;
+    add("box", x, y, (z0 + z1)/2, SW, JD, z1 - z0, pick(COL.lumber), t0 + 0.012 + (i/(xs.length - 1))*span, 0.012, "drop", {dist:3});
+  });
+  if (withBay) add("box", (BAY.x0 + BAY.x1)/2, y, D/2 + BAY.d - SW/2, BAY.x1 - BAY.x0, JD, SW, pick(COL.lumber), t0 + span + 0.014, 0.012, "drop", {dist:3});
+  /* 4×8 sheets across the joists, joints staggered */
+  const sy = baseY + JD + SUB/2, sheets = [];
+  for (let r = 0; r < D/4; r++){
+    const z0 = -D/2 + r*4;
+    for (let x = -W/2 - (r % 2 ? 4 : 0); x < W/2; x += 8){
+      const a = Math.max(x, -W/2), b = Math.min(x + 8, W/2);
+      if (b - a > 0.2) sheets.push([(a+b)/2, z0 + 2, b - a - 0.03, 3.97]);
+    }
+  }
+  if (withBay) sheets.push([(BAY.x0 + BAY.x1)/2, D/2 + BAY.d/2, BAY.x1 - BAY.x0 - 0.03, BAY.d - 0.03]);
+  const s0 = t0 + (t1 - t0)*0.66, sspan = (t1 - t0)*0.3;
+  sheets.forEach((s, i) => add("box", s[0], sy, s[1], s[2], SUB, s[3], i % 3 ? pick(COL.osb) : COL.ply, s0 + (i/sheets.length)*sspan, 0.01, "drop", {dist:2}));
+}
+floorSystem(SILL_TOP, 0.18, 0.30, true);
+floorSystem(F1 + H1, 0.44, 0.52, false);
+
+/* ---------- walls ---------- */
+/* openings: [u0, u1, v0, v1, type] measured along the wall and up from its bottom plate.
+   w = window, d = door, s = slider, tri = bay triple window, bay = opening into the bay, oct = octagon */
+const WALLS = {
+  back:  {ox:-W/2, oz:-(D/2 - T/2), dir:"x", len:W, nx:0, nz:-1, h:H1, base:F1, band:-(F1 - STEM_TOP),
+          open:[[3.3,6,2.2,7,"w"],[9.3,12,2.2,7,"w"],[18.3,21.1,3.2,6.5,"w"],[22.5,25.3,0,6.9,"d"]]},
+  left:  {ox:-(W/2 - T/2), oz:-D/2 + T, dir:"z", len:D - 2*T, nx:-1, nz:0, h:H1, base:F1, band:-(F1 - STEM_TOP), ext:[-T, T],
+          open:[[zu(-7),zu(-4),3,7,"w"],[zu(1),zu(4),3,7,"w"]]},
+  right: {ox:W/2 - T/2, oz:-D/2 + T, dir:"z", len:D - 2*T, nx:1, nz:0, h:H1, base:F1, band:-(F1 - STEM_TOP), ext:[-T, T],
+          open:[[zu(-5.4),zu(-2.6),3,7,"w"]]},
+  front: {ox:-W/2, oz:D/2 - T/2, dir:"x", len:W, nx:0, nz:1, h:H1, base:F1, band:-(F1 - STEM_TOP), top:(F2 - OHF*Math.tan(TF)) - F1,
+          open:[[4.4,7.4,0,6.9,"d"],[BAY.x0 + W/2, BAY.x1 + W/2, 0, 7.4, "bay"]]},
+  bayF:  {ox:BAY.x0, oz:D/2 + BAY.d - T/2, dir:"x", len:BAY.x1 - BAY.x0, nx:0, nz:1, h:BAY.top, base:F1, band:-BAND,
+          open:[[0.45, BAY.x1 - BAY.x0 - 0.45, 2.2, 7.2, "tri"]]},
+  bayL:  {ox:BAY.x0 + T/2, oz:D/2, dir:"z", len:BAY.d - T, nx:-1, nz:0, h:BAY.top, base:F1, band:-BAND, ext:[0, T], open:[]},
+  bayR:  {ox:BAY.x1 - T/2, oz:D/2, dir:"z", len:BAY.d - T, nx:1, nz:0, h:BAY.top, base:F1, band:-BAND, ext:[0, T], open:[]},
+  back2: {ox:-W/2, oz:-(D/2 - T/2), dir:"x", len:W, nx:0, nz:-1, h:H2, base:F2, band:-BAND, top:H2 - OHR*Math.tan(TR),
+          open:[[3.3,6,2.2,7,"w"],[11.6,14.4,4.6,6.6,"w"],[21.5,26.5,0,6.8,"s"]]},
+  left2: {ox:-(W/2 - T/2), oz:-D/2 + T, dir:"z", len:D - T, nx:-1, nz:0, base:F2, band:-BAND, ext:[-T, 0], gable:true,
+          open:[[zu(-8.3)-0.8, zu(-8.3)+0.8, 7.2, 8.8, "oct"],[zu(-3.5), zu(-0.5), 2, 7.2, "w"]]},
+  right2:{ox:W/2 - T/2, oz:-D/2 + T, dir:"z", len:D - T, nx:1, nz:0, base:F2, band:-BAND, ext:[-T, 0], gable:true,
+          open:[[zu(-8.3)-0.8, zu(-8.3)+0.8, 7.2, 8.8, "oct"],[zu(-5.4), zu(-2.6), 1.6, 7.2, "w"]]},
+  wingF: {ox:WING.x0, oz:WING.z1 - T/2, dir:"x", len:WING.x1 - WING.x0, nx:0, nz:1, h:WING.h, base:F1, band:-(F1 - STEM_TOP), open:[]},
+  wingL: {ox:WING.x0 + T/2, oz:WING.z0 + T, dir:"z", len:WING.z1 - WING.z0 - 2*T, nx:-1, nz:0, h:WING.h, base:F1, band:-(F1 - STEM_TOP), ext:[-T, T],
+          open:[[2.6, 5.2, 3, 6.8, "w"]]},
+  wingB: {ox:WING.x0, oz:WING.z0 + T/2, dir:"x", len:WING.x1 - WING.x0, nx:0, nz:-1, h:WING.h, base:F1, band:-(F1 - STEM_TOP), open:[]}
+};
+/* wall height at u: flat for most walls, follows the roof line on the two gable ends */
+const wallTop = (w, u) => w.gable ? under(w.oz + u) - w.base : w.h;
+function wallBox(kind, w, u0, u1, v0, v1, thick, off, c, t0, dur, mode, o){
+  const u = (u0 + u1)/2, along = u1 - u0;
+  const x = w.ox + (w.dir === "x" ? u : 0) + w.nx*off;
+  const z = w.oz + (w.dir === "z" ? u : 0) + w.nz*off;
+  const sx = w.dir === "x" ? along : thick, sz = w.dir === "x" ? thick : along;
+  add(kind, x, w.base + (v0 + v1)/2, z, sx, v1 - v0, sz, c, t0, dur, mode, o);
+}
+function frameWall(w, t0, t1){
+  const parts = []; /* [seq, u0, u1, v0, v1, color] */
+  const opens = w.open;
+  let segs = [[0, w.len]];
+  opens.filter(o => o[2] === 0).forEach(o => {
+    segs = segs.flatMap(([a,b]) => (o[1] <= a || o[0] >= b) ? [[a,b]] : [[a, o[0] - SW*2], [o[1] + SW*2, b]].filter(s => s[1] - s[0] > 0.05));
+  });
+  segs.forEach(s => parts.push([0, s[0], s[1], 0, SW, null]));
+  const studTop = u => w.gable ? wallTop(w, u) - SW*1.6 : w.h - 2*SW;
+  const studs = [SW/2];
+  for (let u = OC; u < w.len - SW; u += OC) studs.push(u);
+  studs.push(w.len - SW/2);
+  studs.forEach(u => {
+    const top = studTop(u);
+    if (top < SW + 0.35) return;
+    const o = opens.find(o => u > o[0] - 0.4 && u < o[1] + 0.4);
+    const seq = 0.05 + (u / w.len)*0.82;
+    if (!o) { parts.push([seq, u - SW/2, u + SW/2, SW, top, null]); return; }
+    if (u > o[0] + SW && u < o[1] - SW){
+      if (o[2] > 0) parts.push([seq, u - SW/2, u + SW/2, SW, o[2] - SW, null]);
+      if (top - (o[3] + JD) > 0.05) parts.push([seq + 0.01, u - SW/2, u + SW/2, o[3] + JD, top, null]);
+    }
+  });
+  opens.forEach(o => {
+    const seq = 0.05 + (o[0] / w.len)*0.82, seqR = 0.05 + (o[1] / w.len)*0.82;
+    parts.push([seq, o[0] - SW*2, o[0] - SW, SW, studTop(o[0] - SW*1.5), null]);
+    parts.push([seq + 0.004, o[0] - SW, o[0], SW, o[3], null]);
+    parts.push([seqR, o[1] + SW, o[1] + SW*2, SW, studTop(o[1] + SW*1.5), null]);
+    parts.push([seqR + 0.004, o[1], o[1] + SW, SW, o[3], null]);
+    parts.push([seqR + 0.012, o[0] - SW, o[1] + SW, o[3], o[3] + Math.min(JD, studTop((o[0] + o[1])/2) - o[3]), COL.lvl]);
+    if (o[2] > 0) parts.push([seqR + 0.008, o[0], o[1], o[2] - SW, o[2], null]);
+  });
+  const dur = Math.min(0.012, (t1 - t0)*0.3), span = t1 - t0 - dur;
+  parts.forEach(pt => wallBox("box", w, pt[1], pt[2], pt[3], pt[4], T, 0, pt[5] || pick(COL.lumber), t0 + pt[0]*span, dur, "drop", {dist:3.5}));
+  if (!w.gable){
+    wallBox("box", w, 0, w.len, w.h - 2*SW, w.h - SW, T, 0, pick(COL.lumber), t0 + 0.92*span, dur, "drop", {dist:3.5});
+    wallBox("box", w, 0, w.len, w.h - SW, w.h, T, 0, pick(COL.lumber), t0 + 0.97*span, dur, "drop", {dist:3.5});
+  } else {
+    /* rake plates follow the roof: up to the ridge, then down the long front slope */
+    const x = w.ox, zA = w.oz, zB = w.oz + w.len, lift = -SW*0.8;
+    boardYZ(x, zA, under(zA) + lift, ZR, under(ZR) + lift, T, SW, pick(COL.lumber), t0 + 0.92*span, dur, "drop", {dist:3.5});
+    boardYZ(x, ZR, under(ZR) + lift, zB, under(zB) + lift, T, SW, pick(COL.lumber), t0 + 0.97*span, dur, "drop", {dist:3.5});
+  }
+}
+frameWall(WALLS.back, 0.30, 0.335);
+frameWall(WALLS.left, 0.335, 0.37);
+frameWall(WALLS.right, 0.37, 0.405);
+frameWall(WALLS.front, 0.405, 0.43);
+frameWall(WALLS.bayF, 0.43, 0.44);
+frameWall(WALLS.bayL, 0.432, 0.44);
+frameWall(WALLS.bayR, 0.432, 0.44);
+frameWall(WALLS.wingB, 0.44, 0.447);
+frameWall(WALLS.wingL, 0.444, 0.452);
+frameWall(WALLS.wingF, 0.448, 0.455);
+frameWall(WALLS.back2, 0.52, 0.56);
+frameWall(WALLS.left2, 0.56, 0.60);
+frameWall(WALLS.right2, 0.60, 0.64);
+
+/* ---------- roof framing ---------- */
+const nF = new THREE.Vector3(0, Math.cos(TF), Math.sin(TF)), nR = new THREE.Vector3(0, Math.cos(TR), -Math.sin(TR));
+const zEF = D/2 + OHF, zER = -D/2 - OHR;
+const SLF = (zEF - ZR)/Math.cos(TF), SLR = (ZR - zER)/Math.cos(TR);
+const ridgeS = (SW/2);
+/* place a slab on a roof slope: s runs down the slope from the ridge, lift is off the rafter underside */
+function slopeBox(kind, side, x, s0, s1, lift, sx, sy, c, t0, dur, mode, o){
+  const th = side > 0 ? TF : TR, n = side > 0 ? nF : nR;
+  const hm = ((s0 + s1)/2)*Math.cos(th);
+  const z = ZR + side*hm, y = under(z);
+  o = Object.assign({}, o || {});
+  o.rx = side*th + (o.tilt ? -side*o.tilt : 0);
+  if (mode === "slide") { o.dir = n.clone(); o.dist = o.dist == null ? 2.5 : o.dist; }
+  add(kind, x, y + n.y*lift, z + n.z*lift, sx, sy, s1 - s0, c, t0, dur, mode, o);
+}
+add("box", 0, YR + JD/2, ZR, W + 2*RAKE, JD, SW, COL.lvl, 0.64, 0.012, "drop", {dist:4});
+const rxs = [-(W/2 + RAKE) + SW/2];
+for (let x = -W/2 + SW/2; x < W/2; x += OC) rxs.push(x);
+rxs.push(W/2 - SW/2, W/2 + RAKE - SW/2);
+rxs.forEach((x, i) => {
+  const t = 0.645 + (i/rxs.length)*0.06;
+  slopeBox("box", 1, x, ridgeS + JD*Math.tan(TF), SLF - JD*Math.tan(TF) - 0.06, JD/2, SW, JD, pick(COL.lumber), t, 0.011, "drop", {dist:4});
+  slopeBox("box", -1, x, ridgeS + JD*Math.tan(TR), SLR - JD*Math.tan(TR) - 0.06, JD/2, SW, JD, pick(COL.lumber), t + 0.003, 0.011, "drop", {dist:4});
+});
+
+/* roof sheathing from the eaves up */
+const sheetLift = JD + SUB/2;
+[[1, SLF], [-1, SLR]].forEach(([side, SL]) => {
+  let row = 0;
+  for (let s1 = SL; s1 > ridgeS + 0.05; s1 -= 4, row++){
+    const s0 = Math.max(ridgeS, s1 - 4);
+    for (let x = -(W/2 + RAKE) - (row % 2 ? 4 : 0); x < W/2 + RAKE; x += 8){
+      const a = Math.max(x, -(W/2 + RAKE)), b = Math.min(x + 8, W/2 + RAKE);
+      if (b - a < 0.2) continue;
+      slopeBox("box", side, (a + b)/2, s0 + 0.005, s1 - 0.005, sheetLift, b - a - 0.01, SUB, pick(COL.osb), 0.72 + row*0.008 + ((a + W/2)/W)*0.006, 0.01, "slide", {dist:2.5});
+    }
+  }
+});
+/* shingle courses, eave to ridge */
+const shLift = JD + SUB + 0.05;
+[[1, SLF], [-1, SLR]].forEach(([side, SL]) => {
+  const courses = Math.ceil((SL - ridgeS)/0.9);
+  let i = 0;
+  for (let s1 = SL + 0.1; s1 > ridgeS; s1 -= 0.9, i++){
+    const s0 = Math.max(ridgeS - 0.05, s1 - 1.05);
+    slopeBox("box", side, 0, s0, s1, shLift, W + 2*RAKE + 0.3, 0.07, pick(COL.roof), 0.81 + (i/courses)*0.055, 0.008, "slide", {dist:1.8, tilt:0.02});
+  }
+});
+add("box", 0, YR + (JD + SUB)/Math.cos(TF) + 0.12, ZR, W + 2*RAKE + 0.4, 0.22, 1.2, COL.roof[0], 0.868, 0.01, "drop", {dist:2});
+
+/* ---------- chimney: stucco over masonry on the right gable ---------- */
+const CHIM_Z = 1.5;
+{
+  const x0 = W/2 + 0.2, zc = CHIM_Z;
+  const segs = [
+    [x0, x0 + 2.4, -0.3, F1 + 6, zc - 2.6, zc + 2.6],
+    [x0, x0 + 2.0, F1 + 6, F1 + 7.4, zc - 2.1, zc + 2.1],
+    [x0, x0 + 1.7, F1 + 7.4, F2 + 4, zc - 1.6, zc + 1.6],
+    [x0, x0 + 1.7, F2 + 4, F2 + 9, zc - 1.6, zc + 1.6],
+    [x0, x0 + 1.7, F2 + 9, YR + 4, zc - 1.6, zc + 1.6]
+  ];
+  segs.forEach((s, i) => box(s[0], s[1], s[2], s[3], s[4], s[5], pick(COL.stucco), 0.76 + i*0.011, 0.012, "grow"));
+  box(x0 - 0.1, x0 + 1.9, YR + 4, YR + 4.25, zc - 1.8, zc + 1.8, COL.concrete, 0.818, 0.01, "drop", {dist:2});
+}
+
+const sidingT0 = y => 0.84 + Math.min(1, Math.max(0, (y - STEM_TOP)/(YR - STEM_TOP)))*0.075;
+/* ---------- wing shed roof ---------- */
+const wingY = x => F1 + WING.h + (x - WING.x0)*Math.tan(WING.pitch);   /* rafter underside */
+{
+  const a = WING.pitch, nx = -Math.sin(a), ny = Math.cos(a), RD = 7.25*IN, oh = 0.8;
+  const xe = WING.x0 - oh, xh = WING.x1;
+  const za = WING.z0 - 0.6, zb = WING.z1 + 0.6;
+  const along = (lift, xa, xb) => [xa + nx*lift, wingY(xa) + ny*lift, xb + nx*lift, wingY(xb) + ny*lift];
+  /* ledger on the house wall, then rafters */
+  box(xh - 0.05, xh + 0.08, wingY(xh) - 0.1, wingY(xh) + RD, za, zb, COL.lvl, 0.655, 0.01, "drop", {dist:3});
+  for (let z = za + 0.06, i = 0; z < zb; z += OC, i++){
+    const [x0, y0, x1, y1] = along(RD/2, xe, xh - 0.06);
+    boardXY(z, x0, y0, x1, y1, RD, SW, pick(COL.lumber), 0.66 + i*0.003, 0.011, "drop", {dist:4});
+  }
+  const L = (xh - xe)/Math.cos(a), mid = (s, lift) => [xe + Math.cos(a)*s + nx*lift, wingY(xe) + Math.sin(a)*s + ny*lift];
+  /* sheathing in two strips */
+  for (let k = 0; k < 2; k++){
+    const z0 = za + k*(zb - za)/2, z1 = z0 + (zb - za)/2 - 0.02, [cx, cy] = mid(L/2, RD + SUB/2);
+    add("box", cx, cy, (z0 + z1)/2, L, SUB, z1 - z0, COL.osb[k], 0.73 + k*0.006, 0.01, "slide", {rz:a, dir:new THREE.Vector3(nx, ny, 0), dist:2.5});
+  }
+  /* shingle courses from the eave up, running along the wing */
+  let i = 0;
+  for (let s = 0; s < L - 0.1; s += 0.9, i++){
+    const [cx, cy] = mid(Math.min(L, s + 0.525), RD + SUB + 0.05);
+    add("box", cx, cy, (za + zb)/2, zb - za + 0.25, 0.07, 1.05, COL.roof[i % 3], 0.83 + i*0.004, 0.008, "slide",
+      {ry:-Math.PI/2, rz:a - 0.02, order:"ZYX", dir:new THREE.Vector3(nx, ny, 0), dist:1.8});
+  }
+  /* fascia + rake boards */
+  const [fx, fy] = mid(0, RD/2 + 0.1);
+  box(fx - 0.06, fx + 0.06, fy - 0.45, fy + 0.4, za - 0.05, zb + 0.05, COL.trim, 0.93, 0.012, "drop", {dist:1.5});
+  [za - 0.04, zb + 0.04].forEach(z => {
+    const [x0, y0, x1, y1] = along(RD/2 + 0.12, xe, xh);
+    boardXY(z, x0, y0, x1, y1, RD + 0.45, 0.12, COL.trim, 0.935, 0.012, "drop", {dist:1.5});
+  });
+  box(xe, xh, wingY(xe) - 0.06, wingY(xe), za, zb, COL.trim, 0.93, 0.012, "grow");
+  /* siding fills the sloped gables above the wing's front and back walls */
+  const off = T/2 + 0.04 + 0.06;
+  [[WING.z1 + off, 1], [WING.z0 - off, -1]].forEach(([z, nz]) => {
+    for (let y = F1 + WING.h; y < wingY(xh) - 0.1; y += 0.5){
+      const xl = WING.x0 + (y + 0.56 - (F1 + WING.h))/Math.tan(a);
+      if (xh - xl < 0.15) continue;
+      box(Math.max(xl, WING.x0), xh, y, y + 0.56, z - 0.03, z + 0.03, COL.siding[0], sidingT0(y), 0.012, "slide", {mat:"siding", dir:new THREE.Vector3(0, 0, nz), dist:1.6});
+    }
+  });
+}
+
+/* ---------- sheathing + siding ---------- */
+/* rows of cover for a wall: exact around openings, clipped to the roof line on gables */
+function coverRects(w, vStart, vEnd, rowH){
+  const ext = w.ext || [0, 0];
+  const extent = vTop => {
+    let a = ext[0], b = w.len + ext[1];
+    if (!w.gable) return vTop <= (w.top != null ? w.top : w.h) + 1e-6 ? [a, b] : null;
+    const y = w.base + vTop;
+    if (y > YR) return null;
+    if (y > F2 + H2) a = Math.max(a, (ZR - (YR - y)/Math.tan(TR)) - w.oz);
+    b = Math.min(b, (ZR + (YR - y)/Math.tan(TF)) - w.oz);
+    return b - a > 0.1 ? [a, b] : null;
+  };
+  const opens = w.open.filter(o => o[4] !== "bay" || true);
+  const rects = [];
+  for (let v = vStart; v < vEnd - 0.02; v += rowH){
+    const v1 = Math.min(v + rowH, vEnd);
+    const cuts = [...new Set([v, v1, ...opens.flatMap(o => [o[2], o[3]]).filter(e => e > v + 0.02 && e < v1 - 0.02)])].sort((p,q) => p - q);
+    for (let i = 0; i < cuts.length - 1; i++){
+      const a = cuts[i], b = cuts[i+1];
+      const e = extent(b); if (!e) continue;
+      let segs = [e];
+      opens.forEach(o => {
+        if (o[2] < b - 1e-6 && o[3] > a + 1e-6)
+          segs = segs.flatMap(([s, t]) => (o[1] <= s || o[0] >= t) ? [[s, t]] : [[s, o[0]], [o[1], t]].filter(q => q[1] - q[0] > 0.05));
+      });
+      segs.forEach(s => rects.push([s[0], s[1], a, b]));
+    }
+  }
+  return rects;
+}
+const SHEATH = 0.04, SID = 0.05;
+const offSheath = T/2 + SHEATH/2, offSiding = T/2 + SHEATH + SID/2 + 0.01;
+const yTopHouse = YR;
+const sidingT = y => 0.84 + Math.min(1, Math.max(0, (y - STEM_TOP)/(yTopHouse - STEM_TOP)))*0.075;
+const wallList = Object.values(WALLS);
+wallList.forEach((w, wi) => {
+  const vEnd = w.gable ? YR - w.base : (w.top != null ? w.top : w.h);
+  const dir = new THREE.Vector3(w.nx, 0, w.nz);
+  coverRects(w, w.band, vEnd, 4).forEach(r => {
+    for (let a = r[0]; a < r[1] - 0.05; a += 4){
+      const b = Math.min(r[1], a + 4);
+      wallBox("box", w, a + 0.01, b - 0.01, r[2], r[3], SHEATH, offSheath, pick(COL.osb),
+        0.70 + Math.min(0.07, ((w.base + r[2] - STEM_TOP)/(YR - STEM_TOP))*0.06 + (a/w.len)*0.008), 0.01, "slide", {dir, dist:2.5});
+    }
+  });
+  const tilt = 0.05, o = w.dir === "x" ? {rx:-w.nz*tilt} : {rz:w.nx*tilt};
+  coverRects(w, w.band, vEnd, 0.5).forEach(r => {
+    wallBox("box", w, r[0], r[1], r[2], r[3], SID, offSiding, pick(COL.siding), sidingT(w.base + r[2]), 0.012, "slide", Object.assign({dir, dist:1.6}, o));
+  });
+});
+
+/* ---------- windows, doors, trim ---------- */
+const offFrame = T/2 + 0.02, offTrim = T/2 + SHEATH + SID + 0.06;
+wallList.forEach(w => {
+  const dir = new THREE.Vector3(w.nx, 0, w.nz);
+  w.open.forEach((o, oi) => {
+    const [u0, u1, v0, v1, type] = o;
+    if (type === "bay") return;
+    const t = 0.80 + Math.min(0.04, ((w.base - F1)/(F2 - F1))*0.015 + oi*0.004);
+    const ins = (a, b, c, d, th, off, color, kind, tt) => wallBox(kind || "box", w, a, b, c, d, th, off, color, tt || t, 0.014, "slide", {dir, dist:2});
+    if (type === "oct"){
+      const uc = (u0 + u1)/2, vc = (v0 + v1)/2, r = (u1 - u0)/2;
+      const x = w.ox + w.nx*(offTrim - 0.02), z = w.oz + uc;
+      add("oct", x, w.base + vc, z, r + 0.28, 0.08, r + 0.28, COL.trim, 0.925, 0.012, "slide", {dir, dist:1.5, rz:Math.PI/2, rx:Math.PI/8});
+      add("octGlass", w.ox + w.nx*offFrame, w.base + vc, z, r, 0.06, r, COL.glass, t, 0.014, "slide", {dir, dist:2, rz:Math.PI/2, rx:Math.PI/8});
+      return;
+    }
+    const fw = 0.17;
+    if (type === "d"){
+      ins(u0 + 0.05, u1 - 0.05, 0.05, v1 - 0.05, 0.16, 0, COL.trim);
+      ins(u0 + 0.45, u1 - 0.45, 1.2, v1 - 0.45, 0.18, 0.01, COL.glass, "glass", t + 0.004);
+    } else {
+      ins(u0 + 0.06, u1 - 0.06, v0 + 0.06, v1 - 0.06, 0.05, 0, COL.glass, "glass");
+      const nw = (u1 - u0)*0.245;
+      const mids = type === "s" ? [(u0 + u1)/2] : type === "tri" ? [u0 + nw, u1 - nw] : [];
+      mids.forEach(m => ins(m - fw/2, m + fw/2, v0, v1, 0.22, offFrame - 0.05, COL.trim, "box", t + 0.003));
+      /* meeting rails on double-hung sashes */
+      const rails = type === "w" ? [[u0, u1]] : type === "tri" ? [[u0, u0 + nw], [u1 - nw, u1]] : [];
+      rails.forEach(([a, b]) => ins(a, b, (v0 + v1)/2 - fw/2, (v0 + v1)/2 + fw/2, 0.22, offFrame - 0.05, COL.trim, "box", t + 0.003));
+    }
+    [[u0, u0 + fw, v0, v1], [u1 - fw, u1, v0, v1], [u0, u1, v1 - fw, v1], [u0, u1, v0, v0 + fw]].forEach((f, k) => {
+      if ((type === "d" || type === "s") && k === 3) return;
+      ins(f[0], f[1], f[2], f[3], 0.24, offFrame, COL.trim);
+    });
+    /* white casing outside the siding */
+    const tw = 0.36, tt = 0.07, tTrim = 0.92 + Math.min(0.015, oi*0.003);
+    const lo = v0 > 0 ? v0 - tw : 0;
+    wallBox("box", w, u0 - tw, u0, lo, v1 + tw, tt, offTrim, COL.trim, tTrim, 0.012, "slide", {dir, dist:1.5});
+    wallBox("box", w, u1, u1 + tw, lo, v1 + tw, tt, offTrim, COL.trim, tTrim, 0.012, "slide", {dir, dist:1.5});
+    wallBox("box", w, u0 - tw - 0.1, u1 + tw + 0.1, v1, v1 + tw + 0.05, tt + 0.03, offTrim + 0.015, COL.trim, tTrim + 0.002, 0.012, "slide", {dir, dist:1.5});
+    if (v0 > 0) wallBox("box", w, u0 - tw - 0.06, u1 + tw + 0.06, v0 - tw, v0, tt + 0.03, offTrim + 0.015, COL.trim, tTrim + 0.002, 0.012, "slide", {dir, dist:1.5});
+  });
+});
+/* corner boards */
+{
+  const o = T/2 + SHEATH + SID + 0.02;
+  const corner = (x, z, y1, i) => add("box", x, (STEM_TOP + y1)/2, z, 0.6, y1 - STEM_TOP, 0.6, COL.trim, 0.925 + i*0.002, 0.012, "grow");
+  corner(-(W/2 + o - 0.2), D/2 + o - 0.2, F2 - OHF*Math.tan(TF), 0);
+  corner(W/2 + o - 0.2, D/2 + o - 0.2, F2 - OHF*Math.tan(TF), 1);
+  corner(-(W/2 + o - 0.2), -(D/2 + o - 0.2), F2 + H2 - OHR*Math.tan(TR), 2);
+  corner(W/2 + o - 0.2, -(D/2 + o - 0.2), F2 + H2 - OHR*Math.tan(TR), 3);
+  /* bay corners + bay roof + bay underside */
+  [BAY.x0, BAY.x1].forEach((x, i) => add("box", x + (i ? 0.08 : -0.08), F1 - BAND/2 + BAY.top/2, D/2 + BAY.d + 0.08, 0.5, BAY.top + BAND, 0.5, COL.trim, 0.928, 0.012, "grow"));
+  add("box", (BAY.x0 + BAY.x1)/2, F1 + BAY.top - 0.2, D/2 + BAY.d + 0.13, BAY.x1 - BAY.x0 + 0.6, 0.4, 0.08, COL.trim, 0.93, 0.012, "drop", {dist:1.5});
+  corner(WING.x0 - o + 0.2, WING.z1 + o - 0.2, F1 + WING.h, 4);
+  corner(WING.x0 - o + 0.2, WING.z0 - o + 0.2, F1 + WING.h, 5);
+  add("box", (BAY.x0 + BAY.x1)/2, SILL_TOP - 0.03, D/2 + BAY.d/2 + 0.05, BAY.x1 - BAY.x0 + 0.1, 0.06, BAY.d + 0.15, COL.trim, 0.93, 0.012, "grow");
+}
+/* fascia, soffits, rake boards */
+{
+  const yEF = under(zEF), yER = under(zER);
+  add("box", 0, yEF + 0.3, zEF + 0.05, W + 2*RAKE + 0.2, 0.8, 0.1, COL.trim, 0.93, 0.012, "slide", {dir:new THREE.Vector3(0,0,1), dist:1.5});
+  box(-W/2 - RAKE, W/2 + RAKE, yEF - 0.06, yEF, D/2, zEF + 0.05, COL.trim, 0.93, 0.012, "grow");
+  add("box", 0, yER + 0.3, zER - 0.05, W + 2*RAKE + 0.2, 0.8, 0.1, COL.trim, 0.93, 0.012, "slide", {dir:new THREE.Vector3(0,0,-1), dist:1.5});
+  box(-W/2 - RAKE, W/2 + RAKE, yER - 0.06, yER, zER - 0.05, -D/2, COL.trim, 0.93, 0.012, "grow");
+  [-1, 1].forEach(sx => {
+    slopeBox("box", 1, sx*(W/2 + RAKE + 0.05), ridgeS - 0.1, SLF + 0.08, JD/2 + 0.12, 0.12, JD + 0.45, COL.trim, 0.935, 0.012, "slide", {dist:1.5});
+    slopeBox("box", -1, sx*(W/2 + RAKE + 0.05), ridgeS - 0.1, SLR + 0.08, JD/2 + 0.12, 0.12, JD + 0.45, COL.trim, 0.935, 0.012, "slide", {dist:1.5});
+  });
+  /* gutter downspouts */
+  [[W/2 + 0.25, D/2 + 0.25], [W/2 + 0.25, -D/2 - 0.25]].forEach(([x, z], i) =>
+    box(x - 0.12, x + 0.12, 0.1, (z > 0 ? yEF : yER) - 0.1, z - 0.12, z + 0.12, COL.trim, 0.938 + i*0.002, 0.01, "grow"));
+}
+/* exposed foundation gets the painted parge coat seen in the photos */
+[[WING.x0 - 0.03, WING.x1, WING.z1, WING.z1 + 0.03], [WING.x0 - 0.03, WING.x0, WING.z0, WING.z1], [WING.x0 - 0.03, WING.x1, WING.z0 - 0.03, WING.z0]].forEach((b, i) =>
+  box(b[0], b[1], 0, STEM_TOP, b[2], b[3], COL.parge, 0.905 + i*0.003, 0.012, "grow"));
+[[-W/2 - 0.03, W/2 + 0.03, D/2, D/2 + 0.03], [-W/2 - 0.03, W/2 + 0.03, -D/2 - 0.03, -D/2], [-W/2 - 0.03, -W/2, -D/2, D/2], [W/2, W/2 + 0.03, -D/2, D/2]].forEach((b, i) =>
+  box(b[0], b[1], 0, STEM_TOP, b[2], b[3], COL.parge, 0.905 + i*0.003, 0.012, "grow"));
+
+/* ---------- decks, stairs, balcony ---------- */
+function railRun(x0, z0, x1, z1, y, t0, t1){
+  const len = Math.hypot(x1 - x0, z1 - z0), n = Math.max(2, Math.round(len/0.42));
+  const ax = Math.abs(x1 - x0) >= Math.abs(z1 - z0);
+  [[x0, z0], [x1, z1]].forEach(([x, z]) => box(x - 0.15, x + 0.15, y, y + 3.15, z - 0.15, z + 0.15, pick(COL.deck), t0, 0.01, "drop", {dist:2}));
+  for (let i = 1; i < n; i++){
+    const f = i/n, x = x0 + (x1 - x0)*f, z = z0 + (z1 - z0)*f;
+    box(x - 0.06, x + 0.06, y + 0.3, y + 2.95, z - 0.06, z + 0.06, pick(COL.deck), t0 + 0.004 + f*(t1 - t0 - 0.016), 0.008, "drop", {dist:1.5});
+  }
+  const cx = (x0 + x1)/2, cz = (z0 + z1)/2;
+  add("box", cx, y + 3.05, cz, ax ? len + 0.3 : 0.45, 0.13, ax ? 0.45 : len + 0.3, COL.deck[0], t1 - 0.01, 0.01, "drop", {dist:1.5});
+  add("box", cx, y + 0.22, cz, ax ? len : 0.25, 0.12, ax ? 0.25 : len, COL.deck[1], t1 - 0.012, 0.01, "drop", {dist:1.5});
+}
+function deck(x0, x1, z0, z1, top, t0, t1, rails, posts){
+  const d = t1 - t0, jy = top - 0.1 - JD;
+  if (posts !== false){
+    const px = [x0 + 0.2, ...(x1 - x0 > 12 ? [(x0 + x1)/2] : []), x1 - 0.2];
+    const pz = z0 > 0 ? [z1 - 0.2] : [z0 + 0.2];
+    px.forEach((x, i) => pz.forEach(z => box(x - 0.15, x + 0.15, 0, jy + 0.1, z - 0.15, z + 0.15, pick(COL.deck), t0 + i*0.002, 0.01, "grow")));
+  }
+  for (let x = x0 + 0.1, i = 0; x < x1; x += OC, i++)
+    box(x - SW/2, x + SW/2, jy, top - 0.1, z0, z1, COL.deckDark, t0 + d*0.15 + (x - x0)/(x1 - x0)*d*0.2, 0.01, "drop", {dist:2});
+  const boards = Math.round((z1 - z0)/0.5);
+  for (let i = 0; i < boards; i++){
+    const za = z0 + i*(z1 - z0)/boards, zb = za + (z1 - z0)/boards - 0.03;
+    box(x0, x1, top - 0.1, top, za, zb, pick(COL.deck), t0 + d*0.4 + (i/boards)*d*0.3, 0.01, "drop", {dist:1.5});
+  }
+  rails.forEach((r, i) => railRun(r[0], r[1], r[2], r[3], top, t0 + d*0.72 + i*d*0.06, t0 + d*0.72 + (i + 1)*d*0.06 + d*0.06));
+}
+/* front deck + stairs + lattice skirt: a wide landing from in front of the left wing to just past the door,
+   with the stairs coming off its right side and running down along the house toward the bay */
+const FD = {x0: WING.x0 - 0.8, x1: -W/2 + 8.0, z0: D/2 + 0.1, z1: D/2 + 5.4, sz0: D/2 + 2.0, sz1: D/2 + 5.3};
+{
+  const top = F1 - 0.15, {x0, x1, z0, z1, sz0, sz1} = FD;
+  deck(x0, x1, z0, z1, top, 0.885, 0.935, [[x0, z0, x0, z1], [x0, z1, x1, z1], [x1, z1, x1, sz1], [x1, sz0, x1, z0]]);
+  add("lattice", (x0 + x1)/2, (top - 0.4)/2, z1 - 0.1, x1 - x0, top - 0.4, 0.05, COL.deck[0], 0.932, 0.01, "grow");
+  add("lattice", x0 + 0.1, (top - 0.4)/2, (z0 + z1)/2, 0.05, top - 0.4, z1 - z0, COL.deck[0], 0.932, 0.01, "grow");
+  const risers = 5, r = top/risers, run = 0.9;
+  for (let i = 1; i < risers; i++){
+    const y = top - r*i, xa = x1 + (i - 1)*run;
+    box(xa, xa + run, y - 0.1, y, sz0 + 0.1, sz1 - 0.1, pick(COL.deck), 0.905 + i*0.003, 0.01, "drop", {dist:1.5});
+    box(xa, xa + 0.06, y - r, y - 0.1, sz0 + 0.15, sz1 - 0.15, COL.deckDark, 0.904 + i*0.003, 0.01, "drop", {dist:1.5});   /* riser board */
+  }
+  const xEnd = x1 + (risers - 1)*run;
+  [sz0 + 0.08, sz1 - 0.08].forEach(z => {
+    boardXY(z, x1, top - 0.4, xEnd + 0.4, 0.2, 0.8, 0.15, COL.deckDark, 0.9, 0.012, "drop", {dist:2});        /* stringer */
+    boardXY(z, x1, top + 3.05, xEnd, r + 2.9, 0.13, 0.4, COL.deck[0], 0.93, 0.012, "drop", {dist:1.5});      /* sloped handrail */
+    for (let i = 0; i < (risers - 1)*2; i++){
+      const x = x1 + 0.25 + i*run/2, yb = top - r*Math.ceil((i + 1)/2);
+      const yt = top + 2.95 - (x - x1)*(top - r)/(xEnd - x1);
+      box(x - 0.06, x + 0.06, yb, yt, z - 0.06, z + 0.06, pick(COL.deck), 0.915 + i*0.002, 0.008, "drop", {dist:1.5});
+    }
+    box(xEnd - 0.15, xEnd + 0.15, 0, r + 3.1, z - 0.15, z + 0.15, pick(COL.deck), 0.912, 0.01, "grow");     /* newel post */
+  });
+}
+/* lattice skirting over the foundation along the front, under the bay, and along the right side up to the chimney */
+{
+  const LH = STEM_TOP + 0.06, t = 0.94;
+  const sk = (cx, cz, sx, sz, i) => add("lattice", cx, LH/2, cz, sx, LH, sz, COL.deck[0], t + i*0.002, 0.012, "grow");
+  sk((FD.x1 + BAY.x0)/2, D/2 + 0.13, BAY.x0 - FD.x1, 0.05, 0);
+  sk((BAY.x0 + BAY.x1)/2, D/2 + BAY.d + 0.13, BAY.x1 - BAY.x0, 0.05, 1);
+  sk(BAY.x0 - 0.05, D/2 + BAY.d/2 + 0.07, 0.05, BAY.d + 0.1, 2);
+  sk(BAY.x1 + 0.05, D/2 + BAY.d/2 + 0.07, 0.05, BAY.d + 0.1, 3);
+  sk((BAY.x1 + W/2)/2, D/2 + 0.13, W/2 - BAY.x1, 0.05, 4);
+  const zf = CHIM_Z + 2.7;
+  sk(W/2 + 0.13, (zf + D/2)/2, 0.05, D/2 - zf, 5);
+}
+/* rear deck off the kitchen */
+{
+  const top = F1 - 0.6, z0 = -D/2 - 12, z1 = -D/2 - 0.1, xr = W/2 + 2;
+  deck(-1, xr, z0, z1, top, 0.88, 0.94, [[-1, z0, xr, z0], [xr, z0, xr, z1 - 4.6], [-1, z1 - 3, -1, z0]]);
+  deck(-10.5, -1, z0, z1, top - 1.0, 0.875, 0.93, []);
+  /* three steps down off the right end, toward the side-yard walk */
+  for (let i = 1; i <= 3; i++){
+    const y = top - i*(top/4), xa = xr + (i - 1)*0.9;
+    box(xa, xa + 0.92, y - 0.12, y, z1 - 4.4, z1 - 0.4, pick(COL.deck), 0.935 + i*0.002, 0.01, "drop", {dist:1.5});
+    box(xa, xa + 0.92, 0, y - 0.12, z1 - 4.4, z1 - 4.25, COL.deckDark, 0.933, 0.01, "grow");
+  }
+}
+/* upstairs balcony off the rear slider */
+{
+  const x0 = 5.6, x1 = 12.4, z0 = -D/2 - 4, z1 = -D/2 - 0.1, top = F2 - 0.12;
+  deck(x0, x1, z0, z1, top, 0.895, 0.935, [[x0, z0, x1, z0], [x0, z1, x0, z0], [x1, z1, x1, z0]], false);
+}
+
+/* ---------- landscape: walks, beds, shrubs, shed ---------- */
+{
+  const zs = FD.z1 + 1.0, xf = FD.x1 + 4*0.9;   /* walk runs along the front of the deck; xf is the foot of the stairs */
+  /* concrete pad in front of the deck, then the walk along the front bed and down the right side */
+  box(xf - 0.2, xf + 2.6, 0, 0.12, FD.sz0 - 0.2, zs - 0.9, null, 0.95, 0.01, "pour", {mat:"walk", axis:2});   /* landing pad at the foot of the stairs */
+  box(FD.x0 - 0.6, W/2 + 4.9, 0, 0.09, zs - 0.9, zs + 0.9, null, 0.953, 0.012, "pour", {mat:"walk", axis:0});
+  box(W/2 + 2.9, W/2 + 4.9, 0, 0.09, -D/2 - 0.3, zs - 0.9, null, 0.956, 0.012, "pour", {mat:"walk", axis:2});
+  /* mulch bed from the stairs around the right corner to the chimney */
+  box(xf + 2.6, W/2 + 2.85, 0, 0.06, D/2 + 0.05, zs - 0.92, COL.mulch, 0.955, 0.012, "grow");
+  box(W/2 + 0.05, W/2 + 2.85, 0, 0.06, CHIM_Z + 2.7, D/2 + 0.05, COL.mulch, 0.956, 0.012, "grow");
+}
+plant("shrub", 5.5, D/2 + 3.0, 4.6, 3, 0.962);
+plant("maple", WING.x0 - 4.5, D/2 + 6.5, 4.6, 6, 0.964);
+plant("rose", W/2 + 2.0, CHIM_Z + 4.3, 8.5, 7, 0.968);
+plant("rose", -W/2 - 2.6, -D/2 - 3.4, 9.0, 12, 0.969);
+plant("hydrangea", -W/2 - 1.6, -4, 3.4, 8, 0.97);
+plant("hydrangea", -W/2 - 1.6, 0.5, 3.2, 9, 0.972);
+plant("hydrangea", W/2 + 1.6, -D/2 + 1.6, 3.2, 10, 0.973);
+plant("hydrangea", 4, -D/2 - 13.2, 2.8, 13, 0.974);
+/* black metal fence from behind the chimney out across the side walk, then back along the yard */
+{
+  const fence = (xa, za, xb, zb, t0) => {
+    const len = Math.hypot(xb - xa, zb - za), n = Math.round(len/0.42), ax = Math.abs(xb - xa) > Math.abs(zb - za);
+    for (let i = 0; i <= n; i++){
+      const f = i/n, x = xa + (xb - xa)*f, z = za + (zb - za)*f, post = i % 14 === 0 || i === n;
+      const w = post ? 0.16 : 0.05;
+      box(x - w/2, x + w/2, 0, post ? 4.3 : 4.0, z - w/2, z + w/2, null, t0 + f*0.008, 0.008, "grow", {mat:"fence"});
+    }
+    [0.35, 3.85].forEach(y => add("box", (xa + xb)/2, y, (za + zb)/2, ax ? len : 0.06, 0.08, ax ? 0.06 : len, null, t0 + 0.009, 0.008, "grow", {mat:"fence"}));
+  };
+  const zf = CHIM_Z - 2.9;
+  fence(W/2 + 0.15, zf, W/2 + 15, zf, 0.976);
+  fence(W/2 + 15, zf, W/2 + 15, -D/2 - 18, 0.979);
+}
+/* porch lantern beside the front door */
+box(-W/2 + 7.95, -W/2 + 8.4, F1 + 5.7, F1 + 6.45, D/2 + 0.12, D/2 + 0.5, null, 0.95, 0.01, "drop", {mat:"lamp", dist:1});
+box(-W/2 + 8.02, -W/2 + 8.33, F1 + 5.82, F1 + 6.3, D/2 + 0.16, D/2 + 0.46, null, 0.951, 0.01, "drop", {mat:"glass", dist:1});
+/* detached shed */
+box(-W/2 - 20, -W/2 - 8, 0, 7.5, -D/2 - 8, -D/2, COL.siding[0], 0.966, 0.014, "grow", {mat:"siding"});
+box(-W/2 - 20.5, -W/2 - 7.5, 7.5, 7.9, -D/2 - 8.5, -D/2 + 0.5, COL.trim, 0.97, 0.01, "drop", {dist:2});
+box(-W/2 - 17, -W/2 - 11, 0.2, 6.6, -D/2, -D/2 + 0.12, COL.deckDark, 0.972, 0.01, "slide", {dir:new THREE.Vector3(0,0,1), dist:1.5});
+
+/* ---------- build instanced meshes ---------- */
+let totalPieces = 0;
+Object.values(KINDS).forEach(k => {
+  if (!k.list.length) return;
+  const mat = k.key === "string" ? new THREE.MeshStandardMaterial({color: col(FALLBACK.string), roughness: 0.7}) : material(k.key);
+  const m = new THREE.InstancedMesh(k.geo, mat, k.list.length);
+  m.frustumCulled = false;
+  m.castShadow = k.key !== "glass" && k.key !== "string";
+  m.receiveShadow = true;
+  if (k.key === "lattice"){
+    const lv = mod("wood") && mod("wood").variants.lattice;
+    if (lv && lv.depthMaterial) m.customDepthMaterial = lv.depthMaterial;
+    else if (mat.alphaMap) m.customDepthMaterial = new THREE.MeshDepthMaterial({depthPacking: THREE.RGBADepthPacking, alphaMap: mat.alphaMap, alphaTest: mat.alphaTest || 0.5});
+  }
+  k.list.forEach((it, i) => { m.setColorAt(i, it.c); if (!it.site && it.mode !== "none") totalPieces++; });
+  m.instanceColor.needsUpdate = true;
+  scene.add(m); k.mesh = m;
+});
+$("tally-t").textContent = totalPieces.toLocaleString("en-US");
+
+/* ---------- vegetation ---------- */
+const vegLib = mod("veg");
+VEG.forEach(v => {
+  let obj = null;
+  if (vegLib && vegLib.make){
+    try { obj = vegLib.make(v.type, v.size, v.seed); } catch (err){ console.warn("veg", v.type, err); }
+  }
+  if (!obj){
+    /* fallback: simple trunk + foliage mass */
+    obj = new THREE.Group();
+    const leaf = new THREE.MeshStandardMaterial({color: col(v.type === "maple" ? "#5E1F26" : v.type === "pine" || v.type === "hemlock" ? "#3F5A3B" : "#56744A"), roughness: 0.9});
+    const tall = v.type === "pine" || v.type === "hemlock" || v.type === "oak";
+    if (tall){
+      const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.6, v.size*0.6, 8), new THREE.MeshStandardMaterial({color: col("#5E4836"), roughness: 0.95}));
+      trunk.position.y = v.size*0.3; obj.add(trunk);
+      const crown = new THREE.Mesh(v.type === "oak" ? new THREE.IcosahedronGeometry(v.size*0.3, 2) : new THREE.ConeGeometry(v.size*0.2, v.size*0.75, 12), leaf);
+      crown.position.y = v.size*0.62; obj.add(crown);
+    } else {
+      const b = new THREE.Mesh(new THREE.IcosahedronGeometry(v.size*0.5, 2), leaf);
+      b.scale.set(1, 0.8, 1); b.position.y = v.size*0.4; obj.add(b);
+    }
+  }
+  obj.position.set(v.x, 0, v.z);
+  obj.rotation.y = v.ry || (v.seed * 1.7) % (Math.PI*2);
+  obj.traverse(o => { if (o.isMesh){ o.castShadow = true; o.receiveShadow = true; } });
+  v.obj = obj;
+  scene.add(obj);
+});
+
+/* ---------- blueprint ghost of the finished house ---------- */
+const gp = [];
+const seg = (a, b) => gp.push(a[0],a[1],a[2], b[0],b[1],b[2]);
+const hx = W/2, hz = D/2;
+seg([-hx,STEM_TOP,-hz],[hx,STEM_TOP,-hz]); seg([hx,STEM_TOP,-hz],[hx,STEM_TOP,hz]); seg([hx,STEM_TOP,hz],[-hx,STEM_TOP,hz]); seg([-hx,STEM_TOP,hz],[-hx,STEM_TOP,-hz]);
+[-hx, hx].forEach(x => {
+  seg([x,STEM_TOP,-hz],[x,F2+H2,-hz]); seg([x,F2+H2,-hz],[x,YR,ZR]); seg([x,YR,ZR],[x,F2,hz]); seg([x,F2,hz],[x,STEM_TOP,hz]);
+});
+seg([-hx,F2+H2,-hz],[hx,F2+H2,-hz]); seg([-hx,YR,ZR],[hx,YR,ZR]); seg([-hx,F2,hz],[hx,F2,hz]);
+const ghostRect = (x0,x1,y0,y1,z) => { seg([x0,y0,z],[x1,y0,z]); seg([x1,y0,z],[x1,y1,z]); seg([x1,y1,z],[x0,y1,z]); seg([x0,y1,z],[x0,y0,z]); };
+ghostRect(-hx + 4.4, -hx + 7.4, F1, F1 + 6.9, hz + 0.02);
+ghostRect(BAY.x0, BAY.x1, F1 - BAND, F1 + BAY.top, hz + BAY.d);
+ghostRect(BAY.x0 + 0.45, BAY.x1 - 0.45, F1 + 2.2, F1 + 7.2, hz + BAY.d + 0.02);
+const ghostGeo = new THREE.BufferGeometry();
+ghostGeo.setAttribute("position", new THREE.Float32BufferAttribute(gp, 3));
+const ghostMat = new THREE.LineBasicMaterial({color:0x087174, transparent:true, opacity:0.5, depthWrite:false, depthTest:false});
+const ghost = new THREE.LineSegments(ghostGeo, ghostMat);
+/* the plan outline is an overlay: kept out of the occlusion pass so it stays a clean blue line */
+const ghostScene = new THREE.Scene();
+ghostScene.add(ghost);
+
+/* ---------- ground: a real lawn, with the excavation cut out of it until final grading ---------- */
+const GR = 600;
+const groundLib = mod("ground");
+let groundMat = null;
+try { groundMat = groundLib && groundLib.lawnMaterial ? groundLib.lawnMaterial(GR*2) : null; } catch (err){ console.warn("lawn", err); }
+if (!groundMat) groundMat = new THREE.MeshStandardMaterial({color: col("#5F7A3A"), roughness: 0.95});
+function groundMesh(withHole){
+  const sh = new THREE.Shape();
+  sh.absarc(0, 0, GR, 0, Math.PI*2, false);
+  if (withHole){
+    const h = new THREE.Path();
+    h.moveTo(-PX, -PZ); h.lineTo(-PX, PZ); h.lineTo(PX, PZ); h.lineTo(PX, -PZ); h.lineTo(-PX, -PZ);
+    sh.holes.push(h);
+  }
+  const g = new THREE.ShapeGeometry(sh, 64);
+  const pos = g.attributes.position, uv = g.attributes.uv;
+  for (let i = 0; i < pos.count; i++) uv.setXY(i, pos.getX(i)/(2*GR) + 0.5, pos.getY(i)/(2*GR) + 0.5);
+  uv.needsUpdate = true;
+  const m = new THREE.Mesh(g, groundMat);
+  m.rotation.x = -Math.PI/2;
+  m.receiveShadow = true;
+  scene.add(m);
+  return m;
+}
+const groundPit = groundMesh(true), groundFull = groundMesh(false);
+let grass = null;
+try {
+  if (groundLib && groundLib.grass){
+    grass = groundLib.grass(THREE, renderer, {areas:[
+      {x0:-PX - 8, x1:PX + 8, z0:D/2 + 11.4, z1:D/2 + 22}, {x0:W/2 + 3.7, x1:W/2 + 12, z0:-D/2, z1:D/2 + 11},
+      {x0:-PX - 10, x1:-W/2 - 2.5, z0:-D/2, z1:D/2 + 10}], density: narrowScreen ? 0.5 : 1});
+    if (grass){ grass.visible = false; grass.traverse && grass.traverse(o => { if (o.isMesh) o.receiveShadow = true; }); scene.add(grass); }
+  }
+} catch (err){ console.warn("grass", err); grass = null; }
+
+/* lit windows and a porch lantern for the evening (dark) theme */
+const porch = new THREE.PointLight(0xffb867, 0, 22, 2);
+porch.position.set(-W/2 + 8.2, F1 + 6.0, D/2 + 0.9);
+scene.add(porch);
+
+let dirty = true;
+function applyTheme(){
+  const cs = getComputedStyle(document.documentElement);
+  rig.theme(isDark());
+  ghostMat.color = col(cs.getPropertyValue("--accent").trim() || "#087174");
+  dirty = true;
+}
+const mq = window.matchMedia("(prefers-color-scheme: dark)");
+(mq.addEventListener ? mq.addEventListener("change", applyTheme) : mq.addListener(applyTheme));
+new MutationObserver(applyTheme).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme","class","style"]});
+
+/* ---------- animation ---------- */
+const M = new THREE.Matrix4(), P = new THREE.Vector3(), S = new THREE.Vector3(), ZERO = new THREE.Matrix4().makeScale(0,0,0);
+const easeOut = t => 1 - Math.pow(1 - t, 3);
+const easeBack = t => { const c = 1.6; return 1 + (c + 1)*Math.pow(t - 1, 3) + c*Math.pow(t - 1, 2); };
+const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a)/(b - a))); return t*t*(3 - 2*t); };
+function updatePieces(p){
+  let placed = 0;
+  Object.values(KINDS).forEach(k => {
+    if (!k.mesh) return;
+    const mesh = k.mesh;
+    k.list.forEach((it, i) => {
+      let t = (p - it.t0)/it.dur;
+      if (t <= 0 || (it.t1 && p > it.t1)) { mesh.setMatrixAt(i, ZERO); return; }
+      if (t >= 1) { t = 1; if (!it.site && it.mode !== "none") placed++; }
+      const e = easeOut(t);
+      P.copy(it.p); S.copy(it.s);
+      if (it.mode === "drop") P.y += (1 - e)*it.dist;
+      else if (it.mode === "grow") { S.y = it.s.y*Math.max(e, 0.001); P.y = it.p.y - it.s.y*(1 - e)/2; }
+      else if (it.mode === "slide") P.addScaledVector(it.dir, (1 - e)*it.dist);
+      else if (it.mode === "pop") S.multiplyScalar(Math.max(0.001, easeBack(t)));
+      else if (it.mode === "pour"){
+        if (it.axis === 2){ S.z = it.s.z*Math.max(e, 0.001); P.z = it.p.z - it.s.z*(1 - e)/2; }
+        else { S.x = it.s.x*Math.max(e, 0.001); P.x = it.p.x - it.s.x*(1 - e)/2; }
+      }
+      M.compose(P, it.q, S);
+      mesh.setMatrixAt(i, M);
+    });
+    mesh.instanceMatrix.needsUpdate = true;
+  });
+  VEG.forEach(v => {
+    if (!v.obj) return;
+    const t = (p - v.t0)/v.dur;
+    if (t <= 0){ v.obj.visible = false; return; }
+    v.obj.visible = true;
+    v.obj.scale.setScalar(t >= 1 ? 1 : Math.max(0.001, easeBack(t)));
+  });
+  if (grass) grass.visible = p > 0.958;
+  return placed;
+}
+
+/* camera: starts high over the open excavation, settles square to the front of the house */
+let wide = true;
+function placeCamera(p, fp){
+  const ov = window.__houseBuild && window.__houseBuild.cameraOverride;
+  if (ov){ camera.position.set(ov.pos[0], ov.pos[1], ov.pos[2]); camera.lookAt(ov.look[0], ov.look[1], ov.look[2]); return; }
+  const e = smooth(0, 1, p), f = fp || 0;
+  /* f swings the finished view round to face the front of the house, at standing height, with the yard sign in frame */
+  const az = (-0.8 + 1.25*e)*(1 - f) + 0.1*f, el = (0.64 - 0.56*e)*(1 - f) + 0.075*f;
+  const ty = 11*e*(1 - f) + 9.5*f;
+  let dist = (95 - 22*e)*(1 - f) + 74*f;
+  const hf = 2*Math.atan(Math.tan(camera.fov*Math.PI/360)*camera.aspect);
+  const needW = wide ? 46 : 50;
+  dist = Math.max(dist, (needW/2)/Math.tan(hf/2));
+  camera.position.set(Math.sin(az)*Math.cos(el)*dist, ty + Math.sin(el)*dist, Math.cos(az)*Math.cos(el)*dist);
+  camera.lookAt(0, ty, 0);
+}
+
+function resize(){
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  if (!w || !h) return;
+  renderer.setSize(w, h, false);
+  if (composer){ composer.setPixelRatio(renderer.getPixelRatio()); composer.setSize(w, h); }
+  camera.aspect = w/h;
+  wide = w >= 900;
+  if (wide) camera.setViewOffset(w, h, -w*0.17, 0, w, h);
+  else camera.setViewOffset(w, h, 0, h*0.2, w, h);
+  camera.updateProjectionMatrix();
+  dirty = true;
+}
+
+const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+let target = scrollProgress(), cur = target, lastTally = -1;
+window.addEventListener("scroll", () => { target = scrollProgress(); }, {passive:true});
+window.addEventListener("resize", () => { resize(); target = scrollProgress(); if (signIn) placeSign(); });
+
+const BUILD_END = END_MODE === "render" ? 0.92 : 0.88;
+
+/* ---------- 3D yard sign (render ending): white vinyl post, arm, hanging panel with the brokerage artwork ---------- */
+const sign3d = new THREE.Group(), signPanel = new THREE.Group(), dust = [];
+const SIGN3D = {x: 11.5, z: D/2 + 17};
+if (END_MODE === "render"){
+  const white = material("trim");
+  const art = new THREE.TextureLoader().load("sign.jpg", () => { dirty = true; });
+  art.encoding = THREE.sRGBEncoding; art.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  const face = new THREE.MeshStandardMaterial({map: art, roughness: 0.45, metalness: 0});
+  const back = new THREE.MeshStandardMaterial({color: 0xf2f2ee, roughness: 0.6});
+  const part = (sx, sy, sz, x, y, z, m, g) => { const o = new THREE.Mesh(BOX, m || white); o.scale.set(sx, sy, sz); o.position.set(x, y, z); (g || sign3d).add(o); return o; };
+  part(0.33, 6.6, 0.33, 0, 2.7, 0);                 /* post, 0.6 ft in the ground */
+  part(0.45, 0.2, 0.45, 0, 6.08, 0);                /* cap */
+  part(3.7, 0.3, 0.3, 1.75, 5.55, 0);               /* arm */
+  const brace = part(1.5, 0.16, 0.16, 0.55, 5.0, 0); brace.rotation.z = Math.PI/4;
+  signPanel.position.set(2.15, 5.38, 0);
+  sign3d.add(signPanel);
+  const metal = new THREE.MeshStandardMaterial({color: 0x55585c, roughness: 0.4, metalness: 0.8});
+  [-0.9, 0.9].forEach(x => part(0.04, 0.38, 0.04, x, -0.2, 0, metal, signPanel));
+  const panel = new THREE.Mesh(BOX, [back, back, back, back, face, back]);
+  panel.scale.set(2.2, 2.2, 0.06); panel.position.set(0, -1.48, 0);
+  signPanel.add(panel);
+  sign3d.position.set(SIGN3D.x, 0, SIGN3D.z);
+  sign3d.traverse(o => { if (o.isMesh){ o.castShadow = true; o.receiveShadow = true; } });
+  sign3d.visible = false;
+  scene.add(sign3d);
+  const soil = new THREE.MeshStandardMaterial({color: col("#6e5640"), roughness: 1, transparent: true});
+  for (let i = 0; i < 9; i++){
+    const m = new THREE.Mesh(new THREE.IcosahedronGeometry(0.12 + (i % 3)*0.05, 0), soil);
+    m.userData.dir = new THREE.Vector3(Math.cos(i*2.4), 0.8 + (i % 4)*0.25, Math.sin(i*2.4));
+    m.visible = false; scene.add(m); dust.push(m);
+  }
+}
+let signStart = -1;
+function animateSign(now){
+  if (signStart < 0){ sign3d.visible = false; dust.forEach(d => d.visible = false); return false; }
+  sign3d.visible = true;
+  const t = reduce.matches ? 9 : (now - signStart)/1000;
+  /* falls in, drives into the lawn with a small bounce, panel swings on its hooks and settles */
+  let y = 0;
+  if (t < 0.55) y = 9*(1 - Math.pow(t/0.55, 2));
+  else if (t < 0.8) y = -0.22*Math.sin(Math.PI*(t - 0.55)/0.25);
+  /* two more mallet blows drive the post a little deeper (timed with the sound) */
+  [0.97, 1.39].forEach(h => { if (t > h) y -= 0.07*Math.min(1, (t - h)/0.05); });
+  sign3d.position.y = y;
+  const ts = Math.max(0, t - 0.55);
+  signPanel.rotation.x = t > 0.55 ? 0.32*Math.exp(-ts*2.0)*Math.sin(ts*8.5) : 0;
+  dust.forEach((d, i) => {
+    const k = (t - 0.55)/0.7;
+    d.visible = k > 0 && k < 1;
+    if (!d.visible) return;
+    const r = 0.3 + k*1.6;
+    d.position.set(SIGN3D.x + d.userData.dir.x*r, 0.1 + d.userData.dir.y*Math.sin(k*Math.PI)*0.9, SIGN3D.z + d.userData.dir.z*r);
+    d.material.opacity = 1 - k;
+  });
+  return t < 3.2;
+}
+const photo = $("photo"), photoImg = $("photo-img"), sign = $("sign");
+/* where the sign stands in the photo (photo pixels, 2000×1333) */
+const SIGN_AT = { wide:{x:1560, y:1130}, narrow:{x:1420, y:1140}, h:0.29 };
+function placeSign(){
+  const st = photo.parentElement.getBoundingClientRect(), r = photo.getBoundingClientRect();
+  if (!r.width) return;
+  const s = Math.max(r.width/2000, r.height/1333);
+  const pos = getComputedStyle(photoImg).objectPosition.split(" ").map(v => parseFloat(v)/100);
+  const ox = (r.width - 2000*s)*(isNaN(pos[0]) ? 0.5 : pos[0]), oy = (r.height - 1333*s)*(isNaN(pos[1]) ? 0.5 : pos[1]);
+  const at = wide ? SIGN_AT.wide : SIGN_AT.narrow;
+  sign.style.left = (r.left - st.left + ox + at.x*s) + "px";
+  sign.style.top = (r.top - st.top + oy + at.y*s) + "px";
+  sign.style.height = (1333*s*SIGN_AT.h) + "px";
+}
+let signIn = false;
+function frame(){
+  const d = target - cur;
+  if (Math.abs(d) > 0.00005){ cur = reduce.matches ? target : cur + d*0.14; dirty = true; }
+  else if (cur !== target){ cur = target; dirty = true; }
+  if (dirty){
+    dirty = false;
+    const bp = Math.min(1, cur/BUILD_END);
+    const placed = updatePieces(bp);
+    if (placed !== lastTally){ $("tally-n").textContent = placed.toLocaleString("en-US"); lastTally = placed; }
+    const fp = END_MODE === "render" ? smooth(0.9, 0.975, cur) : 0;
+    placeCamera(bp, fp);
+    groundPit.visible = bp < 0.955; groundFull.visible = !groundPit.visible;
+    const glow = isDark() ? smooth(0.86, 0.99, bp) : 0;
+    const gm = MATS.glass;
+    if (gm && "emissiveIntensity" in gm){ if (gm.emissive && gm.emissive.getHex() === 0 && !gm.emissiveMap) gm.emissive.set(0xffb060); gm.emissiveIntensity = glow*1.6; }
+    porch.intensity = glow*2.2;
+    ghostMat.opacity = 0.55*(1 - smooth(0.6, 0.86, bp));
+    ghost.visible = SHOW_BLUEPRINT && ghostMat.opacity > 0.01;
+    const rv = END_MODE === "photo" ? smooth(0.885, 0.955, cur) : 0;
+    photo.hidden = rv <= 0;
+    photo.style.setProperty("--rv", rv.toFixed(4));
+    canvas.style.opacity = END_MODE === "photo" ? (1 - smooth(0.9, 0.975, cur)).toFixed(3) : "1";
+    $("scrim-b").style.opacity = (END_MODE === "photo" ? rv : fp*0.35).toFixed(3);
+    $("tally").style.opacity = (1 - Math.max(rv, fp)).toFixed(3);
+    if (END_MODE === "render"){
+      const want3d = cur >= 0.962;
+      if (want3d && signStart < 0){ signStart = performance.now(); if (window.SiteSound) SiteSound.cue("mallet", 0.55); }
+      if (!want3d) signStart = -1;
+    }
+    if (END_MODE === "render" && animateSign(performance.now())) dirty = true;
+    const wantSign = END_MODE === "photo" && cur >= 0.962;
+    if (wantSign !== signIn){
+      signIn = wantSign;
+      if (signIn){ placeSign(); sign.hidden = false; void sign.offsetWidth; sign.classList.add("in"); if (window.SiteSound) SiteSound.cue("mallet", 0.55); }
+      else { sign.classList.remove("in"); sign.hidden = true; }
+    }
+    if (window.SiteSound) SiteSound.update(soundStage(bp, END_MODE === "render" ? cur >= 0.95 : rv > 0.5));
+    updateUI(cur);
+    if (composer && !window.__noAO) composer.render(); else renderer.render(scene, camera);
+    if (ghost.visible){ const ac = renderer.autoClear; renderer.autoClear = false; renderer.render(ghostScene, camera); renderer.autoClear = ac; }
+    window.__ready = true;
+  }
+  requestAnimationFrame(frame);
+}
+/* hook for previews and screenshots */
+window.__houseBuild = { setProgress(p){ target = cur = p; dirty = true; }, get total(){ return totalPieces; },
+  redraw(){ dirty = true; }, sao: () => saoPass, rig, scene, camera, renderer };
+
+applyTheme();
+resize();
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
